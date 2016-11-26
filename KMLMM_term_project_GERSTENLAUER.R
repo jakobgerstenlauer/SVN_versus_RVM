@@ -39,22 +39,7 @@ isLocal<-FALSE
 glue<-function(...){paste(...,sep="")}
 
 #define path of standard directories
-#TODO Set the working directory!
-workingDir<-"UPC/2016/02/KMLMM/practicals/term_project"
-
-path.windows<-"J:/"
-path.windows.local<-"C:/Users/Jakob/Documents/"
-path.linux<-"/media/jakob/INTENSO/"
-
-#get the current operating system 
-
-if(isLocal){
-  workingDir<-glue(path.windows.local, workingDir)
-  }else{
-ifelse(Sys.info()[1]=="Windows", 
-       workingDir<-glue(path.windows, workingDir), 
-       workingDir<-glue(path.linux, workingDir))
-}
+source(workingDir.R)
 
 dataDir<-glue(workingDir,"/data")
 plotDir<-glue(workingDir,"/plots")
