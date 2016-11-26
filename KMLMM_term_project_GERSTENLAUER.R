@@ -81,7 +81,7 @@ for (simulation in seq(1,dim(LHS)[1]))
   {   
     #Here we use the quantile function for the uniform distribution to "translate" from the standard uniform distribution to the respective trait range
     eval(parse(text=paste(
-      'A',arguments,'<-round(qunif(LHS[simulation,',arguments,'], min=low_A',arguments,', max=high_A',arguments,'),digits=3)'
+      'A',arguments,'<-round(qunif(LHS[simulation,',arguments,'], min=low_V',arguments,', max=high_V',arguments,'),digits=3)'
       ,sep="")));
   } 
   
