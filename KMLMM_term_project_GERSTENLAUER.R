@@ -119,6 +119,7 @@ file.names<-file.names[-1]
 #
 #################################################################################
 
+require("kernlab")
 sample.size <- length(file.names) 
 
 #Now I only store the results of the best model for each file!
@@ -136,19 +137,26 @@ for(fileName in file.names){
   load(fileName)
   cv.mean.max<-0
   
-  for(C in grid.c){
-    for(Epsilon in grid.epsilon){
-      result<-ksvm.10x10CV(data=d, response.name="output",c=C, eps=Epsilon, p=polynomial_degree,n=10)
-      if(result[1]>cv.mean.max){
-        cv.mean.max<-result[1]
-        c_setting[i]<-C
-        epsilon_setting[i]<-Epsilon
-        cv.mean[i]<-result[1]
-        cv.sd[i]<-result[2]
-        sparsity[i]<-result[3]
-        sd.sparsity[i]<-result[4]
-      }
-    }
+      m1.nlm <- nlm(ksvm.CV.optim.eps, 
+                    0.1*(1:5),
+                    response.name="output",
+                    data=d,
+                    c=1:5,
+                    p=1:5,
+                    k=10,
+                    stepmax = 100);
+      str(m1.nlm)  
+      
+      #  result<-ksvm.10x10CV(data=d, response.name="output",c=C, eps=Epsilon, p=polynomial_degree,n=10)
+      # if(result[1]>cv.mean.max){
+      #   cv.mean.max<-result[1]
+      #   c_setting[i]<-C
+      #   epsilon_setting[i]<-Epsilon
+      #   cv.mean[i]<-result[1]
+      #   cv.sd[i]<-result[2]
+      #   sparsity[i]<-result[3]
+      #   sd.sparsity[i]<-result[4]
+
   }
   #The index i has to run over all input files.
   #I store only one result for each file! 
