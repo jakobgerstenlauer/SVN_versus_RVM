@@ -47,7 +47,7 @@ source("KMLMM_term_project_GERSTENLAUER_utility_functions.R")
 #Step 1: define the LH scheme 
 require("lhs")
 #set-up the Latin Hypercube sampling scheme
-SampleSize<-100
+SampleSize<-10
 NumVariables<-4                            
 LHS<-improvedLHS(n=SampleSize, k=NumVariables, dup=1)
 
@@ -133,86 +133,115 @@ Epsilon=0.3
 polynomial_degree=3
 
 #Now I only store the results of the best model for each file!
+
+#vectors for optimal parameters
 c_setting<-vector(mode="numeric",length=sample.size)  
 epsilon_setting<-vector(mode="numeric",length=sample.size)  
-signal_to_noise_setting<-vector(mode="numeric",length=sample.size)
+polynomial_degree_setting<-vector(mode="numeric",length=sample.size)
+
+#vectors for cross-validation error mean and sd
 cv.mean<-vector(mode="numeric",length=sample.size)
 cv.sd<-vector(mode="numeric",length=sample.size)
+
+#vectors for sparsity mean and sd
 sparsity<-vector(mode="numeric",length=sample.size)
 sd.sparsity<-vector(mode="numeric",length=sample.size)
 
+#how many iterations should be run? (in each iteration we do a line-search for each of the three hyper-parameters)
+maxStep<-3
+
 i<-1
 for(fileName in file.names){
+  
   print(fileName)
   load(fileName)
-  cv.mean.max<-0
-  c.optim<-C.start
-  epsilon.optim<-Epsilon
-  polynomial.degree.optim<-polynomial_degree
   
-  for(epsilon in epsilon.grid){
-    result<-ksvm.10x10CV(data=d, response.name="output",
-                         c=c.optim, 
-                         eps=epsilon, 
-                         p=polynomial.degree.optim,
-                         n=10)
-    
-    if(result[1]>cv.mean.max){
-      epsilon.optim<-epsilon
-      cv.mean.max<-result[1]
-      c_setting[i]<-C
-      epsilon_setting[i]<-Epsilon
-      cv.mean[i]<-result[1]
-      cv.sd[i]<-result[2]
-      sparsity[i]<-result[3]
-      sd.sparsity[i]<-result[4]
-    }
-  }
+  cv.mean.max <- 0
+  c.optim <- C.start
+  epsilon.optim <- Epsilon
+  polynomial.degree.optim <- polynomial_degree
   
-  for(C in c.grid){
-    result<-ksvm.10x10CV(data=d, response.name="output",
-                         c=C, 
-                         eps=epsilon.optim, 
-                         p=polynomial.degree.optim,
-                         n=10)
-    
-    if(result[1]>cv.mean.max){
-      c.optim<-C
-      cv.mean.max<-result[1]
-      c_setting[i]<-C
-      epsilon_setting[i]<-Epsilon
-      cv.mean[i]<-result[1]
-      cv.sd[i]<-result[2]
-      sparsity[i]<-result[3]
-      sd.sparsity[i]<-result[4]
-    }
-  }
+  for (step in 1:maxStep) {
+    for (epsilon in epsilon.grid) {
+      result <- ksvm.10x10CV(
+        data = d,
+        response.name = "output",
+        c = c.optim,
+        eps = epsilon,
+        p = polynomial.degree.optim,
+        n = 10
+      )
       
-  for(polynomial.degree in poly.grid){
-    result<-ksvm.10x10CV(data=d, response.name="output",
-                         c=c.optim, 
-                         eps=epsilon.optim, 
-                         p=polynomial.degree,
-                         n=10)
-    
-    if(result[1]>cv.mean.max){
-      c.optim<-C
-      cv.mean.max<-result[1]
-      c_setting[i]<-C
-      epsilon_setting[i]<-Epsilon
-      cv.mean[i]<-result[1]
-      cv.sd[i]<-result[2]
-      sparsity[i]<-result[3]
-      sd.sparsity[i]<-result[4]
+      if (result[1] > cv.mean.max) {
+        epsilon.optim <- epsilon
+        print(paste("epsilon optim:",epsilon.optim))
+        cv.mean.max <- result[1]
+      }
     }
+    
+    epsilon.grid <- updateGrid(epsilon.optim, step)
+    
+    for (C_ in c.grid) {
+      result <- ksvm.10x10CV(
+        data = d,
+        response.name = "output",
+        c = C_,
+        eps = epsilon.optim,
+        p = polynomial.degree.optim,
+        n = 10
+      )
+      
+      if (result[1] > cv.mean.max) {
+        c.optim <- C_
+        print(paste("C optim:",c.optim))
+        cv.mean.max <- result[1]
+      }
+    }
+    
+    c.grid <- updateGrid(c.optim, step)
+    
+    for (polynomial.degree in poly.grid) {
+      result <- ksvm.10x10CV(
+        data = d,
+        response.name = "output",
+        c = c.optim,
+        eps = epsilon.optim,
+        p = polynomial.degree,
+        n = 10
+      )
+      
+      if (result[1] > cv.mean.max) {
+        polynomial.degree.optim <- polynomial.degree
+        print(paste("poly optim:", polynomial.degree.optim))
+        cv.mean.max <- result[1]
+        if (step == maxStep) {
+          #guardar=save / almacenar=store
+          
+          #optimal parameters
+          c_setting[i] <- c.optim
+          epsilon_setting[i] <- epsilon.optim
+          polynomial_degree_setting[i] <- polynomial.degree.optim
+          
+          #cross-validation error mean and sd
+          cv.mean[i] <- result[1]
+          cv.sd[i] <- result[2]
+          
+          #sparsity mean and sd
+          sparsity[i] <- result[3]
+          sd.sparsity[i] <- result[4]
+          
+        }
+      }
+    }
+    
+    poly.grid <- updateGrid(polynomial.degree.optim, step, poly=TRUE)
   }
-
   
   #The index i has to run over all input files.
-  #I store only one result for each file! 
-  #I override results if the new model is better 
+  #I store only one result for each file!
+  #I override results if the new model is better
   #(has higher mean coefficient of determination).
-  i<-i+1
+  i <- i + 1
 }
 
 require(lattice)
