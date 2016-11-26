@@ -77,7 +77,8 @@ instance.generator<-function(signal_to_noise_ratio, N, D, polynomialDegree, isDe
   return(d)
 }
 
-d1<-instance.generator(signal_to_noise_ratio=0.5, N=100, D=10, polynomialDegree=4, isDebug=FALSE)
+#How to call the instance generator:
+#d1<-instance.generator(signal_to_noise_ratio=0.5, N=100, D=10, polynomialDegree=4, isDebug=FALSE)
   
 ######################################################################################################
 #Calculates k-fold-cross-validation for a kernelized SVM regression
