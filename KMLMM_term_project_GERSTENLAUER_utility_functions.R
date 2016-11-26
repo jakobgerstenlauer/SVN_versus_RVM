@@ -184,22 +184,28 @@ ksvm.CV<-function(response.name, data, c, eps, p, k=10){
   return(c(mean(rSquared),sd(rSquared), mean(sparsity), sd(sparsity) ))
 }
 
-#wrapper for ksvm.10x10CV which only returns the first argument
-ksvm.CV.optim.eps<-function(eps, response.name, data, c, p, k=10){
-  result<-ksvm.CV(response.name, data, c, eps, p, k=10);
-  return(result[1]);
-}
-
-#wrapper for ksvm.10x10CV which only returns the first argument
-ksvm.CV.optim.c<-function(c, response.name, data, eps, p, k=10){
-  result<-ksvm.CV(response.name, data, c, eps, p, k=10);
-  return(result[1]);
-}
-
-#wrapper for ksvm.10x10CV which only returns the first argument
-ksvm.CV.optim.p<-function(p, response.name, data, c, eps, k=10){
-  result<-ksvm.CV(response.name, data, c, eps, p, k=10);
-  return(result[1]);
+#Calculates a new grid for parameter optimization
+#
+#value.optim: current estimate for the optimal value
+#step: current iteration
+#poly: is the paramter polynomial degre? Default is FALSE.
+updateGrid <- function(value.optim, step, poly=FALSE) {
+  
+  stopifnot(value.optim>0.001)
+  
+  #for the degree 1 is the minimum
+  if(poly){
+    minV <- max(value.optim - (1 / step**2) * value.optim, 1)
+  }else{
+    minV <- max(value.optim - (1 / step**2) * value.optim, 0.01)
+  }
+  maxV <- value.optim + (1 / step**2) * value.optim
+  if(poly){
+    return(c(round(minV), round(value.optim), round(maxV)))
+  }
+  
+  return(c(minV, value.optim, maxV))
+  
 }
 
 #Calculates n times k-fold-cross-validation for a kernelized SVM regression
