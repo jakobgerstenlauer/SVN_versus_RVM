@@ -46,6 +46,8 @@ source("KMLMM_term_project_GERSTENLAUER_utility_functions.R")
 
 #Step 1: define the LH scheme 
 require("lhs")
+#TODO Define number of replications for LHC and Cross-validation!
+numCVReplicates<-1
 #set-up the Latin Hypercube sampling scheme
 SampleSize<-10
 NumVariables<-4                            
@@ -157,15 +159,17 @@ is.invalid<-function(x){
 i<-1
 for(fileName in file.names){
   
-  print(fileName)
+  print(paste("read input file:",fileName))
   load(fileName)
   
+  #start values for parameters
   cv.mean.max <- 0
   c.optim <- C.start
   epsilon.optim <- Epsilon
   polynomial.degree.optim <- polynomial_degree
   
   for (step in 1:maxStep) {
+    print(paste("optim step:",step))
     for (epsilon in epsilon.grid) {
       result <- ksvm.10x10CV(
         data = d,
@@ -173,10 +177,13 @@ for(fileName in file.names){
         c = c.optim,
         eps = epsilon,
         p = polynomial.degree.optim,
-        n = 10
+        n = numCVReplicates
       )
       
-      if(is.invalid(result[1])) next;
+      if(is.invalid(result[1])){
+        print(paste("Invalid result for epsilon:", epsilon))
+        next;
+      } 
       
       if (result[1] > cv.mean.max) {
         epsilon.optim <- epsilon
@@ -194,10 +201,13 @@ for(fileName in file.names){
         c = C_,
         eps = epsilon.optim,
         p = polynomial.degree.optim,
-        n = 10
+        n = numCVReplicates
       )
       
-      if(is.invalid(result[1])) next;
+      if(is.invalid(result[1])){
+        print(paste("Invalid result for c:",C_))
+        next;
+      } 
       
       if (result[1] > cv.mean.max) {
         c.optim <- C_
@@ -215,10 +225,13 @@ for(fileName in file.names){
         c = c.optim,
         eps = epsilon.optim,
         p = polynomial.degree,
-        n = 10
+        n = numCVReplicates
       )
       
-      if(is.invalid(result[1])) next;
+      if(is.invalid(result[1])){
+        print(paste("Invalid result for poly:",polynomial.degree))
+        next;
+      } 
       
       if (result[1] > cv.mean.max) {
         polynomial.degree.optim <- polynomial.degree
