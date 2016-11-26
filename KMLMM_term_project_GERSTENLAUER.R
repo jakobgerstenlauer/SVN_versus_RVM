@@ -64,8 +64,60 @@ codeDir<-glue(workingDir,"/code")
 setwd(codeDir)
 source("KMLMM_term_project_GERSTENLAUER_utility_functions.R")
 
-#create a sequence of artificial data sets of decreasing signal to noise ratio
+#Step 1: define the LH scheme 
+
+#set-up the Latin Hypercube sampling scheme
+SampleSize<-100
+NumVariables<-4                            
+LHS<-improvedLHS(n=SampleSize, k=NumVariables, dup=1)
+
+#Now define the marginals for all five parameters:
+
+#V1: signal-to-noise ratio
+low_V1= 0.1;
+high_V1= 0.9;
+
+#V2: number of observations N
+low_V2  = 10;
+high_V2 = 1000;
+
+#V3: number of variables D
+low_V3  = 2;
+high_V3 = 100;
+
+#V4: polynomial degree of the inputs.
+low_V4  = 2;
+high_V4 = 5;
+
 setwd(dataDir)
+file.names<-""
+
+for (simulation in seq(1,dim(LHS)[1]))
+{
+  for (arguments in seq(1,NumVariables))
+  {   
+    #Here we use the quantile function for the uniform distribution to "translate" from the standard uniform distribution to the respective trait range
+    eval(parse(text=paste(
+      'A',arguments,'<-round(qunif(LHS[simulation,',arguments,'], min=low_A',arguments,', max=high_A',arguments,'),digits=3)'
+      ,sep="")));
+  } 
+  
+  #Create the new data set with the specific variables
+  d<-instance.generator(signal_to_noise_ratio=A1, N=round(A2), D=round(A3), polynomialDegree=round(A4));
+ 
+  dump.file.name<-glue("data_signal_to_noise_", A1,
+                       "_N_", A2,
+                       "_D_", A3,
+                       "_poly_", round(A4),
+                       ".RData");
+  save(list="d", file=dump.file.name);
+  file.names<-c(file.names, dump.file.name);
+}     
+
+file.names<-file.names[-1]
+
+
+
 signal.to.noise.ratio.grid<-seq(from=0.1,to=0.9,by=0.1)
 num_vars<-10
 num_observations<-100
@@ -85,7 +137,7 @@ for(s in signal.to.noise.ratio.grid){
   }
 }
 
-file.names<-file.names[-1]
+
 
 #################################################################################
 #
