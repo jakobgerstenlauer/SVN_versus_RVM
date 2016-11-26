@@ -150,6 +150,10 @@ sd.sparsity<-vector(mode="numeric",length=sample.size)
 #how many iterations should be run? (in each iteration we do a line-search for each of the three hyper-parameters)
 maxStep<-3
 
+is.invalid<-function(x){
+  is.nan(x)||is.infinite(x)
+}
+
 i<-1
 for(fileName in file.names){
   
@@ -172,6 +176,8 @@ for(fileName in file.names){
         n = 10
       )
       
+      if(is.invalid(result[1])) next;
+      
       if (result[1] > cv.mean.max) {
         epsilon.optim <- epsilon
         print(paste("epsilon optim:",epsilon.optim))
@@ -191,6 +197,8 @@ for(fileName in file.names){
         n = 10
       )
       
+      if(is.invalid(result[1])) next;
+      
       if (result[1] > cv.mean.max) {
         c.optim <- C_
         print(paste("C optim:",c.optim))
@@ -209,6 +217,8 @@ for(fileName in file.names){
         p = polynomial.degree,
         n = 10
       )
+      
+      if(is.invalid(result[1])) next;
       
       if (result[1] > cv.mean.max) {
         polynomial.degree.optim <- polynomial.degree
