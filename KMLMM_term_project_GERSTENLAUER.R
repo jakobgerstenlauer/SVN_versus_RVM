@@ -27,6 +27,8 @@
 # Date: 26.11.2016
 # Jakob Gerstenlauer
 # jakob.gerstenlauer@gjakob.de
+# Francisco Pèrez
+# pacogppl@gmail.com
 ###############################################################################################
 
 #remove old objects for safety resons
@@ -39,14 +41,14 @@ isLocal<-FALSE
 glue<-function(...){paste(...,sep="")}
 
 #define path of standard directories
-source(workingDir.R)
+source("workingDir.R")
 
 #read functions from external code file
 setwd(codeDir)
 source("KMLMM_term_project_GERSTENLAUER_utility_functions.R")
 
 #Step 1: define the LH scheme 
-
+require("lhs")
 #set-up the Latin Hypercube sampling scheme
 SampleSize<-100
 NumVariables<-4                            
