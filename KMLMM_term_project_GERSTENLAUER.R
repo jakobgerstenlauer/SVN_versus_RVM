@@ -75,6 +75,12 @@ high_V4 = 5;
 setwd(dataDir)
 file.names<-""
 
+signal.to.noise.ratio.grid<-rep(0,SampleSize)
+num.vars.grid<-rep(0,SampleSize)
+num.observations.grid<-rep(0,SampleSize)
+polynomial.degree.grid<-rep(0,SampleSize)
+
+i<-1
 for (simulation in seq(1,dim(LHS)[1]))
 {
   for (arguments in seq(1,NumVariables))
@@ -88,6 +94,13 @@ for (simulation in seq(1,dim(LHS)[1]))
   #Create the new data set with the specific variables
   d<-instance.generator(signal_to_noise_ratio=A1, N=round(A2), D=round(A3), polynomialDegree=round(A4));
  
+  signal.to.noise.ratio.grid[i]<-A1;
+  num.vars.grid[i]<-round(A2);
+  num.observations.grid[i]<-round(A3);
+  polynomial.degree.grid[i]<-round(A4);
+  
+  i<-i+1
+  
   dump.file.name<-glue("data_signal_to_noise_", A1,
                        "_N_", A2,
                        "_D_", A3,
@@ -99,131 +112,11 @@ for (simulation in seq(1,dim(LHS)[1]))
 
 file.names<-file.names[-1]
 
-
-
-signal.to.noise.ratio.grid<-seq(from=0.1,to=0.9,by=0.1)
-num_vars<-10
-num_observations<-100
-file.names<-""
-polynomial_degree<-3
-
-for(s in signal.to.noise.ratio.grid){
-  for(repetition in 1:5){
-  print(s)
-  d<-instance.generator(signal_to_noise_ratio=s, N=num_observations, D=num_vars, polynomialDegree=polynomial_degree)
-  dump.file.name<-glue("data_signal_to_noise_", s,
-                       "_rep_",repetition,
-                       "_N_", num_observations,
-                       "_D_", num_vars,".RData")
-  save(list="d", file=dump.file.name)
-  file.names<-c(file.names, dump.file.name)
-  }
-}
-
-
-
 #################################################################################
 #
 # SVM regression
 #
 #################################################################################
-
-grid.c<-c(1,3,5)
-grid.epsilon<-seq(from=0.1,to=0.9,by=0.1)
-sample.size <- length(file.names) * length(grid.c) * length(grid.epsilon) 
-
-#here I have to reverse engineer the signal to noise ratio as a vector for all data sets
-stn<-seq(from=0.1,to=0.9,by=0.1)
-signal_to_noise_setting<-vector()
-for(stn in signal.to.noise.ratio.grid){
-  signal_to_noise_setting<-c(signal_to_noise_setting,rep(stn, 10 * length(grid.c) * length(grid.epsilon)))
-}
-
-c_setting<-vector(mode="numeric",length=sample.size)  
-epsilon_setting<-vector(mode="numeric",length=sample.size)
-cv.mean<-vector(mode="numeric",length=sample.size)
-cv.sd<-vector(mode="numeric",length=sample.size)
-sparsity<-vector(mode="numeric",length=sample.size)
-sd.sparsity<-vector(mode="numeric",length=sample.size)
-
-i<-1
-for(fileName in file.names){
-  print(fileName)
-  load(fileName)
-  
-  for(C in grid.c){
-    for(Epsilon in grid.epsilon){
-      print(paste("Step:",i,"from:",sample.size))
-      result<-ksvm.10x10CV(data=d, response.name="output",c=C, eps=Epsilon, p=polynomial_degree,n=10)
-      c_setting[i]<-C
-      epsilon_setting[i]<-Epsilon
-      cv.mean[i]<-result[1]
-      cv.sd[i]<-result[2]
-      sparsity[i]<-result[3]
-      sd.sparsity[i]<-result[4]
-      i<-i+1
-    }
-  }
-}
-
-require(lattice)
-setwd(plotDir)
-
-jpeg("distribution_cross_validation_rsquare_svm.jpeg")
-densityplot(~cv.mean)
-dev.off()
-
-jpeg("cross_validation_rsquare_svm_versus_signal_to_noise_ratio.jpeg")
-xyplot(cv.mean ~ signal_to_noise_setting)
-dev.off()
-
-cor(cv.mean, signal_to_noise_setting)
-#0.006095
-#0.32
-
-jpeg("cross_validation_rsquare_svm_epsilon_c.jpeg")
-xyplot(cv.mean ~ epsilon_setting | c_setting, auto.key = TRUE)
-dev.off()
-
-jpeg("cross_validation_rsquare_svm_epsilon_c_signal_to_noise_ratio.jpeg")
-xyplot(cv.mean ~ epsilon_setting | c_setting, group = signal_to_noise_setting, auto.key = TRUE)
-dev.off()
-
-d_cv<-data.frame(
-c_setting,
-epsilon_setting,
-cv.mean,
-cv.sd,
-sparsity,
-sd.sparsity,
-signal_to_noise_setting)
-
-setwd(dataDir)
-write.table(d_cv, col.names=FALSE, file="results_cross_validation_1.csv")
-
-m1.lm<-lm(cv.mean ~ c_setting * epsilon_setting + signal_to_noise_setting)
-summary(m1.lm)
-# Call:
-#   lm(formula = cv.mean ~ c_setting * epsilon_setting + signal_to_noise_setting)
-# 
-# Residuals:
-#   Min        1Q    Median        3Q       Max 
-# -0.185565 -0.033353  0.000678  0.031924  0.172809 
-# 
-# Coefficients:
-#   Estimate Std. Error t value Pr(>|t|)    
-# (Intercept)                0.237628   0.006255  37.988  < 2e-16 ***
-#   c_setting                  0.046863   0.001666  28.122  < 2e-16 ***
-#   epsilon_setting           -0.232396   0.009908 -23.455  < 2e-16 ***
-#   signal_to_noise_setting    0.028589   0.005189   5.509 4.31e-08 ***
-#   c_setting:epsilon_setting -0.039970   0.002901 -13.779  < 2e-16 ***
-#   ---
-#   Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
-# 
-# Residual standard error: 0.04923 on 1345 degrees of freedom
-# Multiple R-squared:  0.8354,	Adjusted R-squared:  0.8349 
-# F-statistic:  1706 on 4 and 1345 DF,  p-value: < 2.2e-16
-
 
 
 
@@ -237,8 +130,6 @@ summary(m1.lm)
 #
 #################################################################################
 
-grid.c<-c(4, 5, 6)
-grid.epsilon<-c(0.001, 0.005, 0.01, 0.05, 0.1, 0.15, 0.2, 0.25)
 
 #here I have to reverse engineer the signal to noise ratio as a vector for all data sets
 stn<-seq(from=0.1,to=0.9,by=0.1)
