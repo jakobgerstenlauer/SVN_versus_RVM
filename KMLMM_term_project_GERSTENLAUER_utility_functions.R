@@ -25,10 +25,11 @@ instance.generator<-function(signal_to_noise_ratio, N, D, polynomialDegree, isDe
   
   glue<-function(...){paste(...,sep="")}
   
+  #for test purposes:
   # signal_to_noise_ratio= 0.99
-  # N=1000
-  # D=10
-  # polynomialDegree = 3
+  # N=5
+  # D=2
+  # polynomialDegree = 2
   # isDebug=TRUE
   
   #test preconditions
@@ -51,11 +52,11 @@ instance.generator<-function(signal_to_noise_ratio, N, D, polynomialDegree, isDe
   d<-data.frame("output"=rep(0,N))
 
   #the coefficients of the polynomials of the inputs on the output are normally distributed
-  #coefs<-rnorm(n=D, mean=0, sd=1)
+  #with mean 0 and standard deviation 1:
   for(nrVar in 1:D){
     for(power in 1:polynomialDegree){
       eval(parse(text=
-                   glue("d$coefs_",nrVar,"_",power,"<-rnorm(n=D, 
+                   glue("coefs_",nrVar,"_",power,"<-rnorm(n=1, 
                         mean=0,
                         sd=1)")
       ));
@@ -72,9 +73,9 @@ instance.generator<-function(signal_to_noise_ratio, N, D, polynomialDegree, isDe
 
   #additive linear component for each variable
   #and for each power function of the input (from 1 to polynomial degree)
-  for(nrVar in D){
+  for(nrVar in 1:D){
     for(power in 1:polynomialDegree){
-      eval(parse(text=glue("d$output <- d$output + d$coefs_",nrVar,"_",power,"[",nrVar,"] * d$input_",nrVar,"**",power
+      eval(parse(text=glue("d$output <- d$output + coefs_",nrVar,"_",power," * d$input_",nrVar,"**",power
       )));
     }
   }
