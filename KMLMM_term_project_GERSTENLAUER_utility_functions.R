@@ -201,11 +201,13 @@ updateGrid <- function(value.optim, step, poly=FALSE) {
   }
   maxV <- value.optim + (1 / step**2) * value.optim
   if(poly){
+    print("updated grid for polz degree:")
+    print(c(round(minV), round(value.optim), round(maxV)))
     return(c(round(minV), round(value.optim), round(maxV)))
   }
-  
+  print("updated grid:")
+  print(c(minV, value.optim, maxV))
   return(c(minV, value.optim, maxV))
-  
 }
 
 #Calculates n times k-fold-cross-validation for a kernelized SVM regression
