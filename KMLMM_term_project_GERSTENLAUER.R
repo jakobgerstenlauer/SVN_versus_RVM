@@ -34,9 +34,6 @@
 #remove old objects for safety resons
 rm(list=ls(all=TRUE))
 
-#TODO set is local variable (on local laptop disc)
-isLocal<-FALSE
-
 #utility function
 glue<-function(...){paste(...,sep="")}
 
@@ -112,32 +109,15 @@ for (simulation in seq(1,dim(LHS)[1]))
 
 file.names<-file.names[-1]
 
-#################################################################################
-#
-# SVM regression
-#
-#################################################################################
-
-
 
 #################################################################################
 #
-# SVM regression, 2nd sensitivity analysis
-# Changes to the first are:
+# SVM regression, 
 # For each data set, the parameter combination with the lowest prediction error is recorded!
 # The parameter ranges are adapted as a result of the conclusion from the first analysis.
 #
 #
 #################################################################################
-
-
-#here I have to reverse engineer the signal to noise ratio as a vector for all data sets
-stn<-seq(from=0.1,to=0.9,by=0.1)
-signal_to_noise_setting<-vector()
-for(stn in signal.to.noise.ratio.grid){
-  #5 repetitions for each signal to noise setting
-  signal_to_noise_setting<-c(signal_to_noise_setting,rep(stn, 5))
-}
 
 sample.size <- length(file.names) 
 
