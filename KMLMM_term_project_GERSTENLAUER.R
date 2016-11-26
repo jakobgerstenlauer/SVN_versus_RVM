@@ -122,6 +122,16 @@ file.names<-file.names[-1]
 require("kernlab")
 sample.size <- length(file.names) 
 
+#initial sample values
+c.grid<-1:5
+epsilon.grid<-seq(from=0.1,to=0.9,by=0.1)
+poly.grid<-1:5
+
+#start values
+C.start=2
+Epsilon=0.3
+polynomial_degree=3
+
 #Now I only store the results of the best model for each file!
 c_setting<-vector(mode="numeric",length=sample.size)  
 epsilon_setting<-vector(mode="numeric",length=sample.size)  
@@ -136,28 +146,68 @@ for(fileName in file.names){
   print(fileName)
   load(fileName)
   cv.mean.max<-0
+  c.optim<-C.start
+  epsilon.optim<-Epsilon
+  polynomial.degree.optim<-polynomial_degree
   
-      m1.nlm <- nlm(ksvm.CV.optim.eps, 
-                    0.1*(1:5),
-                    response.name="output",
-                    data=d,
-                    c=1:5,
-                    p=1:5,
-                    k=10,
-                    stepmax = 100);
-      str(m1.nlm)  
-      
-      #  result<-ksvm.10x10CV(data=d, response.name="output",c=C, eps=Epsilon, p=polynomial_degree,n=10)
-      # if(result[1]>cv.mean.max){
-      #   cv.mean.max<-result[1]
-      #   c_setting[i]<-C
-      #   epsilon_setting[i]<-Epsilon
-      #   cv.mean[i]<-result[1]
-      #   cv.sd[i]<-result[2]
-      #   sparsity[i]<-result[3]
-      #   sd.sparsity[i]<-result[4]
-
+  for(epsilon in epsilon.grid){
+    result<-ksvm.10x10CV(data=d, response.name="output",
+                         c=c.optim, 
+                         eps=epsilon, 
+                         p=polynomial.degree.optim,
+                         n=10)
+    
+    if(result[1]>cv.mean.max){
+      epsilon.optim<-epsilon
+      cv.mean.max<-result[1]
+      c_setting[i]<-C
+      epsilon_setting[i]<-Epsilon
+      cv.mean[i]<-result[1]
+      cv.sd[i]<-result[2]
+      sparsity[i]<-result[3]
+      sd.sparsity[i]<-result[4]
+    }
   }
+  
+  for(C in c.grid){
+    result<-ksvm.10x10CV(data=d, response.name="output",
+                         c=C, 
+                         eps=epsilon.optim, 
+                         p=polynomial.degree.optim,
+                         n=10)
+    
+    if(result[1]>cv.mean.max){
+      c.optim<-C
+      cv.mean.max<-result[1]
+      c_setting[i]<-C
+      epsilon_setting[i]<-Epsilon
+      cv.mean[i]<-result[1]
+      cv.sd[i]<-result[2]
+      sparsity[i]<-result[3]
+      sd.sparsity[i]<-result[4]
+    }
+  }
+      
+  for(polynomial.degree in poly.grid){
+    result<-ksvm.10x10CV(data=d, response.name="output",
+                         c=c.optim, 
+                         eps=epsilon.optim, 
+                         p=polynomial.degree,
+                         n=10)
+    
+    if(result[1]>cv.mean.max){
+      c.optim<-C
+      cv.mean.max<-result[1]
+      c_setting[i]<-C
+      epsilon_setting[i]<-Epsilon
+      cv.mean[i]<-result[1]
+      cv.sd[i]<-result[2]
+      sparsity[i]<-result[3]
+      sd.sparsity[i]<-result[4]
+    }
+  }
+
+  
   #The index i has to run over all input files.
   #I store only one result for each file! 
   #I override results if the new model is better 

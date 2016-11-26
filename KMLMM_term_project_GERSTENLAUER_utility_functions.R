@@ -184,6 +184,23 @@ ksvm.CV<-function(response.name, data, c, eps, p, k=10){
   return(c(mean(rSquared),sd(rSquared), mean(sparsity), sd(sparsity) ))
 }
 
+#wrapper for ksvm.10x10CV which only returns the first argument
+ksvm.CV.optim.eps<-function(eps, response.name, data, c, p, k=10){
+  result<-ksvm.CV(response.name, data, c, eps, p, k=10);
+  return(result[1]);
+}
+
+#wrapper for ksvm.10x10CV which only returns the first argument
+ksvm.CV.optim.c<-function(c, response.name, data, eps, p, k=10){
+  result<-ksvm.CV(response.name, data, c, eps, p, k=10);
+  return(result[1]);
+}
+
+#wrapper for ksvm.10x10CV which only returns the first argument
+ksvm.CV.optim.p<-function(p, response.name, data, c, eps, k=10){
+  result<-ksvm.CV(response.name, data, c, eps, p, k=10);
+  return(result[1]);
+}
 
 #Calculates n times k-fold-cross-validation for a kernelized SVM regression
 #Arguments:
