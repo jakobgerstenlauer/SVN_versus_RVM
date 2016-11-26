@@ -41,10 +41,6 @@ glue<-function(...){paste(...,sep="")}
 #define path of standard directories
 source(workingDir.R)
 
-dataDir<-glue(workingDir,"/data")
-plotDir<-glue(workingDir,"/plots")
-codeDir<-glue(workingDir,"/code")
-
 #read functions from external code file
 setwd(codeDir)
 source("KMLMM_term_project_GERSTENLAUER_utility_functions.R")
