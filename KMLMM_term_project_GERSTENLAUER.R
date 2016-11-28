@@ -149,13 +149,15 @@ cv.sd<-vector(mode="numeric",length=sample.size)
 sparsity<-vector(mode="numeric",length=sample.size)
 sd.sparsity<-vector(mode="numeric",length=sample.size)
 
-#how many iterations should be run? (in each iteration we do a line-search for each of the three hyper-parameters)
+#how many iterations should be run? 
+#(in each iteration we do a line-search for each of the three hyper-parameters)
 maxStep<-3
 
 is.invalid<-function(x){
   is.nan(x)||is.infinite(x)
 }
 
+#index for files
 i<-1
 for(fileName in file.names){
   
