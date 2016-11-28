@@ -157,6 +157,16 @@ is.invalid<-function(x){
   is.nan(x)||is.infinite(x)
 }
 
+isInvalidResult<-function(result, param_name, param_value){
+  if(is.invalid(result[1])){
+    print(paste("Invalid result for ", param_name,":",param_value))
+    return (false);
+  } 
+  return (true);
+}
+
+
+
 #index for files
 i<-1
 for(fileName in file.names){
@@ -173,6 +183,8 @@ for(fileName in file.names){
   for (step in 1:maxStep) {
     print(paste("optim step:",step))
     for (epsilon in epsilon.grid) {
+      
+      #fit the SVM using n fold 10 times cross-validation
       result <- ksvm.10x10CV(
         data = d,
         response.name = "output",
@@ -182,8 +194,7 @@ for(fileName in file.names){
         n = numCVReplicates
       )
       
-      if(is.invalid(result[1])){
-        print(paste("Invalid result for epsilon:", epsilon))
+      if(isInvalidResult(result, "epsilon", epsilon)){
         next;
       } 
       
@@ -206,8 +217,7 @@ for(fileName in file.names){
         n = numCVReplicates
       )
       
-      if(is.invalid(result[1])){
-        print(paste("Invalid result for c:",C_))
+      if(isInvalidResult(result, "c", C_)){
         next;
       } 
       
@@ -221,6 +231,7 @@ for(fileName in file.names){
     c.grid <- updateGrid(c.optim, step)
     
     for (polynomial.degree in poly.grid) {
+      
       result <- ksvm.10x10CV(
         data = d,
         response.name = "output",
@@ -230,8 +241,7 @@ for(fileName in file.names){
         n = numCVReplicates
       )
       
-      if(is.invalid(result[1])){
-        print(paste("Invalid result for poly:",polynomial.degree))
+      if(isInvalidResult(result, "poly", polynomial.degree)){
         next;
       } 
       
@@ -240,7 +250,6 @@ for(fileName in file.names){
         print(paste("poly optim:", polynomial.degree.optim))
         cv.mean.max <- result[1]
         if (step == maxStep) {
-          #guardar=save / almacenar=store
           
           #optimal parameters
           c_setting[i] <- c.optim
@@ -254,7 +263,6 @@ for(fileName in file.names){
           #sparsity mean and sd
           sparsity[i] <- result[3]
           sd.sparsity[i] <- result[4]
-          
         }
       }
     }
