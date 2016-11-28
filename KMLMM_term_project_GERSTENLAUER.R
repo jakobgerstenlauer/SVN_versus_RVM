@@ -170,111 +170,87 @@ isInvalidResult<-function(result, param_name, param_value){
 #index for files
 i<-1
 for(fileName in file.names){
-  
-  print(paste("read input file:",fileName))
+  print(paste("read input file:", fileName))
   load(fileName)
   
   #start values for parameters
   cv.mean.max <- 0
   c.optim <- C.start
   epsilon.optim <- Epsilon
-  polynomial.degree.optim <- polynomial_degree
+  poly.optim <- polynomial_degree
   
   for (step in 1:maxStep) {
-    print(paste("optim step:",step))
-    for (epsilon in epsilon.grid) {
-      
-      #fit the SVM using n fold 10 times cross-validation
-      result <- ksvm.10x10CV(
+    print(paste("optim step:", step))
+    
+    o <-
+      optim.parameter(
+        result.optim,
+        epsilon.grid,
+        "epsilon",
         data = d,
-        response.name = "output",
-        c = c.optim,
-        eps = epsilon,
-        p = polynomial.degree.optim,
-        n = numCVReplicates
+        c.optim,
+        epsilon.optim,
+        poly.optim,
+        numCVReplicates
       )
+    
+    epsilon.grid  <- o$new.grid
+    epsilon.optim <- o$parameter
+    result.optim  <- o$result
+    
+    o <-
+      optim.parameter(
+        result.optim,
+        c.grid,
+        "C",
+        data = d,
+        c.optim,
+        epsilon.optim,
+        poly.optim,
+        numCVReplicates
+      )
+    
+    c.grid  <- o$new.grid
+    c.optim <- o$parameter
+    result.optim  <- o$result
+    
+    result.optim <-
+      optim.parameter(
+        result.optim,
+        poly.grid,
+        "poly",
+        data = d,
+        c.optim,
+        epsilon.optim,
+        poly.optim,
+        numCVReplicates
+      )
+    
+    poly.grid  <- o$new.grid
+    poly.optim <- o$parameter
+    result.optim  <- o$result
+    
+    if (step == maxStep) {
+      #optimal parameters
+      c_setting[i] <- c.optim
+      epsilon_setting[i] <- epsilon.optim
+      polynomial_degree_setting[i] <- poly.optim
       
-      if(isInvalidResult(result, "epsilon", epsilon)){
-        next;
-      } 
+      #cross-validation error mean and sd
+      cv.mean[i] <- result[1]
+      cv.sd[i] <- result[2]
       
-      if (result[1] > cv.mean.max) {
-        epsilon.optim <- epsilon
-        print(paste("epsilon optim:",epsilon.optim))
-        cv.mean.max <- result[1]
-      }
+      #sparsity mean and sd
+      sparsity[i] <- result[3]
+      sd.sparsity[i] <- result[4]
     }
     
-    epsilon.grid <- updateGrid(epsilon.optim, step)
-    
-    for (C_ in c.grid) {
-      result <- ksvm.10x10CV(
-        data = d,
-        response.name = "output",
-        c = C_,
-        eps = epsilon.optim,
-        p = polynomial.degree.optim,
-        n = numCVReplicates
-      )
-      
-      if(isInvalidResult(result, "c", C_)){
-        next;
-      } 
-      
-      if (result[1] > cv.mean.max) {
-        c.optim <- C_
-        print(paste("C optim:",c.optim))
-        cv.mean.max <- result[1]
-      }
-    }
-    
-    c.grid <- updateGrid(c.optim, step)
-    
-    for (polynomial.degree in poly.grid) {
-      
-      result <- ksvm.10x10CV(
-        data = d,
-        response.name = "output",
-        c = c.optim,
-        eps = epsilon.optim,
-        p = polynomial.degree,
-        n = numCVReplicates
-      )
-      
-      if(isInvalidResult(result, "poly", polynomial.degree)){
-        next;
-      } 
-      
-      if (result[1] > cv.mean.max) {
-        polynomial.degree.optim <- polynomial.degree
-        print(paste("poly optim:", polynomial.degree.optim))
-        cv.mean.max <- result[1]
-        if (step == maxStep) {
-          
-          #optimal parameters
-          c_setting[i] <- c.optim
-          epsilon_setting[i] <- epsilon.optim
-          polynomial_degree_setting[i] <- polynomial.degree.optim
-          
-          #cross-validation error mean and sd
-          cv.mean[i] <- result[1]
-          cv.sd[i] <- result[2]
-          
-          #sparsity mean and sd
-          sparsity[i] <- result[3]
-          sd.sparsity[i] <- result[4]
-        }
-      }
-    }
-    
-    poly.grid <- updateGrid(polynomial.degree.optim, step, poly=TRUE)
+    #The index i has to run over all input files.
+    #I store only one result for each file!
+    #I override results if the new model is better
+    #(has higher mean coefficient of determination).
+    i <- i + 1
   }
-  
-  #The index i has to run over all input files.
-  #I store only one result for each file!
-  #I override results if the new model is better
-  #(has higher mean coefficient of determination).
-  i <- i + 1
 }
 
 require(lattice)
