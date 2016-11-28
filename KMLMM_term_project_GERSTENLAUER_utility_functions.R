@@ -243,6 +243,9 @@ ksvm.10x10CV<-function(response.name, data, c, eps, p, n=10,k=10){
 
 optim.parameter<-function(result.optim, grid, param_name, data, c.optim, epsilon.optim, polynomial.degree.optim, numCVReplicates){
   
+  #set default to mean of grid
+  param.optim <- mean(grid);
+  
   for (param in grid) {
     
     result <- switch(
