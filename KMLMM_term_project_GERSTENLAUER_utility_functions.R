@@ -239,3 +239,46 @@ ksvm.10x10CV<-function(response.name, data, c, eps, p, n=10,k=10){
   names(r)<-c("r2.mean","r2.sd","sparsity.mean","sparsity.sd")
   return(r)
 }
+
+
+optim.parameter<-function(result.optim, grid, param_name, data, c.optim, epsilon.optim, polynomial.degree.optim, numCVReplicates){
+  
+  for (param in grid) {
+    
+    result <- switch(
+      param_name,
+      "epsilon" = ksvm.10x10CV(data,
+                               response.name = "output",
+                               c = c.optim,
+                               eps = param,
+                               p = polynomial.degree.optim,
+                               n = numCVReplicates),
+      "C" = ksvm.10x10CV(data,
+                         response.name = "output",
+                         c = param,
+                         eps = epsilon.optim,
+                         p = polynomial.degree.optim,
+                         n = numCVReplicates),
+      "poly" = ksvm.10x10CV(data,
+                            response.name = "output",
+                            c = c.optim,
+                            eps = epsilon.optim,
+                            p = param,
+                            n = numCVReplicates)
+    )
+    
+    if (isInvalidResult(result, param_name, param)) {
+      next
+    }
+    
+    if (result[1] > result.optim[1]) {
+      result.optim <- result;
+      param.optim <- param;
+      print(paste(param_name, "optim:", param.optim));
+    }
+  }
+  
+  grid <- updateGrid(param.optim, step)
+  return(list(new.grid=grid, result=result.optim, parameter=param.optim))
+}
+
