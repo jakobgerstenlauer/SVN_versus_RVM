@@ -160,12 +160,10 @@ is.invalid<-function(x){
 isInvalidResult<-function(result, param_name, param_value){
   if(is.invalid(result[1])){
     print(paste("Invalid result for ", param_name,":",param_value))
-    return (false);
+    return (FALSE);
   } 
-  return (true);
+  return (TRUE);
 }
-
-
 
 #index for files
 i<-1
