@@ -51,7 +51,7 @@ rm(list=ls(all=TRUE))
 numCVReplicates<-1
 
 #number of samples from the LHC 
-SampleSize<-3
+SampleSize<-5
 
 #Now define the ranges for all four parameters of the LHC:
 #V1: signal-to-noise ratio
@@ -59,16 +59,16 @@ low_V1= 0.1;
 high_V1= 0.9;
 
 #V2: number of observations N
-low_V2  = 10;
-high_V2 = 1000;
+low_V2  = 16;
+high_V2 = 256;
 
 #V3: number of variables D
 low_V3  = 2;
-high_V3 = 100;
+high_V3 = 16;
 
 #V4: polynomial degree of the inputs.
-low_V4  = 2;
-high_V4 = 5;
+low_V4  = 1;
+high_V4 = 3;
 
 #initial sample values
 c.grid<-1:5
