@@ -229,7 +229,7 @@ for(fileName in file.names){
     rm(o)
     
     #optimize polynomial degree
-    result.optim <-
+    o <-
       optim.parameter(
         result.optim,
         param.optim=poly.optim,
