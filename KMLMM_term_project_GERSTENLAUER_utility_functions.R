@@ -1,3 +1,26 @@
+glue<-function(...){paste(...,sep="")}
+
+check.numeric.values<-function(x,min_length){
+  stopifnot(exists("x"))
+  stopifnot(is.numeric(x))
+  stopifnot(length(x)>=min_length)
+}
+
+
+check.character.values<-function(x,min_length){
+  stopifnot(exists("x"))
+  stopifnot(is.character(x))
+  stopifnot(length(x)>=min_length)
+}
+
+check.data.frames<-function(x, min_rows, min_columns){
+  stopifnot(exists("x"))
+  stopifnot(is.data.frame(x))
+  stopifnot(dim(x)[1]>=min_rows)
+  stopifnot(dim(x)[2]>=min_columns)
+}
+
+
 
 #############################################################################################
 # Instance generator 
@@ -22,22 +45,24 @@
 #############################################################################################
 
 instance.generator<-function(signal_to_noise_ratio, N, D, polynomialDegree, isDebug=FALSE){
-  
-  glue<-function(...){paste(...,sep="")}
-  
+
+  #test preconditions
+  check.numeric.values(signal_to_noise_ratio,1);
+  check.numeric.values(N,1);
+  check.numeric.values(D,1);
+  check.numeric.values(polynomialDegree,1);
+  stopifnot(signal_to_noise_ratio>=0)
+  stopifnot(signal_to_noise_ratio<=1)
+  stopifnot(D>=1)
+  stopifnot(N>=1)  
+
   #for test purposes:
   # signal_to_noise_ratio= 0.99
   # N=5
   # D=2
   # polynomialDegree = 2
   # isDebug=TRUE
-  
-  #test preconditions
-  stopifnot(signal_to_noise_ratio>=0)
-  stopifnot(signal_to_noise_ratio<=1)
-  stopifnot(D>=1)
-  stopifnot(N>=1)
-  
+
   #Here the variability in the data is based on a hierarchical Gaussian model:
   #The mean and the variance of the inputs and the coefficients follow a normal distribution.
   
@@ -184,6 +209,20 @@ ksvm.CV<-function(response.name, data, c, eps, p, k=10){
   return(c(mean(rSquared),sd(rSquared), mean(sparsity), sd(sparsity) ))
 }
 
+
+is.invalid<-function(x){
+  is.nan(x)||is.infinite(x)
+}
+
+isInvalidResult<-function(result, param_name, param_value){
+  if(is.invalid(result[1])){
+    print(paste("Invalid result for ", param_name,":",param_value))
+    return (TRUE);
+  } 
+  return (FALSE);
+}
+
+
 #Calculates a new grid for parameter optimization
 #
 #value.optim: current estimate for the optimal value
@@ -240,25 +279,6 @@ ksvm.10x10CV<-function(response.name, data, c, eps, p, n=10,k=10){
   return(r)
 }
 
-check.numeric.values<-function(x,min_length){
-  stopifnot(exists("x"))
-  stopifnot(is.numeric(x))
-  stopifnot(length(x)>=min_length)
-}
-
-
-check.character.values<-function(x,min_length){
-  stopifnot(exists("x"))
-  stopifnot(is.character(x))
-  stopifnot(length(x)>=min_length)
-}
-
-check.data.frames<-function(x, min_rows, min_columns){
-  stopifnot(exists("x"))
-  stopifnot(is.data.frame(x))
-  stopifnot(dim(x)[1]>=min_rows)
-  stopifnot(dim(x)[2]>=min_columns)
-}
 
 optim.parameter<-function(result.optim, grid, param_name, data, c.optim, epsilon.optim, polynomial.degree.optim, numCVReplicates){
   
@@ -285,12 +305,14 @@ optim.parameter<-function(result.optim, grid, param_name, data, c.optim, epsilon
                                eps = param,
                                p = polynomial.degree.optim,
                                n = numCVReplicates),
+      
       "C" = ksvm.10x10CV(data,
                          response.name = "output",
                          c = param,
                          eps = epsilon.optim,
                          p = polynomial.degree.optim,
                          n = numCVReplicates),
+      
       "poly" = ksvm.10x10CV(data,
                             response.name = "output",
                             c = c.optim,
@@ -299,12 +321,20 @@ optim.parameter<-function(result.optim, grid, param_name, data, c.optim, epsilon
                             n = numCVReplicates)
     )
     
-    if (isInvalidResult(result, param_name, param)) {
-        print("Skip this run because there is no valid result!");
-    }else if (result[1] > result.optim[1]){
-        result.optim <- result;
-        param.optim <- param;
-        print(paste(param_name, "optim:", param.optim));
+    if(exists("result")){
+      if (isInvalidResult(result, param_name, param)) {
+          print("Skip this run because there is no valid result!");
+      }else if(length(result.optim)==0){#this is the case for the first model run
+          result.optim <- result;
+          param.optim <- param;
+          print(paste("First run:",param_name, "optim:", param.optim));
+      }else if (result[1] > result.optim[1]){
+          result.optim <- result;
+          param.optim <- param;
+          print(paste(param_name, "optim:", param.optim));
+      }
+    }else{
+      stop("Missing result!")
     }
   }
   
