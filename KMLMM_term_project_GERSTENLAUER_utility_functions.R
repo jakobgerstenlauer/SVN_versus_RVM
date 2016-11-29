@@ -305,14 +305,14 @@ optim.parameter<-function(result.optim, grid, param_name, data, c.optim, epsilon
                                response.name = "output",
                                c = c.optim,
                                eps = param,
-                               p = polynomial.degree.optim,
+                               p = round(polynomial.degree.optim),
                                n = numCVReplicates),
       
       "C" = ksvm.10x10CV(data,
                          response.name = "output",
                          c = param,
                          eps = epsilon.optim,
-                         p = polynomial.degree.optim,
+                         p = round(polynomial.degree.optim),
                          n = numCVReplicates),
       
       "poly" = ksvm.10x10CV(data,
@@ -328,10 +328,12 @@ optim.parameter<-function(result.optim, grid, param_name, data, c.optim, epsilon
           print("Skip this run because there is no valid result!");
       }else if(length(result.optim)==0){#this is the case for the first model run
           result.optim <- result;
+          if(param_name=="poly")param<-round(param);
           param.optim <- param;
           print(paste("First run:",param_name, "optim:", param.optim));
       }else if (result[1] > result.optim[1]){
           result.optim <- result;
+          if(param_name=="poly")param<-round(param);
           param.optim <- param;
           print(paste(param_name, "optim:", param.optim));
       }
