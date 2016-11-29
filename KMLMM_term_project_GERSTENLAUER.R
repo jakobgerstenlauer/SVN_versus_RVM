@@ -24,6 +24,15 @@
 #   Question 1: How often do the models choose the appropriate ploynomial degree of the kernel?
 #   Question 2: How does the predictive accuracy of both models depend on N, D, and signal-to-noise ratio?
 #
+#
+# Git commands:
+#   push changes:
+#   Jakob@Win16 MINGW64 /j/UPC/2016/02/KMLMM/KernelMethods/practicals/term_project/code (master)
+#   $ git push -u origin master
+#   pull changes:
+#   Jakob@Win16 MINGW64 /j/UPC/2016/02/KMLMM/KernelMethods/practicals/term_project/code (master)
+#   $ git pull https://jakobgerstenlauer@bitbucket.org/jakobgerstenlauer/kernels_term_project.git
+#
 # Date: 26.11.2016
 # Jakob Gerstenlauer
 # jakob.gerstenlauer@gjakob.de
@@ -228,7 +237,7 @@ for(fileName in file.names){
         numCVReplicates
       )
     
-    #I do not change update the grid!
+    #I do not change / update the grid!
     #poly.grid  <- o$new.grid
     poly.optim <- o$parameter
     result.optim  <- o$result
@@ -254,9 +263,14 @@ for(fileName in file.names){
   i <- i + 1
 }
 
-
 c_setting
 epsilon_setting
 polynomial_degree_setting
+#cross-validation error mean and sd
+cv.mean
+cv.sd
+#sparsity mean and sd
+sparsity
+sd.sparsity
 
 
