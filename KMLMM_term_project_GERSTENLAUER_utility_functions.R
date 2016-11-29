@@ -34,14 +34,6 @@ check.data.frames<-function(x, min_rows, min_columns){
 # withInteractions: should interactions between the variables be included (default is FALSE)
 # isDebug: Should debug statements be printed? Default is FALSE.
 #
-# Git commands:
-#push changes:
-#Jakob@Win16 MINGW64 /j/UPC/2016/02/KMLMM/KernelMethods/practicals/term_project/code (master)
-#$ git push -u origin master
-#pull changes:
-#Jakob@Win16 MINGW64 /j/UPC/2016/02/KMLMM/KernelMethods/practicals/term_project/code (master)
-#$ git pull https://jakobgerstenlauer@bitbucket.org/jakobgerstenlauer/kernels_term_project.git
-#
 #############################################################################################
 
 instance.generator<-function(signal_to_noise_ratio, N, D, polynomialDegree, isDebug=FALSE){
