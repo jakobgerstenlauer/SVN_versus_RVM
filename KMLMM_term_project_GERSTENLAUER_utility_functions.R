@@ -240,7 +240,7 @@ updateGrid <- function(value.optim, step, poly=FALSE) {
   }
   maxV <- value.optim + (1 / step**2) * value.optim
   if(poly){
-    print("updated grid for polz degree:")
+    print("updated grid for poly degree:")
     print(c(round(minV), round(value.optim), round(maxV)))
     return(c(round(minV), round(value.optim), round(maxV)))
   }
@@ -282,6 +282,8 @@ ksvm.10x10CV<-function(response.name, data, c, eps, p, n=10,k=10){
 
 optim.parameter<-function(result.optim, grid, param_name, data, c.optim, epsilon.optim, polynomial.degree.optim, numCVReplicates){
   
+  if(param_name=="poly")print(paste("grid poly:",grid))
+  
   #check preconditions
   #Here I do not check result.optim because it is NULL in the first call!
   check.numeric.values(grid,3)
@@ -292,8 +294,8 @@ optim.parameter<-function(result.optim, grid, param_name, data, c.optim, epsilon
   check.numeric.values(polynomial.degree.optim,1)
   check.numeric.values(numCVReplicates,1)
   
-  #set default to mean of grid
-  param.optim <- mean(grid);
+  #set default to median of grid
+  param.optim <- median(grid);
   
   for (param in grid) {
     
@@ -317,7 +319,7 @@ optim.parameter<-function(result.optim, grid, param_name, data, c.optim, epsilon
                             response.name = "output",
                             c = c.optim,
                             eps = epsilon.optim,
-                            p = param,
+                            p = round(param),
                             n = numCVReplicates)
     )
     
@@ -338,7 +340,7 @@ optim.parameter<-function(result.optim, grid, param_name, data, c.optim, epsilon
     }
   }
   
-  grid <- updateGrid(param.optim, step)
+  grid <- updateGrid(param.optim, step, poly=param_name=="poly")
   return(list(new.grid=grid, result=result.optim, parameter=param.optim))
 }
 
