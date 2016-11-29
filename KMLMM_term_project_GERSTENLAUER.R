@@ -51,7 +51,7 @@ rm(list=ls(all=TRUE))
 numCVReplicates<-1
 
 #number of samples from the LHC 
-SampleSize<-100
+SampleSize<-1
 
 #Now define the ranges for all four parameters of the LHC:
 #V1: signal-to-noise ratio
@@ -176,6 +176,10 @@ sd.sparsity<-vector(mode="numeric",length=sample.size)
 #because in the first call to optim.parameter() it is a necessary argument.
 result.optim<-NULL
 
+header<-paste(c("fileName", "opt.step", "parameter", "opt.value", "comput.time"), 
+              sep="\t")
+init.logging(header)
+
 #index for files
 i<-1
 for(fileName in file.names){
@@ -252,7 +256,7 @@ for(fileName in file.names){
     poly.optim <- o$parameter
     result.optim  <- o$result
     time.spent  <- o$time
-    logging(paste(fileName, step, "poly:", poly.optim, time.spent))
+    logging(paste(fileName, step, "poly:", poly.optim, time.spent, sep="\t"))
     rm(o)
     
     #optimal parameters
