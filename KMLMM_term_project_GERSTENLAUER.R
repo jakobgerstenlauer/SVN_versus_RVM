@@ -220,20 +220,20 @@ for(fileName in file.names){
     poly.optim <- o$parameter
     result.optim  <- o$result
     
-    if (step == maxStep) {
-      #optimal parameters
-      c_setting[i] <- c.optim
-      epsilon_setting[i] <- epsilon.optim
-      polynomial_degree_setting[i] <- poly.optim
-      
-      #cross-validation error mean and sd
-      cv.mean[i] <- result.optim[1]
-      cv.sd[i] <- result.optim[2]
-      
-      #sparsity mean and sd
-      sparsity[i] <- result.optim[3]
-      sd.sparsity[i] <- result.optim[4]
-    }
+   
+    #optimal parameters
+    c_setting[i] <- c.optim
+    epsilon_setting[i] <- epsilon.optim
+    polynomial_degree_setting[i] <- poly.optim
+    
+    #cross-validation error mean and sd
+    cv.mean[i] <- result.optim[1]
+    cv.sd[i] <- result.optim[2]
+    
+    #sparsity mean and sd
+    sparsity[i] <- result.optim[3]
+    sd.sparsity[i] <- result.optim[4]
+   
     
     #The index i has to run over all input files.
     #I store only one result for each file!
@@ -243,60 +243,8 @@ for(fileName in file.names){
   }
 }
 
-require(lattice)
-setwd(plotDir)
-
-jpeg("distribution_cross_validation_rsquare_svm_2.jpeg")
-densityplot(~cv.mean)
-dev.off()
-
-jpeg("cross_validation_rsquare_svm_versus_signal_to_noise_ratio_2.jpeg")
-xyplot(cv.mean ~ signal_to_noise_setting)
-dev.off()
-
-cor(cv.mean, signal_to_noise_setting)
-#0.006095
-#0.32
-
-jpeg("cross_validation_rsquare_svm_epsilon_c_2.jpeg")
-xyplot(cv.mean ~ epsilon_setting | c_setting, auto.key = TRUE)
-dev.off()
-
-jpeg("cross_validation_rsquare_svm_epsilon_c_signal_to_noise_ratio_2.jpeg")
-xyplot(cv.mean ~ epsilon_setting | c_setting, group = signal_to_noise_setting, auto.key = TRUE)
-dev.off()
-
-d_cv<-data.frame(
-  c_setting,
-  epsilon_setting,
-  cv.mean,
-  cv.sd,
-  sparsity,
-  sd.sparsity,
-  signal_to_noise_setting)
-
-setwd(dataDir)
-write.table(d_cv, col.names=FALSE, file="results_cross_validation_2.csv")
-
-# Weird results: Is there only a positive effect of signal to noise ratio for C=4?
-# > with(subset(d_cv, c_setting==5),cor(cv.mean, signal_to_noise_setting))
-# [1] -0.2081667
-# > with(subset(d_cv, c_setting==4),cor(cv.mean, signal_to_noise_setting))
-# [1] 0.3216072
-# > with(subset(d_cv, c_setting==6),cor(cv.mean, signal_to_noise_setting))
-# [1] -0.07561136
-
-
-
-
-
-
-
-
-
-
-
-
-
+c_setting
+epsilon_setting
+polynomial_degree_setting
 
 
