@@ -273,7 +273,7 @@ ksvm.10x10CV<-function(response.name, data, c, eps, p, n=10,k=10){
 }
 
 
-optim.parameter<-function(result.optim, grid, param_name, data, c.optim, epsilon.optim, polynomial.degree.optim, numCVReplicates){
+optim.parameter<-function(result.optim, param.optim, grid, param_name, data, c.optim, epsilon.optim, polynomial.degree.optim, numCVReplicates){
   
   if(param_name=="poly")print(paste("grid poly:",grid))
   
@@ -287,10 +287,7 @@ optim.parameter<-function(result.optim, grid, param_name, data, c.optim, epsilon
   check.numeric.values(polynomial.degree.optim,1)
   check.numeric.values(numCVReplicates,1)
   
-  #set default to median of grid
-  param.optim <- median(grid);
-  
-  for (param in grid) {
+ for (param in grid) {
     
     result <- switch(
       param_name,
