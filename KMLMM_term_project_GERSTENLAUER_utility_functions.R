@@ -231,7 +231,7 @@ isInvalidResult<-function(result, param_name, param_value){
 #poly: is the paramter polynomial degre? Default is FALSE.
 updateGrid <- function(value.optim, step, poly=FALSE) {
   
-  stopifnot(value.optim>0.001)
+  stopifnot(value.optim>0.0009)
   
   #for the degree 1 is the minimum
   if(poly){
