@@ -165,6 +165,10 @@ isInvalidResult<-function(result, param_name, param_value){
   return (TRUE);
 }
 
+#Here I have to declare the variable without initialising it,
+#because in the first call to optim.parameter() it is a necessary argument.
+result.optim<-NULL
+
 #index for files
 i<-1
 for(fileName in file.names){
