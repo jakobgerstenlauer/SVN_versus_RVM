@@ -230,7 +230,7 @@ updateGrid <- function(value.optim, step, poly=FALSE) {
     minV <- max(value.optim - 1, 1);
     maxV <- value.optim + 1;
   }else{
-    minV <- max(value.optim - (1 / step**2) * value.optim, 0.01)
+    minV <- max(value.optim - (1 / step**2) * value.optim, 0.001)
     maxV <- value.optim + (1 / step**2) * value.optim
   }
   
