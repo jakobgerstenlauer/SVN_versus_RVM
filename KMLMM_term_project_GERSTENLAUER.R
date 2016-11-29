@@ -153,18 +153,6 @@ sd.sparsity<-vector(mode="numeric",length=sample.size)
 #(in each iteration we do a line-search for each of the three hyper-parameters)
 maxStep<-3
 
-is.invalid<-function(x){
-  is.nan(x)||is.infinite(x)
-}
-
-isInvalidResult<-function(result, param_name, param_value){
-  if(is.invalid(result[1])){
-    print(paste("Invalid result for ", param_name,":",param_value))
-    return (FALSE);
-  } 
-  return (TRUE);
-}
-
 #Here I have to declare the variable without initialising it,
 #because in the first call to optim.parameter() it is a necessary argument.
 result.optim<-NULL
@@ -239,12 +227,12 @@ for(fileName in file.names){
       polynomial_degree_setting[i] <- poly.optim
       
       #cross-validation error mean and sd
-      cv.mean[i] <- result[1]
-      cv.sd[i] <- result[2]
+      cv.mean[i] <- result.optim[1]
+      cv.sd[i] <- result.optim[2]
       
       #sparsity mean and sd
-      sparsity[i] <- result[3]
-      sd.sparsity[i] <- result[4]
+      sparsity[i] <- result.optim[3]
+      sd.sparsity[i] <- result.optim[4]
     }
     
     #The index i has to run over all input files.
