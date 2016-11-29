@@ -234,15 +234,16 @@ updateGrid <- function(value.optim, step, poly=FALSE) {
   
   #for the degree 1 is the minimum
   if(poly){
-    minV <- max(value.optim - (1 / step**2) * value.optim, 1)
+    value.optim<-round(value.optim)
+    minV <- max(value.optim - 1, 1);
+    maxV <- value.optim + 1;
   }else{
     minV <- max(value.optim - (1 / step**2) * value.optim, 0.01)
+    maxV <- value.optim + (1 / step**2) * value.optim
   }
-  maxV <- value.optim + (1 / step**2) * value.optim
+  
   if(poly){
-    print("updated grid for poly degree:")
-    print(c(round(minV), round(value.optim), round(maxV)))
-    return(c(round(minV), round(value.optim), round(maxV)))
+    print("polynomial degree:")
   }
   print("updated grid:")
   print(c(minV, value.optim, maxV))
