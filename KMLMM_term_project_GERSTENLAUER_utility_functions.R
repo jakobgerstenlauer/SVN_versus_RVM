@@ -240,8 +240,37 @@ ksvm.10x10CV<-function(response.name, data, c, eps, p, n=10,k=10){
   return(r)
 }
 
+check.numeric.values<-function(x,min_length){
+  stopifnot(exists("x"))
+  stopifnot(is.numeric(x))
+  stopifnot(length(x)>=min_length)
+}
+
+
+check.character.values<-function(x,min_length){
+  stopifnot(exists("x"))
+  stopifnot(is.character(x))
+  stopifnot(length(x)>=min_length)
+}
+
+check.data.frames<-function(x, min_rows, min_columns){
+  stopifnot(exists("x"))
+  stopifnot(is.data.frame(x))
+  stopifnot(dim(x)[1]>=min_rows)
+  stopifnot(dim(x)[2]>=min_columns)
+}
 
 optim.parameter<-function(result.optim, grid, param_name, data, c.optim, epsilon.optim, polynomial.degree.optim, numCVReplicates){
+  
+  #check preconditions
+  #Here I do not check result.optim because it is NULL in the first call!
+  check.numeric.values(grid,3)
+  check.character.values(param_name,1)
+  check.data.frames(data, min_rows=10, min_columns=2)
+  check.numeric.values(c.optim,1)
+  check.numeric.values(epsilon.optim,1)
+  check.numeric.values(polynomial.degree.optim,1)
+  check.numeric.values(numCVReplicates,1)
   
   #set default to mean of grid
   param.optim <- mean(grid);
@@ -271,13 +300,11 @@ optim.parameter<-function(result.optim, grid, param_name, data, c.optim, epsilon
     )
     
     if (isInvalidResult(result, param_name, param)) {
-      next
-    }
-    
-    if (result[1] > result.optim[1]) {
-      result.optim <- result;
-      param.optim <- param;
-      print(paste(param_name, "optim:", param.optim));
+        print("Skip this run because there is no valid result!");
+    }else if (result[1] > result.optim[1]){
+        result.optim <- result;
+        param.optim <- param;
+        print(paste(param_name, "optim:", param.optim));
     }
   }
   
