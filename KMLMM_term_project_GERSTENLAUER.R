@@ -34,27 +34,15 @@
 #remove old objects for safety resons
 rm(list=ls(all=TRUE))
 
-#utility function
-glue<-function(...){paste(...,sep="")}
 
-#define path of standard directories
-source("workingDir.R")
-
-#read functions from external code file
-setwd(codeDir)
-source("KMLMM_term_project_GERSTENLAUER_utility_functions.R")
-
-#Step 1: define the LH scheme 
-require("lhs")
-#TODO Define number of replications for LHC and Cross-validation!
+#*******************************************************************************
+# Here all parameters are set for the R script:
+#*******************************************************************************
+#Define number of replications for LHC and Cross-validation!
 numCVReplicates<-1
-#set-up the Latin Hypercube sampling scheme
-SampleSize<-10
-NumVariables<-4                            
-LHS<-improvedLHS(n=SampleSize, k=NumVariables, dup=1)
-
-#Now define the marginals for all five parameters:
-
+#number of samples from the LHC 
+SampleSize<-3
+#Now define the ranges for all four parameters of the LHC:
 #V1: signal-to-noise ratio
 low_V1= 0.1;
 high_V1= 0.9;
@@ -70,6 +58,28 @@ high_V3 = 100;
 #V4: polynomial degree of the inputs.
 low_V4  = 2;
 high_V4 = 5;
+#*******************************************************************************
+
+
+#utility function
+glue<-function(...){paste(...,sep="")}
+
+#TODO Adapt to working dir or remove!
+setwd("J:/UPC/2016/02/KMLMM/KernelMethods/practicals/term_project/code")
+
+#define path of standard directories
+source("workingDir.R")
+
+#read functions from external code file
+setwd(codeDir)
+source("KMLMM_term_project_GERSTENLAUER_utility_functions.R")
+
+#Step 1: define the LH scheme 
+require("lhs")
+
+#set-up the Latin Hypercube sampling scheme
+NumVariables<-4                            
+LHS<-improvedLHS(n=SampleSize, k=NumVariables, dup=1)
 
 setwd(dataDir)
 file.names<-""
@@ -94,15 +104,15 @@ for (simulation in seq(1,dim(LHS)[1]))
   d<-instance.generator(signal_to_noise_ratio=A1, N=round(A2), D=round(A3), polynomialDegree=round(A4));
  
   signal.to.noise.ratio.grid[i]<-A1;
-  num.vars.grid[i]<-round(A2);
-  num.observations.grid[i]<-round(A3);
+  num.vars.grid[i]<-floor(A2);
+  num.observations.grid[i]<-floor(A3);
   polynomial.degree.grid[i]<-round(A4);
   
   i<-i+1
   
   dump.file.name<-glue("data_signal_to_noise_", A1,
-                       "_N_", A2,
-                       "_D_", A3,
+                       "_N_", floor(A2),
+                       "_D_", floor(A3),
                        "_poly_", round(A4),
                        ".RData");
   save(list="d", file=dump.file.name);
@@ -110,7 +120,6 @@ for (simulation in seq(1,dim(LHS)[1]))
 }     
 
 file.names<-file.names[-1]
-
 
 #################################################################################
 #
@@ -127,7 +136,7 @@ sample.size <- length(file.names)
 #initial sample values
 c.grid<-1:5
 epsilon.grid<-seq(from=0.1,to=0.9,by=0.1)
-poly.grid<-1:5
+poly.grid<-low_V4:high_V4
 
 #start values
 C.start=2
@@ -151,7 +160,7 @@ sd.sparsity<-vector(mode="numeric",length=sample.size)
 
 #how many iterations should be run? 
 #(in each iteration we do a line-search for each of the three hyper-parameters)
-maxStep<-3
+maxStep<-5
 
 #Here I have to declare the variable without initialising it,
 #because in the first call to optim.parameter() it is a necessary argument.
@@ -171,7 +180,8 @@ for(fileName in file.names){
   
   for (step in 1:maxStep) {
     print(paste("optim step:", step))
-    
+  
+    #optimize epsilon  
     o <-
       optim.parameter(
         result.optim,
@@ -188,6 +198,7 @@ for(fileName in file.names){
     epsilon.optim <- o$parameter
     result.optim  <- o$result
     
+    #optimize C
     o <-
       optim.parameter(
         result.optim,
@@ -204,6 +215,7 @@ for(fileName in file.names){
     c.optim <- o$parameter
     result.optim  <- o$result
     
+    #optimize polynomial degree
     result.optim <-
       optim.parameter(
         result.optim,
@@ -216,11 +228,11 @@ for(fileName in file.names){
         numCVReplicates
       )
     
-    poly.grid  <- o$new.grid
+    #I do not change update the grid!
+    #poly.grid  <- o$new.grid
     poly.optim <- o$parameter
     result.optim  <- o$result
     
-   
     #optimal parameters
     c_setting[i] <- c.optim
     epsilon_setting[i] <- epsilon.optim
@@ -233,15 +245,15 @@ for(fileName in file.names){
     #sparsity mean and sd
     sparsity[i] <- result.optim[3]
     sd.sparsity[i] <- result.optim[4]
-   
-    
-    #The index i has to run over all input files.
-    #I store only one result for each file!
-    #I override results if the new model is better
-    #(has higher mean coefficient of determination).
-    i <- i + 1
   }
+  
+  #The index i has to run over all input files.
+  #I store only one result for each file!
+  #I override results if the new model is better
+  #(has higher mean coefficient of determination).
+  i <- i + 1
 }
+
 
 c_setting
 epsilon_setting
