@@ -23,7 +23,7 @@
 # Eight, we compare the two models asking the following questions:
 #   Question 1: How often do the models choose the appropriate ploynomial degree of the kernel?
 #   Question 2: How does the predictive accuracy of both models depend on N, D, and signal-to-noise ratio?
-#
+#   Question 3: How does the sparsity of both models depend on N, D, and  signal-to-noise ratio?
 #
 # Git commands:
 #   push changes:
@@ -51,7 +51,7 @@ rm(list=ls(all=TRUE))
 numCVReplicates<-1
 
 #number of samples from the LHC 
-SampleSize<-5
+SampleSize<-100
 
 #Now define the ranges for all four parameters of the LHC:
 #V1: signal-to-noise ratio
@@ -208,6 +208,8 @@ for(fileName in file.names){
     epsilon.grid  <- o$new.grid
     epsilon.optim <- o$parameter
     result.optim  <- o$result
+    time.spent  <- o$time
+    logging(paste(fileName, step, "epsilon:", epsilon.optim, time.spent))
     rm(o)
     
     #optimize C
@@ -227,6 +229,8 @@ for(fileName in file.names){
     c.grid  <- o$new.grid
     c.optim <- o$parameter
     result.optim  <- o$result
+    time.spent  <- o$time
+    logging(paste(fileName, step, "C:", c.optim, time.spent))
     rm(o)
     
     #optimize polynomial degree
@@ -247,6 +251,8 @@ for(fileName in file.names){
     #poly.grid  <- o$new.grid
     poly.optim <- o$parameter
     result.optim  <- o$result
+    time.spent  <- o$time
+    logging(paste(fileName, step, "poly:", poly.optim, time.spent))
     rm(o)
     
     #optimal parameters
