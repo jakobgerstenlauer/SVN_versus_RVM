@@ -1,11 +1,20 @@
 glue<-function(...){paste(...,sep="")}
 
+init.logging<-function(text){
+  #get current date and replace hyphens by underline
+  Date<-gsub(pattern="-", replacement="_",Sys.Date())
+  #paste new filename
+  fileName<-paste("Log_KMLMM_term_project_",Date,".log",sep="")
+  cat(text, file = fileName, sep = " ", fill = TRUE,
+      append = FALSE)
+}
+
 logging<-function(text){
   #get current date and replace hyphens by underline
   Date<-gsub(pattern="-", replacement="_",Sys.Date())
   #paste new filename
   fileName<-paste("Log_KMLMM_term_project_",Date,".log",sep="")
-  cat(text , file = fileName, sep = " ", fill = TRUE,
+  cat(text, file = fileName, sep = " ", fill = TRUE,
       append = TRUE)
 }
 
@@ -345,9 +354,14 @@ optim.parameter<-function(result.optim, param.optim, grid, param_name, data, c.o
   }
   
   grid <- updateGrid(param.optim, step, poly=param_name=="poly")
+<<<<<<< HEAD
   endTime <- Sys.time();
   #time.used <- proc.time() - ptm
   time.used <- endTime - startTime
   return(list(new.grid=grid, result=result.optim, parameter=param.optim, time=time.used))
+=======
+  time.used <- proc.time() - ptm
+  return(list(new.grid=grid, result=result.optim, parameter=param.optim, time=time.used[3]))
+>>>>>>> 975f9a280a591cc5111bce2fe0d375c9a4ee5b24
 }
 
