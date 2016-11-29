@@ -43,14 +43,16 @@
 #remove old objects for safety resons
 rm(list=ls(all=TRUE))
 
-
 #*******************************************************************************
 # Here all parameters are set for the R script:
 #*******************************************************************************
+
 #Define number of replications for LHC and Cross-validation!
 numCVReplicates<-1
+
 #number of samples from the LHC 
 SampleSize<-3
+
 #Now define the ranges for all four parameters of the LHC:
 #V1: signal-to-noise ratio
 low_V1= 0.1;
@@ -67,8 +69,21 @@ high_V3 = 100;
 #V4: polynomial degree of the inputs.
 low_V4  = 2;
 high_V4 = 5;
-#*******************************************************************************
 
+#initial sample values
+c.grid<-1:5
+epsilon.grid<-seq(from=0.1,to=0.9,by=0.1)
+poly.grid<-low_V4:high_V4
+
+#start values
+C.start=2
+Epsilon=0.3
+polynomial_degree=3
+
+#how many iterations should be run? 
+#(in each iteration we do a line-search for each of the three hyper-parameters)
+maxStep<-3
+#*******************************************************************************
 
 #utility function
 glue<-function(...){paste(...,sep="")}
@@ -142,16 +157,6 @@ file.names<-file.names[-1]
 require("kernlab")
 sample.size <- length(file.names) 
 
-#initial sample values
-c.grid<-1:5
-epsilon.grid<-seq(from=0.1,to=0.9,by=0.1)
-poly.grid<-low_V4:high_V4
-
-#start values
-C.start=2
-Epsilon=0.3
-polynomial_degree=3
-
 #Now I only store the results of the best model for each file!
 
 #vectors for optimal parameters
@@ -166,10 +171,6 @@ cv.sd<-vector(mode="numeric",length=sample.size)
 #vectors for sparsity mean and sd
 sparsity<-vector(mode="numeric",length=sample.size)
 sd.sparsity<-vector(mode="numeric",length=sample.size)
-
-#how many iterations should be run? 
-#(in each iteration we do a line-search for each of the three hyper-parameters)
-maxStep<-5
 
 #Here I have to declare the variable without initialising it,
 #because in the first call to optim.parameter() it is a necessary argument.
