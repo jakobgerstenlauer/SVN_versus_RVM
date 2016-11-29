@@ -1,5 +1,14 @@
 glue<-function(...){paste(...,sep="")}
 
+logging<-function(text){
+  #get current date and replace hyphens by underline
+  Date<-gsub(pattern="-", replacement="_",Sys.Date())
+  #paste new filename
+  fileName<-paste("Log_KMLMM_term_project_",Date,".log",sep="")
+  cat(text , file = fileName, sep = " ", fill = TRUE,
+      append = TRUE)
+}
+
 check.numeric.values<-function(x,min_length){
   stopifnot(exists("x"))
   stopifnot(is.numeric(x))
@@ -275,6 +284,8 @@ ksvm.10x10CV<-function(response.name, data, c, eps, p, n=10,k=10){
 
 optim.parameter<-function(result.optim, param.optim, grid, param_name, data, c.optim, epsilon.optim, polynomial.degree.optim, numCVReplicates){
   
+  ptm <- proc.time();
+  
   if(param_name=="poly")print(paste("grid poly:",grid))
   
   #check preconditions
@@ -333,6 +344,7 @@ optim.parameter<-function(result.optim, param.optim, grid, param_name, data, c.o
   }
   
   grid <- updateGrid(param.optim, step, poly=param_name=="poly")
-  return(list(new.grid=grid, result=result.optim, parameter=param.optim))
+  time.used <- proc.time() - ptm
+  return(list(new.grid=grid, result=result.optim, parameter=param.optim, time=time.used))
 }
 
