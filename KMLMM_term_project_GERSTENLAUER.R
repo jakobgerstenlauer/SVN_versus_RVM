@@ -194,7 +194,7 @@ for(fileName in file.names){
     o <-
       optim.parameter(
         result.optim,
-        optim.parameter=epsilon.optim,
+        param.optim=epsilon.optim,
         epsilon.grid,
         "epsilon",
         data = d,
@@ -213,7 +213,7 @@ for(fileName in file.names){
     o <-
       optim.parameter(
         result.optim,
-        optim.parameter=c.optim,
+        param.optim=c.optim,
         c.grid,
         "C",
         data = d,
@@ -232,7 +232,7 @@ for(fileName in file.names){
     result.optim <-
       optim.parameter(
         result.optim,
-        optim.parameter=poly.optim,
+        param.optim=poly.optim,
         poly.grid,
         "poly",
         data = d,
