@@ -89,7 +89,7 @@ maxStep<-5
 glue<-function(...){paste(...,sep="")}
 
 #TODO Adapt to working dir or remove!
-setwd("E:/Documents/Mis Documentos/MIRI/Semestre 2/APRENDIZAJE AUTOMÁTICO BASADO EN KERNEL Y MODELADO MULTIVARIANTE/KernelFinalProject/code")
+setwd("E:/ProyectoFinal/KernelFinalProject/code")
 #setwd("J:/UPC/2016/02/KMLMM/KernelMethods/practicals/term_project/code")
 
 #define path of standard directories
