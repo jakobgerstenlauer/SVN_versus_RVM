@@ -194,6 +194,7 @@ for(fileName in file.names){
     o <-
       optim.parameter(
         result.optim,
+        optim.parameter=epsilon.optim,
         epsilon.grid,
         "epsilon",
         data = d,
@@ -206,11 +207,13 @@ for(fileName in file.names){
     epsilon.grid  <- o$new.grid
     epsilon.optim <- o$parameter
     result.optim  <- o$result
+    rm(o)
     
     #optimize C
     o <-
       optim.parameter(
         result.optim,
+        optim.parameter=c.optim,
         c.grid,
         "C",
         data = d,
@@ -223,11 +226,13 @@ for(fileName in file.names){
     c.grid  <- o$new.grid
     c.optim <- o$parameter
     result.optim  <- o$result
+    rm(o)
     
     #optimize polynomial degree
     result.optim <-
       optim.parameter(
         result.optim,
+        optim.parameter=poly.optim,
         poly.grid,
         "poly",
         data = d,
@@ -241,6 +246,7 @@ for(fileName in file.names){
     #poly.grid  <- o$new.grid
     poly.optim <- o$parameter
     result.optim  <- o$result
+    rm(o)
     
     #optimal parameters
     c_setting[i] <- c.optim
