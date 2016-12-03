@@ -56,7 +56,7 @@ numCVReplicates<-1
 maxReplicatesLHC<-2
 
 #number of samples from the LHC 
-SampleSize<-1
+SampleSize<-100
 
 #Now define the ranges for all four parameters of the LHC:
 #V1: signal-to-noise ratio
@@ -98,8 +98,9 @@ maxStep<-5
 glue<-function(...){paste(...,sep="")}
 
 #TODO Adapt to working dir or remove!
-#setwd("E:/ProyectoFinal/KernelFinalProject/code")
-setwd("J:/UPC/2016/02/KMLMM/KernelMethods/practicals/term_project/code")
+#setwd('..')
+#setwd(glue(getwd(),'/code'))
+#setwd("J:/UPC/2016/02/KMLMM/KernelMethods/practicals/term_project/code")
 
 #define path of standard directories
 source("workingDir.R")
@@ -620,3 +621,4 @@ m1_epsilon.lm<-lm(epsilon_setting ~ signal.to.noise.ratio.grid + num.vars.grid +
 
 m1_cv_mean.lm<-lm(cv.mean ~ signal.to.noise.ratio.grid + num.vars.grid + num.observations.grid)
 m1_sparsity.lm<-lm(sparsity ~ signal.to.noise.ratio.grid + num.vars.grid + num.observations.grid)
+
