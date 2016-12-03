@@ -47,8 +47,13 @@ rm(list=ls(all=TRUE))
 # Here all parameters are set for the R script:
 #*******************************************************************************
 
-#Define number of replications for LHC and Cross-validation!
+#Define number of replications for 10-fold Cross-validation!
+#E.g 10 means that we use 10-times 10-fold cross-validation
 numCVReplicates<-1
+
+#Define number of replications for each  parameter combination
+#sampled in the Latin Hyper Cube.
+maxReplicatesLHC<-10
 
 #number of samples from the LHC 
 SampleSize<-1
@@ -125,6 +130,8 @@ for (simulation in seq(1,dim(LHS)[1]))
       ,sep="")));
   } 
   
+  
+  for(replicate in 1:maxReplicatesLHC){
   #Create the new data set with the specific variables
   d<-instance.generator(signal_to_noise_ratio=A1, N=round(A2), D=round(A3), polynomialDegree=round(A4));
  
@@ -142,6 +149,7 @@ for (simulation in seq(1,dim(LHS)[1]))
                        ".RData");
   save(list="d", file=dump.file.name);
   file.names<-c(file.names, dump.file.name);
+  }
 }     
 
 file.names<-file.names[-1]
