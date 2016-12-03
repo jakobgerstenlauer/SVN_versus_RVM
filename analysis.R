@@ -10,9 +10,6 @@ library(ggplot2)
 glue<-function(...){paste(...,sep="")}
 
 #prepare path variables
-setwd('..')
-base.directory<-getwd()
-setwd(glue(base.directory,'/code'))
 source("workingDir.R")
 setwd(dataDir)
 
