@@ -161,6 +161,13 @@ j<-1
 for(fileName in file.names){
   print(paste("read input file:", fileName))
   load(fileName)
+  
+  #For each parameter combination there are maxReplicatesLHC replicates.
+  #Index j identifies the replicate.
+  if(((i+1) %% maxReplicatesLHC)==0){
+    j<-j+1
+  }
+  
   id_parameter_combination[i]<-j
   
   #start values for parameters
@@ -251,12 +258,6 @@ for(fileName in file.names){
     #sparsity mean and sd
     sparsity[i] <- result.optim[3]
     sd.sparsity[i] <- result.optim[4]
-  }
-  
-  #For each parameter combination there are maxReplicatesLHC replicates.
-  #Index j identifies the replicate.
-  if((i %% maxReplicatesLHC)==0){
-    j<-j+1
   }
   
   compu.time[i]<-total.sim.time
