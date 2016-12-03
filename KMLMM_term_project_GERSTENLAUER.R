@@ -76,13 +76,13 @@ low_V4  = 1;
 high_V4 = 3;
 
 #initial sample values
-c.grid<-1:5
-epsilon.grid<-seq(from=0.1,to=0.9,by=0.1)
-poly.grid<-low_V4:high_V4
+c.grid<-2**c(0,0.5,1,1.5)
+epsilon.grid<-10**c(-2,-1,-0.5,0,0.5)
+poly.grid<-1:(high_V4+1)
 
 #start values
-C.start=2
-Epsilon=0.3
+C.start=c.grid[3]
+Epsilon=epsilon.grid[3]
 polynomial_degree=3
 
 #how many iterations should be run? 
