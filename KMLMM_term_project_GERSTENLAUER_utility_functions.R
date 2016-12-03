@@ -305,7 +305,11 @@ optim.parameter<-function(result.optim, param.optim, grid, param_name, data, c.o
  
   startTime <- Sys.time()
   
-  if(param_name=="poly")print(paste("grid poly:",grid))
+  print(paste("Optimize parameter:",param_name))
+  print(paste("with grid:",grid))
+  print(paste("and fixed params epsilon:",epsilon.optim))
+  print(paste("and fixed params C:",c.optim))
+  print(paste("and fixed params poly:",polynomial.degree.optim))
   
   #check preconditions
   #Here I do not check result.optim because it is NULL in the first call!
