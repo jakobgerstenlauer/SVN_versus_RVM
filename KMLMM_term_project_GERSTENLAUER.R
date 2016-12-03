@@ -265,8 +265,7 @@ for(fileName in file.names){
         numCVReplicates
       )
     
-    #I do not change / update the grid!
-    #poly.grid  <- o$new.grid
+    poly.grid  <- o$new.grid
     poly.optim <- o$parameter
     result.optim  <- o$result
     time.spent  <- o$time
