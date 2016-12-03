@@ -59,11 +59,9 @@ if(basename(getwd())=='data' || basename(getwd())=='plots')
 
 #setwd("J:/UPC/2016/02/KMLMM/KernelMethods/practicals/term_project/code")
 
-source("workingDir.R")
-source("properties.R")
-
 #define path of standard directories
 source("workingDir.R")
+source("properties.R")
 
 #read functions from external code file
 setwd(codeDir)
