@@ -17,6 +17,8 @@ source("workingDir.R")
 setwd(dataDir)
 
 #import log from file
+#log.file <- file.choose()
+#data.log.file  <- read.table(log.file,header=T)
 data.log.file <- read.table("Log_KMLMM_term_project_2016_11_30.log",header = T)
 ggplot(data.log.file,aes(x=data.log.file$opt.step,y=data.log.file$comput.time,fill=data.log.file$parameter))+geom_bar(position = "dodge",stat="identity")+labs(title="Comparison for each parameter in each step",x="Step",y="Computation Time") 
 
