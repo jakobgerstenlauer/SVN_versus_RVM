@@ -161,7 +161,7 @@ j<-1
 for(fileName in file.names){
   print(paste("read input file:", fileName))
   load(fileName)
-  id_parameter_combination<-j
+  id_parameter_combination[i]<-j
   
   #start values for parameters
   cv.mean.max <- 0
