@@ -292,8 +292,7 @@ ksvm.10x10CV<-function(response.name, data, c, eps, p, n=10,k=10){
 
 
 optim.parameter<-function(result.optim, param.optim, grid, param_name, data, c.optim, epsilon.optim, polynomial.degree.optim, numCVReplicates){
-  
-  #ptm <- proc.time()
+ 
   startTime <- Sys.time()
   
   if(param_name=="poly")print(paste("grid poly:",grid))
@@ -354,14 +353,8 @@ optim.parameter<-function(result.optim, param.optim, grid, param_name, data, c.o
   }
   
   grid <- updateGrid(param.optim, step, poly=param_name=="poly")
-<<<<<<< HEAD
   endTime <- Sys.time();
-  #time.used <- proc.time() - ptm
   time.used <- endTime - startTime
   return(list(new.grid=grid, result=result.optim, parameter=param.optim, time=time.used))
-=======
-  time.used <- proc.time() - ptm
-  return(list(new.grid=grid, result=result.optim, parameter=param.optim, time=time.used[3]))
->>>>>>> 975f9a280a591cc5111bce2fe0d375c9a4ee5b24
 }
 
