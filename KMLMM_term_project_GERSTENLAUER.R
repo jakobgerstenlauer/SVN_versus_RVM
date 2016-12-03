@@ -47,12 +47,11 @@ rm(list=ls(all=TRUE))
 glue<-function(...){paste(...,sep="")}
 
 #define path of standard directories
-source("workingDir.R")
-
-#code according to local workspace, works on every route
-#setwd('..')
-#setwd(glue(getwd(),'/code'))
-#setwd("J:/UPC/2016/02/KMLMM/KernelMethods/practicals/term_project/code")
+if(!exists("codeDir")){
+  if(basename(getwd())=='data')
+    setwd('..')
+  source("workingDir.R")
+}
 
 #read functions from external code file
 setwd(codeDir)
