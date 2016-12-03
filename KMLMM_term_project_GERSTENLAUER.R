@@ -43,57 +43,6 @@
 #remove old objects for safety resons
 rm(list=ls(all=TRUE))
 
-#*******************************************************************************
-# Here all parameters are set for the R script:
-#*******************************************************************************
-
-#Define number of replications for 10-fold Cross-validation!
-#E.g 10 means that we use 10-times 10-fold cross-validation
-numCVReplicates<-1
-
-#Define number of replications for each  parameter combination
-#sampled in the Latin Hyper Cube.
-maxReplicatesLHC<-2
-
-#number of samples from the LHC 
-SampleSize<-100
-
-#Now define the ranges for all four parameters of the LHC:
-#V1: signal-to-noise ratio
-low_V1= 0.1;
-high_V1= 0.9;
-
-#V2: number of observations N
-low_V2  = 16;
-high_V2 = 256;
-
-#V3: number of variables D
-low_V3  = 2;
-high_V3 = 16;
-
-#V4: polynomial degree of the inputs.
-low_V4  = 1;
-high_V4 = 3;
-
-#initial sample values
-#c.grid<-2**c(0,0.5,1,1.5)
-c.grid<-1:5
-#epsilon.grid<-10**c(-0.5,0,0.5)
-epsilon.grid<-seq(from=0.1,to=0.9,by=0.1)
-#Here I restrict the initial search space from 1 to the maximum polynomial degree + 1.
-#However, note that the grid for all parameter changes after each optimization step!
-poly.grid<-1:(high_V4+1)
-
-#start values
-C.start=c.grid[2]
-Epsilon=epsilon.grid[2]
-polynomial_degree=3
-
-#How many iterations should be run? 
-#(in each iteration we do a line-search for each of the three hyper-parameters)
-maxStep<-5
-#*******************************************************************************
-
 #utility function
 glue<-function(...){paste(...,sep="")}
 
@@ -101,6 +50,8 @@ glue<-function(...){paste(...,sep="")}
 #setwd('..')
 #setwd(glue(getwd(),'/code'))
 #setwd("J:/UPC/2016/02/KMLMM/KernelMethods/practicals/term_project/code")
+
+source("properties.R")
 
 #define path of standard directories
 source("workingDir.R")
@@ -119,10 +70,10 @@ LHS<-improvedLHS(n=SampleSize, k=NumVariables, dup=1)
 setwd(dataDir)
 file.names<-""
 
-signal.to.noise.ratio.grid<-rep(0,SampleSize)
-num.vars.grid<-rep(0,SampleSize)
-num.observations.grid<-rep(0,SampleSize)
-polynomial.degree.grid<-rep(0,SampleSize)
+signal.to.noise.ratio.grid<-rep(0,SampleSize*maxReplicatesLHC)
+num.vars.grid<-rep(0,SampleSize*maxReplicatesLHC)
+num.observations.grid<-rep(0,SampleSize*maxReplicatesLHC)
+polynomial.degree.grid<-rep(0,SampleSize*maxReplicatesLHC)
 
 i<-1
 for (simulation in seq(1,dim(LHS)[1]))
@@ -306,9 +257,27 @@ for(fileName in file.names){
   #I override results if the new model is better
   #(has higher mean coefficient of determination).
   i <- i + 1
-  
-  
 }
+
+#Set up a data set with all the results of the simulation
+d.results<-data.frame(
+  signal.to.noise.ratio=signal.to.noise.ratio.grid,
+  num.vars=num.vars.grid,
+  num.observations=num.observations.grid,
+  polynomial.degree=polynomial.degree.grid,
+  id_parameter_combination,
+  #optimal parameters
+  c_setting,
+  epsilon_setting,
+  polynomial_degree_setting,
+  #cross-validation error mean and sd
+  cv.mean,
+  cv.sd,
+  #sparsity mean and sd
+  sparsity,
+  sd.sparsity)
+
+
 
 #Was the correct polynomial degree chosen?
 plot(polynomial.degree.grid,polynomial_degree_setting)
