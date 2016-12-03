@@ -2,7 +2,7 @@
 # Kernel-Based Learning & Multivariate Modeling DMKM Master - MIRI Master
 # Lecturer: Lluıs A. Belanche, belanche@cs.upc.edu
 # Term project
-# October-Dezember 2016  
+# October-December 2016  
 # "Compare the Relevance Vector machine and the SVM for regression in terms of predictive accuracy 
 # and sparsity."
 #
@@ -77,7 +77,7 @@ high_V4 = 3;
 
 #initial sample values
 c.grid<-2**c(0,0.5,1,1.5)
-epsilon.grid<-10**c(-2,-1,-0.5,0,0.5)
+epsilon.grid<-10**c(-1,-0.5,0,0.5)
 poly.grid<-1:(high_V4+1)
 
 #start values
@@ -85,7 +85,7 @@ C.start=c.grid[3]
 Epsilon=epsilon.grid[3]
 polynomial_degree=3
 
-#how many iterations should be run? 
+#How many iterations should be run? 
 #(in each iteration we do a line-search for each of the three hyper-parameters)
 maxStep<-5
 #*******************************************************************************
@@ -95,7 +95,7 @@ glue<-function(...){paste(...,sep="")}
 
 #TODO Adapt to working dir or remove!
 #setwd("E:/ProyectoFinal/KernelFinalProject/code")
-#setwd("J:/UPC/2016/02/KMLMM/KernelMethods/practicals/term_project/code")
+setwd("J:/UPC/2016/02/KMLMM/KernelMethods/practicals/term_project/code")
 
 #define path of standard directories
 source("workingDir.R")
