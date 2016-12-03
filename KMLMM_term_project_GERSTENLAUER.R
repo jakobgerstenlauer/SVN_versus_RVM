@@ -146,6 +146,7 @@ for (simulation in seq(1,dim(LHS)[1]))
                        "_N_", floor(A2),
                        "_D_", floor(A3),
                        "_poly_", round(A4),
+                       "_replicate_",replicate,
                        ".RData");
   save(list="d", file=dump.file.name);
   file.names<-c(file.names, dump.file.name);
