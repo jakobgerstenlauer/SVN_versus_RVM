@@ -10,16 +10,16 @@ library(ggplot2)
 glue<-function(...){paste(...,sep="")}
 
 #prepare path variables
-setwd('D:/Documents/MIRI/Semestre 2/ProyectoFinal/KernelFinalProject/code')
+setwd('..')
 base.directory<-getwd()
 setwd(glue(base.directory,'/code'))
 source("workingDir.R")
 setwd(dataDir)
 
 #import log from file - chose from static or open dialog box
-log.file <- file.choose()
-data.log.file  <- read.table(log.file,header=T)
-#data.log.file <- read.table("Log_KMLMM_term_project_2016_11_30.log",header = T)
+#log.file <- file.choose()
+#data.log.file  <- read.table(log.file,header=T)
+data.log.file <- read.table("Log_KMLMM_term_project_2016_11_30.log",header = T)
 ggplot(data.log.file,aes(x=data.log.file$opt.step,y=data.log.file$comput.time,fill=data.log.file$parameter))+geom_bar(position = "dodge",stat="identity")+labs(title="Comparison for each parameter in each step",x="Step",y="Computation Time") 
 
 #get the computation time and length for each parameter
@@ -30,5 +30,6 @@ tapply(data.log.file$comput.time,data.log.file$parameter,length)
 tapply(data.log.file$comput.time,data.log.file$opt.step,sum)
 tapply(data.log.file$comput.time,data.log.file$opt.step,length)
 
-#get time for each archive, i.o.w. time taken to find optimal parameters
-mean(tapply(data.log.file$comput.time,data.log.file$fileName,sum))
+#get time for each archive, i.o.w. time taken to find optimal parameter
+tapply(data.log.file$comput.time,data.log.file$fileName,sum)
+

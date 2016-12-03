@@ -46,17 +46,21 @@ rm(list=ls(all=TRUE))
 #utility function
 glue<-function(...){paste(...,sep="")}
 
-#define path of standard directories
+
 if(!exists("codeDir")){
   if(basename(getwd())=='data')
     setwd('..')
   source("workingDir.R")
 }
 
+source("properties.R")
+
+#define path of standard directories
+source("workingDir.R")
+
 #read functions from external code file
 setwd(codeDir)
 source("KMLMM_term_project_GERSTENLAUER_utility_functions.R")
-source("properties.R")
 
 #Step 1: define the LH scheme 
 require("lhs")
@@ -291,5 +295,5 @@ setwd(dataDir)
 #get current date and replace hyphens by underline
 Date<-gsub(pattern="-", replacement="_",Sys.Date())
 #paste new filename
-fileName<-paste("Results_Simulation_KMLMM_term_project_",Date,".csv",sep="")
+fileName<-paste("Results_Simulation_SVM_KMLMM_term_project_",Date,".csv",sep="")
 write.table(d.results, file=fileName, append=FALSE, row.names = FALSE, sep = ";")
