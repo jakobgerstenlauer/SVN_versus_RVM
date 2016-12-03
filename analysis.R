@@ -16,7 +16,7 @@ setwd(glue(base.directory,'/code'))
 source("workingDir.R")
 setwd(dataDir)
 
-#import log from file
+#import log from file - chose from static or open dialog box
 #log.file <- file.choose()
 #data.log.file  <- read.table(log.file,header=T)
 data.log.file <- read.table("Log_KMLMM_term_project_2016_11_30.log",header = T)
@@ -30,5 +30,6 @@ tapply(data.log.file$comput.time,data.log.file$parameter,length)
 tapply(data.log.file$comput.time,data.log.file$opt.step,sum)
 tapply(data.log.file$comput.time,data.log.file$opt.step,length)
 
-tapply(data.log.file$comput.time,data.log.file$parameter,ave)
-ave(data.log.file$comput.time)
+#get time for each archive, i.o.w. time taken to find optimal parameter
+tapply(data.log.file$comput.time,data.log.file$fileName,sum)
+
