@@ -98,8 +98,6 @@ maxStep<-5
 glue<-function(...){paste(...,sep="")}
 
 #TODO Adapt to working dir or remove!
-setwd('..')
-setwd(glue(getwd(),'/code'))
 #setwd('..')
 #setwd(glue(getwd(),'/code'))
 #setwd("J:/UPC/2016/02/KMLMM/KernelMethods/practicals/term_project/code")
@@ -176,6 +174,9 @@ sample.size <- length(file.names)
 
 #Now I only store the results of the best model for each file!
 
+#Id of the parameter combination (has maxReplicatesLHC replicates!)
+id_parameter_combination<-vector(mode="numeric",length=sample.size) 
+
 #vectors for optimal parameters
 c_setting<-vector(mode="numeric",length=sample.size)  
 epsilon_setting<-vector(mode="numeric",length=sample.size)  
@@ -199,9 +200,14 @@ init.logging(header)
 
 #index for files
 i<-1
+
+#index for parameter combination
+j<-1
+
 for(fileName in file.names){
   print(paste("read input file:", fileName))
   load(fileName)
+  id_parameter_combination<-j
   
   #start values for parameters
   cv.mean.max <- 0
@@ -289,11 +295,19 @@ for(fileName in file.names){
     sd.sparsity[i] <- result.optim[4]
   }
   
+  #For each parameter combination there are maxReplicatesLHC replicates.
+  #Index j identifies the replicate.
+  if((i %% maxReplicatesLHC)==0){
+    j<-j+1
+  }
+  
   #The index i has to run over all input files.
   #I store only one result for each file!
   #I override results if the new model is better
   #(has higher mean coefficient of determination).
   i <- i + 1
+  
+  
 }
 
 #Was the correct polynomial degree chosen?
