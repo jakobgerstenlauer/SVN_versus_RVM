@@ -301,7 +301,6 @@ ksvm.10x10CV<-function(response.name, data, c, eps, p, n=10,k=10){
   return(r)
 }
 
-
 optim.parameter<-function(result.optim, param.optim, grid, param_name, data, c.optim, epsilon.optim, polynomial.degree.optim, numCVReplicates){
  
   startTime <- Sys.time()
