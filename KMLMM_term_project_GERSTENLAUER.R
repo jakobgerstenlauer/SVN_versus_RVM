@@ -141,6 +141,9 @@ cv.sd<-vector(mode="numeric",length=sample.size)
 sparsity<-vector(mode="numeric",length=sample.size)
 sd.sparsity<-vector(mode="numeric",length=sample.size)
 
+#vector for computation time
+compu.time<-vector(mode="numeric",length=sample.size)
+
 #Here I have to declare the variable without initialising it,
 #because in the first call to optim.parameter() it is a necessary argument.
 result.optim<-NULL
@@ -165,6 +168,7 @@ for(fileName in file.names){
   c.optim <- C.start
   epsilon.optim <- Epsilon
   poly.optim <- polynomial_degree
+  total.sim.time<-0
   
   for (step in 1:maxStep) {
     print(paste("optim step:", step))
@@ -187,6 +191,7 @@ for(fileName in file.names){
     epsilon.optim <- o$parameter
     result.optim  <- o$result
     time.spent  <- o$time
+    total.sim.time <- total.sim.time + time.spent
     logging(paste(fileName, step, "epsilon:", epsilon.optim, time.spent))
     rm(o)
     
@@ -208,6 +213,7 @@ for(fileName in file.names){
     c.optim <- o$parameter
     result.optim  <- o$result
     time.spent  <- o$time
+    total.sim.time <- total.sim.time + time.spent
     logging(paste(fileName, step, "C:", c.optim, time.spent))
     rm(o)
     
@@ -229,6 +235,7 @@ for(fileName in file.names){
     poly.optim <- o$parameter
     result.optim  <- o$result
     time.spent  <- o$time
+    total.sim.time <- total.sim.time + time.spent
     logging(paste(fileName, step, "poly:", poly.optim, time.spent, sep="\t"))
     rm(o)
     
@@ -252,6 +259,8 @@ for(fileName in file.names){
     j<-j+1
   }
   
+  compu.time[i]<-total.sim.time
+    
   #The index i has to run over all input files.
   #I store only one result for each file!
   #I override results if the new model is better
@@ -261,6 +270,7 @@ for(fileName in file.names){
 
 #Set up a data set with all the results of the simulation
 d.results<-data.frame(
+  compu.time,
   signal.to.noise.ratio=signal.to.noise.ratio.grid,
   num.vars=num.vars.grid,
   num.observations=num.observations.grid,
@@ -276,8 +286,6 @@ d.results<-data.frame(
   #sparsity mean and sd
   sparsity,
   sd.sparsity)
-
-
 
 #Was the correct polynomial degree chosen?
 plot(polynomial.degree.grid,polynomial_degree_setting)
