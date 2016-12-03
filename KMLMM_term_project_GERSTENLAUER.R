@@ -98,14 +98,9 @@ maxStep<-5
 glue<-function(...){paste(...,sep="")}
 
 #TODO Adapt to working dir or remove!
-<<<<<<< HEAD
 setwd('..')
 setwd(glue(getwd(),'/code'))
 #setwd("J:/UPC/2016/02/KMLMM/KernelMethods/practicals/term_project/code")
-=======
-#setwd("E:/ProyectoFinal/KernelFinalProject/code")
-setwd("J:/UPC/2016/02/KMLMM/KernelMethods/practicals/term_project/code")
->>>>>>> 7dff25d391099e7e2aed41363b107e1638af462c
 
 #define path of standard directories
 source("workingDir.R")
