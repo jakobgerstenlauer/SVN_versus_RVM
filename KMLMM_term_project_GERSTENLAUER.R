@@ -160,7 +160,15 @@ j<-1
 for(fileName in file.names){
   print(paste("read input file:", fileName))
   load(fileName)
-  id_parameter_combination<-j
+  
+  #For each parameter combination there are maxReplicatesLHC replicates.
+  #Index j identifies the replicate.
+
+  if(((i+1) %% maxReplicatesLHC)==0){
+    j<-j+1
+  }
+  
+  id_parameter_combination[i]<-j
   
   #start values for parameters
   cv.mean.max <- 0
@@ -252,12 +260,6 @@ for(fileName in file.names){
     sd.sparsity[i] <- result.optim[4]
   }
   
-  #For each parameter combination there are maxReplicatesLHC replicates.
-  #Index j identifies the replicate.
-  if((i %% maxReplicatesLHC)==0){
-    j<-j+1
-  }
-  
   compu.time[i]<-total.sim.time
     
   #The index i has to run over all input files.
@@ -287,4 +289,8 @@ d.results<-data.frame(
   sd.sparsity)
 
 setwd(dataDir)
-write.table(d.results, file=fileName, append=FALSE, row.names = FALSE)
+#get current date and replace hyphens by underline
+Date<-gsub(pattern="-", replacement="_",Sys.Date())
+#paste new filename
+fileName<-paste("Results_Simulation_KMLMM_term_project_",Date,".csv",sep="")
+write.table(d.results, file=fileName, append=FALSE, row.names = FALSE, sep = ";")
