@@ -238,6 +238,7 @@ gridPoly<-function(value.optim){
   maxV <- value.optim + 1;
   return(c(minV, value.optim, maxV))
 }
+
 #Adapt the optimization grid for parameter C
 #Here we work on the base 2 scale!
 gridC<-function(value.optim){
