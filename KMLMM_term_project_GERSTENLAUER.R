@@ -56,7 +56,6 @@ source("workingDir.R")
 #setwd("J:/UPC/2016/02/KMLMM/KernelMethods/practicals/term_project/code")
 
 source("properties.R")
-
 #read functions from external code file
 setwd(codeDir)
 source("KMLMM_term_project_GERSTENLAUER_utility_functions.R")
