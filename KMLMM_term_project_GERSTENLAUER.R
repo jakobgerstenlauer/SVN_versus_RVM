@@ -46,17 +46,8 @@ rm(list=ls(all=TRUE))
 #utility function
 glue<-function(...){paste(...,sep="")}
 
-#set the wd to code
-if(basename(getwd())=='data' || basename(getwd())=='plots')
-{
-  if(!exists("codeDir")){
-    setwd('..')
-    setwd(glue(getwd(),'/code'))
-  }
-  else
-    setwd(codeDir)
-}
-
+#TODO Adapt to working dir or remove!
+#setwd("D:/Documents/MIRI/Semestre 2/ProyectoFinal/KernelFinalProject/code")
 #setwd("J:/UPC/2016/02/KMLMM/KernelMethods/practicals/term_project/code")
 
 #define path of standard directories
