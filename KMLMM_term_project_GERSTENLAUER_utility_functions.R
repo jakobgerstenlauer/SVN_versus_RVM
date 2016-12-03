@@ -233,31 +233,43 @@ isInvalidResult<-function(result, param_name, param_value){
 }
 
 
+gridPoly<-function(value.optim){
+  value.optim<-round(value.optim)
+  #for the degree 1 is the minimum
+  minV <- max(value.optim - 1, 1);
+  maxV <- value.optim + 1;
+  return(c(minV, value.optim, maxV))
+}
+#Adapt the optimization grid for parameter C
+#Here we work on the base 2 scale!
+gridC<-function(value.optim){
+  value.optim<-log2(value.optim)
+  minV <- max(value.optim - (1 / step**2) * value.optim, 0.001);
+  maxV <- value.optim + (1 / step**2) * value.optim;
+  return(2**c(minV, value.optim, maxV))
+}
+
+#Adapt the optimization grid for parameter epsilon.
+#Here we work on the base 10 scale!
+gridEpsilon<-function(value.optim){
+  value.optim<-log10(value.optim)
+  minV <- max(value.optim - (1 / step**2) * value.optim, 0.001);
+  maxV <- value.optim + (1 / step**2) * value.optim;
+  return(10**c(minV, value.optim, maxV))
+}
+
 #Calculates a new grid for parameter optimization
 #
 #value.optim: current estimate for the optimal value
 #step: current iteration
-#poly: is the paramter polynomial degre? Default is FALSE.
-updateGrid <- function(value.optim, step, poly=FALSE) {
-  
-  stopifnot(value.optim>0.0009)
-  
-  #for the degree 1 is the minimum
-  if(poly){
-    value.optim<-round(value.optim)
-    minV <- max(value.optim - 1, 1);
-    maxV <- value.optim + 1;
-  }else{
-    minV <- max(value.optim - (1 / step**2) * value.optim, 0.001)
-    maxV <- value.optim + (1 / step**2) * value.optim
-  }
-  
-  if(poly){
-    print("polynomial degree:")
-  }
-  print("updated grid:")
-  print(c(minV, value.optim, maxV))
-  return(c(minV, value.optim, maxV))
+#type: select the appropriate parameter: "C","epsilon","poly".
+updateGrid <- function(value.optim, step, type) {
+  stopifnot(value.optim>0.00001)
+  switch(type,
+    poly =  gridPoly(value.optim),
+    C = gridC(value.optim),
+    epsilon = gridEpsilon(value.optim)
+  )
 }
 
 #Calculates n times k-fold-cross-validation for a kernelized SVM regression
@@ -350,9 +362,10 @@ optim.parameter<-function(result.optim, param.optim, grid, param_name, data, c.o
     }else{
       stop("Missing result!")
     }
-  }
+ }
   
-  grid <- updateGrid(param.optim, step, poly=param_name=="poly")
+  #type: select the appropriate parameter: "C","epsilon","poly".
+  grid <- updateGrid(param.optim, step, type=param_name)
   endTime <- Sys.time();
   time.used <- endTime - startTime
   return(list(new.grid=grid, result=result.optim, parameter=param.optim, time=time.used))
