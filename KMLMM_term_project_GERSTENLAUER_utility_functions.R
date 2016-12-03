@@ -219,7 +219,6 @@ ksvm.CV<-function(response.name, data, c, eps, p, k=10){
   return(c(mean(rSquared),sd(rSquared), mean(sparsity), sd(sparsity) ))
 }
 
-
 is.invalid<-function(x){
   is.nan(x)||is.infinite(x)
 }
@@ -231,7 +230,6 @@ isInvalidResult<-function(result, param_name, param_value){
   } 
   return (FALSE);
 }
-
 
 gridPoly<-function(value.optim){
   value.optim<-round(value.optim)
