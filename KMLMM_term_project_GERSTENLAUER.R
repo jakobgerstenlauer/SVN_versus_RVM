@@ -289,4 +289,8 @@ d.results<-data.frame(
   sd.sparsity)
 
 setwd(dataDir)
-write.table(d.results, file=fileName, append=FALSE, row.names = FALSE)
+#get current date and replace hyphens by underline
+Date<-gsub(pattern="-", replacement="_",Sys.Date())
+#paste new filename
+fileName<-paste("Results_Simulation_KMLMM_term_project_",Date,".csv",sep="")
+write.table(d.results, file=fileName, append=FALSE, row.names = FALSE, sep = ";")
