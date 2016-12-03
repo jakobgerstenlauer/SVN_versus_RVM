@@ -46,13 +46,20 @@ rm(list=ls(all=TRUE))
 #utility function
 glue<-function(...){paste(...,sep="")}
 
-
-if(!exists("codeDir")){
-  if(basename(getwd())=='data')
+#set the wd to code
+if(basename(getwd())=='data' || basename(getwd())=='plots')
+{
+  if(!exists("codeDir")){
     setwd('..')
-  source("workingDir.R")
+    setwd(glue(getwd(),'/code'))
+  }
+  else
+    setwd(codeDir)
 }
 
+#setwd("J:/UPC/2016/02/KMLMM/KernelMethods/practicals/term_project/code")
+
+source("workingDir.R")
 source("properties.R")
 
 #define path of standard directories
