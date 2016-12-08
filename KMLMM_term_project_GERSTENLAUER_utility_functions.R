@@ -125,6 +125,95 @@ instance.generator<-function(signal_to_noise_ratio, N, D, polynomialDegree, isDe
 #d1<-instance.generator(signal_to_noise_ratio=0.5, N=100, D=10, polynomialDegree=4, isDebug=FALSE)
   
 ######################################################################################################
+#Calculates k-fold-cross-validation for a kernelized relevance vector machine.
+#
+#Arguments:
+#response.name: the name of the response (output) as a "string",
+#data: the data set,
+#k: number of cross-validation folds, defaults to 10.
+#p: polynomial degree of the kernel to be fitted
+#
+#return value: a numeric vector with three components 
+#1: mean coefficient of determination for validation data 
+#2: standard deviation of the coefficient of determination for validation data
+#3: sparsity index (1 - ratio of data used as support vectors)
+#4: standard deviation of the sparsity index (ratio of data used as support vectors)
+#
+#Code adapted from: 
+#http://stats.stackexchange.com/questions/61090/how-to-split-a-data-set-to-do-10-fold-cross-validation
+#######################################################################################################
+krvm.CV(response.name, data, p, k=10){
+  
+  #check preconditions
+  stopifnot(exists("response.name"))
+  stopifnot(is.character(response.name))
+  stopifnot(exists("data"))
+  #at least 10 rows
+  stopifnot(nrow(data)>9)
+  #at least 2 columns 
+  stopifnot(ncol(data)>1)
+  stopifnot(k<=nrow(data))
+  
+  require(kernlab)
+  
+  #anonymous function calculating squared errors
+  calculateSquaredErrors<-function(x,y){
+    sum((x-y)**2)
+  }
+  
+  #Randomly shuffle the data
+  data<-data[sample(nrow(data)),]
+  
+  #Create 10 equally size folds
+  folds <- cut(seq(1,nrow(data)),breaks=k,labels=FALSE)
+  
+  #sparsity 
+  sparsity<-numeric(length=k)
+  
+  #The mean squared prediction error of the regression model for a given 
+  #pair of a training and a test data set: 
+  meanSquaredError<-numeric(length=k)
+  
+  #The null hypothesis is given by a global mean:
+  meanSquaredErrorNullHypothesis<-numeric(length=k)
+  
+  #The R-squared value: % of total variance explained
+  #Total variance is defined as variance of the null model.
+  rSquared<-numeric(length=k)
+  
+  #Perform k fold cross validation
+  for(i in 1:k){
+    #Segment your data by fold using the which() function 
+    testIndexes <- which(folds==i,arr.ind=TRUE)
+    testData    <- data[testIndexes, ]
+    trainData   <- data[-testIndexes, ]
+    
+    eval(parse(text=glue(
+      "m1.rvm <- ksvm(",response.name,"~.,
+      data=trainData, scales=rep(FALSE, dim(data)[2]),
+      kernel='polydot', kpar=list(degree=p, scale=1, offset=1))"
+    )))
+    
+    stopifnot(exists("m1.rvm"))
+    
+    sparsity[i] <-1 - (m1.rvm@nSV / dim(data)[1])
+    predictions<-predict(m1.rvm, newdata=testData)
+    
+    eval(parse(text=glue(
+      "meanSquaredError[i] <- calculateSquaredErrors(predictions, testData$",response.name,")"
+    )))
+    
+    eval(parse(text=glue(
+      "meanSquaredErrorNullHypothesis[i] <- calculateSquaredErrors(mean(testData$",response.name,"), testData$",response.name,")"
+    )))
+    
+    rSquared[i] <- (meanSquaredErrorNullHypothesis[i] - meanSquaredError[i]) / meanSquaredErrorNullHypothesis[i]
+  }
+  return(c(mean(rSquared),sd(rSquared), mean(sparsity), sd(sparsity) ))
+}
+
+
+######################################################################################################
 #Calculates k-fold-cross-validation for a kernelized SVM regression
 #
 #Arguments:
@@ -271,12 +360,42 @@ updateGrid <- function(value.optim, step, type) {
   )
 }
 
+#Calculates n times k-fold-cross-validation for a kernelized relevance vector machine.
+#Arguments:
+#response.name: name of the response
+#data: the data set
+#p: degree of the polynomial kernel
+#n: number of replicates, default 10
+#k: number of fold in k-fold cross validation, default 10
+#return value: mean and sd of the prediction error and the sparsity ratio 
+#as average over all n replicates!
+krvm.10x10CV<-function(response.name, data, p, n=10,k=10){
+  
+  #check preconditions
+  stopifnot(exists("response.name"))
+  stopifnot(is.character(response.name))
+  stopifnot(exists("data"))
+  #at least 10 rows
+  stopifnot(nrow(data)>9)
+  #at least 2 columns 
+  stopifnot(ncol(data)>1)
+  stopifnot(k<=nrow(data))
+  
+  r<-replicate(n, krvm.CV(response.name, data, p, k))
+  r<-apply(r,1,mean)
+  names(r)<-c("r2.mean","r2.sd","sparsity.mean","sparsity.sd")
+  return(r)
+}
+
 #Calculates n times k-fold-cross-validation for a kernelized SVM regression
 #Arguments:
-#n: number of replicates, default 10
+#response.name: name of the response
 #data: the data set
 #c: the C parameter
 #eps: the epsilon parameter
+#p: degree of the polynomial kernel
+#n: number of replicates, default 10
+#k: number of fold in k-fold cross validation, default 10
 #return value: mean and sd of the prediction error and the sparsity ratio 
 #as average over all n replicates!
 ksvm.10x10CV<-function(response.name, data, c, eps, p, n=10,k=10){
@@ -309,7 +428,7 @@ optim.parameter.rvm<-function(result.optim, param.optim, grid, data, numCVReplic
   check.numeric.values(numCVReplicates,1)
   startTime <- Sys.time()
   for (param in grid) {
-    result <- rvm.10x10CV(data,response.name = "output",p = round(param),n = numCVReplicates);
+    result <- krvm.10x10CV(response.name = "output", data, p = round(param),n = numCVReplicates);
     if(exists("result")){
       if (isInvalidResult(result, "poly", param)) {
         print("Skip this run because there is no valid result!");
