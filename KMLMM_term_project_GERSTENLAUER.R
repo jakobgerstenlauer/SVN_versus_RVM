@@ -79,9 +79,16 @@ LHS<-improvedLHS(n=SampleSize, k=NumVariables, dup=1)
 setwd(dataDir)
 file.names<-""
 
+#V1: signal-to-noise ratio
 signal.to.noise.ratio.grid<-rep(0,SampleSize*maxReplicatesLHC)
-num.vars.grid<-rep(0,SampleSize*maxReplicatesLHC)
+
+#V2: number of observations N
 num.observations.grid<-rep(0,SampleSize*maxReplicatesLHC)
+
+#V3: number of variables D
+num.vars.grid<-rep(0,SampleSize*maxReplicatesLHC)
+
+#V4: polynomial degree of the inputs.
 polynomial.degree.grid<-rep(0,SampleSize*maxReplicatesLHC)
 
 i<-1
@@ -101,8 +108,8 @@ for (simulation in seq(1,dim(LHS)[1]))
     d<-instance.generator(signal_to_noise_ratio=A1, N=round(A2), D=round(A3), polynomialDegree=round(A4));
     
     signal.to.noise.ratio.grid[i]<-A1;
-    num.vars.grid[i]<-floor(A2);
-    num.observations.grid[i]<-floor(A3);
+    num.observations.grid[i]<-floor(A2);
+    num.vars.grid[i]<-floor(A3);
     polynomial.degree.grid[i]<-round(A4);
     
     i<-i+1
