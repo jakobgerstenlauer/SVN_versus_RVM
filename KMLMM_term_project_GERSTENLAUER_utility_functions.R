@@ -130,8 +130,8 @@ instance.generator<-function(signal_to_noise_ratio, N, D, polynomialDegree, isDe
 #Arguments:
 #response.name: the name of the response (output) as a "string",
 #data: the data set,
-#k: number of cross-validation folds, defaults to 10.
 #p: polynomial degree of the kernel to be fitted
+#k: number of cross-validation folds, defaults to 10.
 #
 #return value: a numeric vector with three components 
 #1: mean coefficient of determination for validation data 
