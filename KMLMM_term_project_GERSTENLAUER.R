@@ -46,16 +46,9 @@ rm(list=ls(all=TRUE))
 #utility function
 glue<-function(...){paste(...,sep="")}
 
-
 #TODO Adapt to working dir or remove!
-#define path of standard directories
-source("workingDir.R")
-
-#code according to local workspace, works on every route
-#setwd('..')
-#setwd(glue(getwd(),'/code'))
+#setwd("D:/Documents/MIRI/Semestre 2/ProyectoFinal/KernelFinalProject/code")
 #setwd("J:/UPC/2016/02/KMLMM/KernelMethods/practicals/term_project/code")
-
 
 if(!exists("codeDir")){
   if(basename(getwd())=='data')
@@ -63,11 +56,13 @@ if(!exists("codeDir")){
   source("workingDir.R")
 }
 
+#define path of standard directories
+source("workingDir.R")
 source("properties.R")
+
 #read functions from external code file
 setwd(codeDir)
 source("KMLMM_term_project_GERSTENLAUER_utility_functions.R")
-source("properties.R")
 
 #Step 1: define the LH scheme 
 require("lhs")
