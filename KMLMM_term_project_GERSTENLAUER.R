@@ -122,6 +122,137 @@ for (simulation in seq(1,dim(LHS)[1]))
 
 file.names<-file.names[-1]
 
+
+#################################################################################
+#
+# Relevance Vector Machine
+#
+#################################################################################
+
+require("kernlab")
+sample.size <- length(file.names) 
+
+#Now I only store the results of the best model for each file!
+
+#Id of the parameter combination (has maxReplicatesLHC replicates!)
+id_parameter_combination<-vector(mode="numeric",length=sample.size) 
+
+#vectors for optimal parameters
+polynomial_degree_setting<-vector(mode="numeric",length=sample.size)
+
+#vectors for cross-validation error mean and sd
+cv.mean<-vector(mode="numeric",length=sample.size)
+cv.sd<-vector(mode="numeric",length=sample.size)
+
+#vectors for sparsity mean and sd
+sparsity<-vector(mode="numeric",length=sample.size)
+sd.sparsity<-vector(mode="numeric",length=sample.size)
+
+#vector for computation time
+compu.time<-vector(mode="numeric",length=sample.size)
+
+#Here I have to declare the variable without initialising it,
+#because in the first call to optim.parameter() it is a necessary argument.
+result.optim<-NULL
+
+header<-paste(c("fileName", "opt.step", "parameter", "opt.value", "comput.time"), 
+              sep="\t")
+init.logging(header)
+
+#index for files
+i<-1
+
+#index for parameter combination
+j<-1
+
+for(fileName in file.names){
+  print(paste("read input file:", fileName))
+  load(fileName)
+  
+  #For each parameter combination there are maxReplicatesLHC replicates.
+  #Index j identifies the replicate.
+  
+  if(((i+1) %% maxReplicatesLHC)==0){
+    j<-j+1
+  }
+  
+  id_parameter_combination[i]<-j
+  
+  #start values for parameters
+  cv.mean.max <- 0
+  poly.optim <- polynomial_degree
+  total.sim.time<-0
+  
+  for (step in 1:maxStep) {
+    print(paste("optim step:", step))
+   
+    #optimize polynomial degree
+    o <-
+      optim.parameter.rvm(
+        result.optim,
+        param.optim=poly.optim,
+        poly.grid,
+        "poly",
+        data = d,
+        c.optim,
+        epsilon.optim,
+        poly.optim,
+        numCVReplicates
+      )
+    
+    poly.grid  <- o$new.grid
+    poly.optim <- o$parameter
+    result.optim  <- o$result
+    time.spent  <- o$time
+    total.sim.time <- total.sim.time + time.spent
+    logging(paste(fileName, step, "poly:", poly.optim, time.spent, sep="\t"))
+    rm(o)
+    
+    #optimal parameters
+    polynomial_degree_setting[i] <- poly.optim
+    
+    #cross-validation error mean and sd
+    cv.mean[i] <- result.optim[1]
+    cv.sd[i] <- result.optim[2]
+    
+    #sparsity mean and sd
+    sparsity[i] <- result.optim[3]
+    sd.sparsity[i] <- result.optim[4]
+  }
+  
+  compu.time[i]<-total.sim.time
+  
+  #The index i has to run over all input files.
+  #I store only one result for each file!
+  #I override results if the new model is better
+  #(has higher mean coefficient of determination).
+  i <- i + 1
+}
+
+#Set up a data set with all the results of the simulation
+d.results<-data.frame(
+  compu.time,
+  signal.to.noise.ratio=signal.to.noise.ratio.grid,
+  num.vars=num.vars.grid,
+  num.observations=num.observations.grid,
+  polynomial.degree=polynomial.degree.grid,
+  id_parameter_combination,
+  #optimal parameters
+  polynomial_degree_setting,
+  #cross-validation error mean and sd
+  cv.mean,
+  cv.sd,
+  #sparsity mean and sd
+  sparsity,
+  sd.sparsity)
+
+setwd(dataDir)
+#get current date and replace hyphens by underline
+Date<-gsub(pattern="-", replacement="_",Sys.Date())
+#paste new filename
+fileName<-paste("Results_Simulation_RVM_KMLMM_term_project_",Date,".csv",sep="")
+write.table(d.results, file=fileName, append=FALSE, row.names = FALSE, sep = ";")
+
 #################################################################################
 #
 # SVM regression, 
