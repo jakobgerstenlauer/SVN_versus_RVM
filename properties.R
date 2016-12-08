@@ -8,7 +8,7 @@ numCVReplicates<-1
 
 #Define number of replications for each  parameter combination
 #sampled in the Latin Hyper Cube.
-maxReplicatesLHC<-5
+maxReplicatesLHC<-3
 
 #TODO Check if the sample size is correct!
 #number of samples from the LHC 
