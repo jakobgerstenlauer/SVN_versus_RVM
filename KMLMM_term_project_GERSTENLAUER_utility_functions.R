@@ -301,6 +301,46 @@ ksvm.10x10CV<-function(response.name, data, c, eps, p, n=10,k=10){
   return(r)
 }
 
+#TODO
+optim.parameter.rvm<-function(result.optim, param.optim, grid, data, numCVReplicates){
+ 
+   startTime <- Sys.time()
+ 
+  #check preconditions
+  #Here I do not check result.optim because it is NULL in the first call!
+  check.numeric.values(grid,3)
+  check.data.frames(data, min_rows=10, min_columns=2)
+  check.numeric.values(numCVReplicates,1)
+  
+  for (param in grid) {
+    result <- rvm.10x10CV(data,response.name = "output",p = round(param),n = numCVReplicates);
+    if(exists("result")){
+      if (isInvalidResult(result, "poly", param)) {
+        print("Skip this run because there is no valid result!");
+      }else if(length(result.optim)==0){#this is the case for the first model run
+        result.optim <- result;
+        param<-round(param);
+        param.optim <- param;
+        print(paste("First run: RVM optim poly degree:", param.optim));
+      }else if (result[1] > result.optim[1]){
+        result.optim <- result;
+        param<-round(param);
+        param.optim <- param;
+        print(paste("optim poly degree:", param.optim));
+      }
+    }else{
+      stop("Missing result!")
+    }
+  }
+  
+  #type: select the appropriate parameter: "C","epsilon","poly".
+  grid <- updateGrid(param.optim, step, type=param_name)
+  endTime <- Sys.time();
+  time.used <- endTime - startTime
+  return(list(new.grid=grid, result=result.optim, parameter=param.optim, time=time.used))
+}
+  
+  
 optim.parameter<-function(result.optim, param.optim, grid, param_name, data, c.optim, epsilon.optim, polynomial.degree.optim, numCVReplicates){
   
   #ptm <- proc.time()
