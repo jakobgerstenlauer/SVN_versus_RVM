@@ -46,7 +46,7 @@ rm(list=ls(all=TRUE))
 #utility function
 glue<-function(...){paste(...,sep="")}
 
-<<<<<<< HEAD
+
 #TODO Adapt to working dir or remove!
 #define path of standard directories
 source("workingDir.R")
@@ -55,14 +55,13 @@ source("workingDir.R")
 #setwd('..')
 #setwd(glue(getwd(),'/code'))
 #setwd("J:/UPC/2016/02/KMLMM/KernelMethods/practicals/term_project/code")
-=======
+
 
 if(!exists("codeDir")){
   if(basename(getwd())=='data')
     setwd('..')
   source("workingDir.R")
 }
->>>>>>> 9e5b4fb30ae079a50a6f78f190fe14996eb3da1f
 
 source("properties.R")
 #read functions from external code file
