@@ -23,9 +23,9 @@ high_V1= 0.9;
 low_V2  = 16;
 high_V2 = 256;
 
-#V3: number of variables D
-low_V3  = 16;
-high_V3 = 1024;
+#V3: ratio observations to number of variables D
+low_V3  = 4;
+high_V3 = 32;
 
 #V4: polynomial degree of the inputs.
 low_V4  = 3;

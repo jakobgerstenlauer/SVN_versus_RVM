@@ -98,12 +98,16 @@ for (simulation in seq(1,dim(LHS)[1]))
   } 
   
   for(replicate in 1:maxReplicatesLHC){
+    
+    #calculate the number of variables based on the ratio observations / variables which is stored in A3
+    D<-round(A2/A3)
+    
     #Create the new data set with the specific variables
-    d<-instance.generator(signal_to_noise_ratio=A1, N=round(A2), D=round(A3), polynomialDegree=round(A4));
+    d<-instance.generator(signal_to_noise_ratio=A1, N=round(A2), D, polynomialDegree=round(A4));
     
     signal.to.noise.ratio.grid[i]<-A1;
-    num.observations.grid[i]<-floor(A2);
-    num.vars.grid[i]<-floor(A3);
+    num.observations.grid[i]<-round(A2);
+    num.vars.grid[i]<-D;
     polynomial.degree.grid[i]<-round(A4);
     
     i<-i+1
