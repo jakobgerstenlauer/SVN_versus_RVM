@@ -301,17 +301,13 @@ ksvm.10x10CV<-function(response.name, data, c, eps, p, n=10,k=10){
   return(r)
 }
 
-#TODO
 optim.parameter.rvm<-function(result.optim, param.optim, grid, data, numCVReplicates){
- 
-   startTime <- Sys.time()
- 
   #check preconditions
   #Here I do not check result.optim because it is NULL in the first call!
   check.numeric.values(grid,3)
   check.data.frames(data, min_rows=10, min_columns=2)
   check.numeric.values(numCVReplicates,1)
-  
+  startTime <- Sys.time()
   for (param in grid) {
     result <- rvm.10x10CV(data,response.name = "output",p = round(param),n = numCVReplicates);
     if(exists("result")){
@@ -332,9 +328,8 @@ optim.parameter.rvm<-function(result.optim, param.optim, grid, data, numCVReplic
       stop("Missing result!")
     }
   }
-  
   #type: select the appropriate parameter: "C","epsilon","poly".
-  grid <- updateGrid(param.optim, step, type=param_name)
+  grid <- updateGrid(param.optim, step, type="poly")
   endTime <- Sys.time();
   time.used <- endTime - startTime
   return(list(new.grid=grid, result=result.optim, parameter=param.optim, time=time.used))
