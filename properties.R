@@ -42,8 +42,8 @@ initial.epsilon.grid<-seq(from=0.1,to=0.9,by=0.1)
 initial.poly.grid<-1:(high_V4+3)
 
 #start values
-C.start=c.grid[2]
-Epsilon=epsilon.grid[2]
+C.start=initial.c.grid[2]
+Epsilon=initial.epsilon.grid[2]
 polynomial_degree=3
 
 #How many iterations should be run? 
