@@ -196,7 +196,7 @@ for(fileName in file.names){
   result.optim  <- o$result
   time.spent  <- o$time
   total.sim.time <- total.sim.time + time.spent
-  logging(paste(fileName, step, "poly:", poly.optim, time.spent, sep="\t"))
+  logging(paste(fileName, "poly:", poly.optim, time.spent, sep="\t"))
   rm(o)
   
   #optimal parameters
