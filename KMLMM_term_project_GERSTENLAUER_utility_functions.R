@@ -421,12 +421,12 @@ ksvm.10x10CV<-function(response.name, data, c, eps, p, n=10,k=10){
 }
 
 optim.parameter.rvm<-function(result.optim, param.optim, grid, data, numCVReplicates){
+  ptm <- proc.time();
   #check preconditions
   #Here I do not check result.optim because it is NULL in the first call!
   check.numeric.values(grid,3)
   check.data.frames(data, min_rows=10, min_columns=2)
   check.numeric.values(numCVReplicates,1)
-  startTime <- Sys.time()
   print(grid)
   for (param in grid) {
     result <- krvm.10x10CV(response.name = "output", data, p = round(param),n = numCVReplicates);
@@ -451,16 +451,13 @@ optim.parameter.rvm<-function(result.optim, param.optim, grid, data, numCVReplic
   #type: select the appropriate parameter: "C","epsilon","poly".
   grid <- updateGrid(param.optim, step, type="poly")
   endTime <- Sys.time();
-  time.used <- endTime - startTime
-  return(list(new.grid=grid, result=result.optim, parameter=param.optim, time=time.used))
+  time.used <- proc.time() - ptm
+  return(list(new.grid=grid, result=result.optim, parameter=param.optim, time=time.used[3]))
 }
   
   
 optim.parameter<-function(result.optim, param.optim, grid, param_name, data, c.optim, epsilon.optim, polynomial.degree.optim, numCVReplicates){
-  
-  #ptm <- proc.time()
-  startTime <- Sys.time()
-  
+  ptm <- proc.time();
   print(paste("Optimize parameter:",param_name))
   print(paste("with grid:",grid))
   print(paste("and fixed params epsilon:",epsilon.optim))
@@ -524,8 +521,7 @@ optim.parameter<-function(result.optim, param.optim, grid, param_name, data, c.o
   
   #type: select the appropriate parameter: "C","epsilon","poly".
   grid <- updateGrid(param.optim, step, type=param_name)
-  endTime <- Sys.time();
-  time.used <- endTime - startTime
-  return(list(new.grid=grid, result=result.optim, parameter=param.optim, time=time.used))
+  time.used <- proc.time() - ptm
+  return(list(new.grid=grid, result=result.optim, parameter=param.optim, time=time.used[3]))
 }
 

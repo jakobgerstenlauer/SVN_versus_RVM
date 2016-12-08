@@ -97,7 +97,6 @@ for (simulation in seq(1,dim(LHS)[1]))
       ,sep="")));
   } 
   
-  
   for(replicate in 1:maxReplicatesLHC){
     #Create the new data set with the specific variables
     d<-instance.generator(signal_to_noise_ratio=A1, N=round(A2), D=round(A3), polynomialDegree=round(A4));
@@ -157,10 +156,8 @@ result.optim<-NULL
 header<-paste(c("fileName", "opt.step", "parameter", "opt.value", "comput.time"), 
               sep="\t")
 init.logging(header)
-
 #index for files
 i<-1
-
 #index for parameter combination
 j<-1
 
@@ -174,43 +171,40 @@ for(fileName in file.names){
   if((i %% maxReplicatesLHC)==0){
     j<-j+1
   }
- 
+  
   #start values for parameters
   cv.mean.max <- 0
   poly.optim <- polynomial_degree
   total.sim.time<-0
- 
- 
-    #optimize polynomial degree
-    o <-
-      optim.parameter.rvm(
-        result.optim,
-        param.optim=poly.optim,
-        initial.poly.grid,
-        data = d,
-        numCVReplicates
-      )
-    
-    poly.grid  <- o$new.grid
-    poly.optim <- o$parameter
-    result.optim  <- o$result
-    time.spent  <- o$time
-    total.sim.time <- total.sim.time + time.spent
-    logging(paste(fileName, step, "poly:", poly.optim, time.spent, sep="\t"))
-    rm(o)
-    
-    #optimal parameters
-    polynomial_degree_setting[i] <- poly.optim
-    
-    #cross-validation error mean and sd
-    cv.mean[i] <- result.optim[1]
-    cv.sd[i] <- result.optim[2]
-    
-    #sparsity mean and sd
-    sparsity[i] <- result.optim[3]
-    sd.sparsity[i] <- result.optim[4]
   
+  #optimize polynomial degree
+  o <-
+    optim.parameter.rvm(
+      result.optim,
+      param.optim=poly.optim,
+      initial.poly.grid,
+      data = d,
+      numCVReplicates
+    )
   
+  poly.grid  <- o$new.grid
+  poly.optim <- o$parameter
+  result.optim  <- o$result
+  time.spent  <- o$time
+  total.sim.time <- total.sim.time + time.spent
+  logging(paste(fileName, step, "poly:", poly.optim, time.spent, sep="\t"))
+  rm(o)
+  
+  #optimal parameters
+  polynomial_degree_setting[i] <- poly.optim
+  
+  #cross-validation error mean and sd
+  cv.mean[i] <- result.optim[1]
+  cv.sd[i] <- result.optim[2]
+  
+  #sparsity mean and sd
+  sparsity[i] <- result.optim[3]
+  sd.sparsity[i] <- result.optim[4]
   compu.time[i]<-total.sim.time
   
   #The index i has to run over all input files.
