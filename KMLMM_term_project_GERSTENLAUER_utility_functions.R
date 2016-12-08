@@ -142,7 +142,7 @@ instance.generator<-function(signal_to_noise_ratio, N, D, polynomialDegree, isDe
 #Code adapted from: 
 #http://stats.stackexchange.com/questions/61090/how-to-split-a-data-set-to-do-10-fold-cross-validation
 #######################################################################################################
-krvm.CV(response.name, data, p, k=10){
+krvm.CV<-function(response.name, data, p, k=10){
   
   #check preconditions
   stopifnot(exists("response.name"))
@@ -427,6 +427,7 @@ optim.parameter.rvm<-function(result.optim, param.optim, grid, data, numCVReplic
   check.data.frames(data, min_rows=10, min_columns=2)
   check.numeric.values(numCVReplicates,1)
   startTime <- Sys.time()
+  print(grid)
   for (param in grid) {
     result <- krvm.10x10CV(response.name = "output", data, p = round(param),n = numCVReplicates);
     if(exists("result")){

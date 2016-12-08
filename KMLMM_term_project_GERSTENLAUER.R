@@ -50,11 +50,11 @@ glue<-function(...){paste(...,sep="")}
 #setwd("D:/Documents/MIRI/Semestre 2/ProyectoFinal/KernelFinalProject/code")
 #setwd("J:/UPC/2016/02/KMLMM/KernelMethods/practicals/term_project/code")
 
-if(!exists("codeDir")){
-  if(basename(getwd())=='data')
-    setwd('..')
-  source("workingDir.R")
-}
+# if(!exists("codeDir")){
+#   if(basename(getwd())=='data')
+#     setwd('..')
+#   source("workingDir.R")
+# }
 
 #define path of standard directories
 source("workingDir.R")
@@ -122,7 +122,6 @@ for (simulation in seq(1,dim(LHS)[1]))
 
 file.names<-file.names[-1]
 
-
 #################################################################################
 #
 # Relevance Vector Machine
@@ -171,32 +170,24 @@ for(fileName in file.names){
   
   #For each parameter combination there are maxReplicatesLHC replicates.
   #Index j identifies the replicate.
-  
-  if(((i+1) %% maxReplicatesLHC)==0){
+  id_parameter_combination[i]<-j
+  if((i %% maxReplicatesLHC)==0){
     j<-j+1
   }
-  
-  id_parameter_combination[i]<-j
-  
+ 
   #start values for parameters
   cv.mean.max <- 0
   poly.optim <- polynomial_degree
   total.sim.time<-0
-  
-  for (step in 1:maxStep) {
-    print(paste("optim step:", step))
-   
+ 
+ 
     #optimize polynomial degree
     o <-
       optim.parameter.rvm(
         result.optim,
         param.optim=poly.optim,
-        poly.grid,
-        "poly",
+        initial.poly.grid,
         data = d,
-        c.optim,
-        epsilon.optim,
-        poly.optim,
         numCVReplicates
       )
     
@@ -218,7 +209,7 @@ for(fileName in file.names){
     #sparsity mean and sd
     sparsity[i] <- result.optim[3]
     sd.sparsity[i] <- result.optim[4]
-  }
+  
   
   compu.time[i]<-total.sim.time
   
@@ -302,12 +293,10 @@ for(fileName in file.names){
   
   #For each parameter combination there are maxReplicatesLHC replicates.
   #Index j identifies the replicate.
-
-  if(((i+1) %% maxReplicatesLHC)==0){
+  id_parameter_combination[i]<-j
+  if((i %% maxReplicatesLHC)==0){
     j<-j+1
   }
-  
-  id_parameter_combination[i]<-j
   
   #start values for parameters
   cv.mean.max <- 0
@@ -315,6 +304,11 @@ for(fileName in file.names){
   epsilon.optim <- Epsilon
   poly.optim <- polynomial_degree
   total.sim.time<-0
+  
+  #reset all grids to initial/ default search grid
+  poly.grid<-initial.poly.grid
+  epsilon.grid<-initial.epsilon.grid
+  c.grid<-initial.c.grid
   
   for (step in 1:maxStep) {
     print(paste("optim step:", step))
