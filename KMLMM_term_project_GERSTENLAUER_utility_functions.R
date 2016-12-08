@@ -450,15 +450,9 @@ optim.parameter.rvm<-function(result.optim, param.optim, grid, data, numCVReplic
   }
   #type: select the appropriate parameter: "C","epsilon","poly".
   grid <- updateGrid(param.optim, step, type="poly")
-<<<<<<< HEAD
   time.used <- proc.time() - ptm
   print(time.used[3])
   return(list(new.grid=grid, result=result.optim, parameter=param.optim, time=time.used[3]))
-=======
-  endTime <- Sys.time();
-  time.used <- proc.time() - ptm
-  return(list(new.grid=grid, result=result.optim, parameter=param.optim, time=time.used))
->>>>>>> 4f954098c0e00cc3de3b81f192f5b8d6708939bb
 }
   
   
@@ -528,11 +522,7 @@ optim.parameter<-function(result.optim, param.optim, grid, param_name, data, c.o
   #type: select the appropriate parameter: "C","epsilon","poly".
   grid <- updateGrid(param.optim, step, type=param_name)
   time.used <- proc.time() - ptm
-<<<<<<< HEAD
   print(time.used[3])
   return(list(new.grid=grid, result=result.optim, parameter=param.optim, time=time.used[3]))
-=======
-  return(list(new.grid=grid, result=result.optim, parameter=param.optim, time=time.used))
->>>>>>> 4f954098c0e00cc3de3b81f192f5b8d6708939bb
 }
 
