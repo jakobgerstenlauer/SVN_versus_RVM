@@ -290,10 +290,6 @@ compu.time<-vector(mode="numeric",length=sample.size)
 #because in the first call to optim.parameter() it is a necessary argument.
 result.optim<-NULL
 
-header<-paste(c("fileName", "opt.step", "parameter", "opt.value", "comput.time"), 
-              sep="\t")
-init.logging(header)
-
 #index for files
 i<-1
 
