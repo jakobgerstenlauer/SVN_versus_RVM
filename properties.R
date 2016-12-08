@@ -8,12 +8,11 @@ numCVReplicates<-1
 
 #Define number of replications for each  parameter combination
 #sampled in the Latin Hyper Cube.
-#TODO Update to 10
-maxReplicatesLHC<-1
+maxReplicatesLHC<-5
 
-#TODO Update to at least 100!
+#TODO Check if the sample size is correct!
 #number of samples from the LHC 
-SampleSize<-10
+SampleSize<-100
 
 #Now define the ranges for all four parameters of the LHC:
 #V1: signal-to-noise ratio
