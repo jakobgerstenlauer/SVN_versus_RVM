@@ -8,10 +8,12 @@ numCVReplicates<-1
 
 #Define number of replications for each  parameter combination
 #sampled in the Latin Hyper Cube.
-maxReplicatesLHC<-10
+#TODO Update to 10
+maxReplicatesLHC<-1
 
+#TODO Update to at least 100!
 #number of samples from the LHC 
-SampleSize<-200
+SampleSize<-10
 
 #Now define the ranges for all four parameters of the LHC:
 #V1: signal-to-noise ratio
@@ -32,12 +34,12 @@ high_V4 = 6;
 
 #initial sample values
 #c.grid<-2**c(0,0.5,1,1.5)
-c.grid<-1:5
+initial.c.grid<-1:5
 #epsilon.grid<-10**c(-0.5,0,0.5)
-epsilon.grid<-seq(from=0.1,to=0.9,by=0.1)
+initial.epsilon.grid<-seq(from=0.1,to=0.9,by=0.1)
 #Here I restrict the initial search space from 1 to the maximum polynomial degree + 1.
 #However, note that the grid for all parameter changes after each optimization step!
-poly.grid<-1:(high_V4+1)
+initial.poly.grid<-1:(high_V4+3)
 
 #start values
 C.start=c.grid[2]
