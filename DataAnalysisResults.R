@@ -8,7 +8,8 @@ glue<-function(...){paste(...,sep="")}
 #setwd('..')
 #setwd(glue(getwd(),'/code'))
 #setwd("J:/UPC/2016/02/KMLMM/KernelMethods/practicals/term_project/code")
-setwd("E:/Documents/Mis Documentos/MIRI/Semestre 2/APRENDIZAJE AUTOMATICO BASADO EN KERNEL Y MODELADO MULTIVARIANTE/ProyectoFinal/KernelFinalProject/code")
+#setwd("E:/Documents/Mis Documentos/MIRI/Semestre 2/APRENDIZAJE AUTOMATICO BASADO EN KERNEL Y MODELADO MULTIVARIANTE/ProyectoFinal/KernelFinalProject/code")
+#setwd("D:/Documents/MIRI/Semestre 2/ProyectoFinal/KernelFinalProject/code")
 
 source("properties.R")
 #define path of standard directories

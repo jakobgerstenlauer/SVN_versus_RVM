@@ -48,13 +48,8 @@ glue<-function(...){paste(...,sep="")}
 
 #TODO Adapt to working dir or remove!
 #setwd("D:/Documents/MIRI/Semestre 2/ProyectoFinal/KernelFinalProject/code")
+#setwd("E:/Documents/Mis Documentos/MIRI/Semestre 2/APRENDIZAJE AUTOMATICO BASADO EN KERNEL Y MODELADO MULTIVARIANTE/ProyectoFinal/KernelFinalProject/code")
 #setwd("J:/UPC/2016/02/KMLMM/KernelMethods/practicals/term_project/code")
-
-# if(!exists("codeDir")){
-#   if(basename(getwd())=='data')
-#     setwd('..')
-#   source("workingDir.R")
-# }
 
 #define path of standard directories
 source("workingDir.R")
