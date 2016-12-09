@@ -1,5 +1,10 @@
+#############################################################################################
+#                               Functions
+#############################################################################################
+
 glue<-function(...){paste(...,sep="")}
 
+#functions dedicated to create logs
 init.logging<-function(text){
   #get current date and replace hyphens by underline
   Date<-gsub(pattern="-", replacement="_",Sys.Date())
