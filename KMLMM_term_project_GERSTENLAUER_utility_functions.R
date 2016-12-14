@@ -2,27 +2,66 @@
 #                               Utility Functions
 #############################################################################################
 
+#' @title Glue together a list of characters.
+#'
+#' @description This is a wrapper function for paste which does not use any separator.
 glue<-function(...){paste(...,sep="")}
 
-#functions dedicated to create logs
-init.logging<-function(text){
+
+#' @title Initialize a common log file.
+#'
+#' @description
+#' Creates a new log file whose name contains the current date.
+#' Only use this function if you want to overwrite existing log files!
+#'
+#' @details
+#' If the log file already consists it is deleted and overwritten.
+#' 
+#' @param text The log statement which should be printed to the new logfile.
+#' @param fileName The root of the file name for the new logfile.
+init.logging<-function(text, fileName){
   #get current date and replace hyphens by underline
   Date<-gsub(pattern="-", replacement="_",Sys.Date())
   #paste new filename
-  fileName<-paste("Log_KMLMM_term_project_",Date,".log",sep="")
+  fileName<-paste(fileName, Date,".log",sep="")
   cat(text, file = fileName, sep = " ", fill = TRUE,
       append = FALSE)
 }
 
-logging<-function(text){
+
+#' @title Write to a common log file.
+#'
+#' @description
+#' Writes to a log file whose name contains the current date.
+#'
+#' @details
+#' Calls init.logging() if the log file does not yet exists, 
+#' else writes directly to the existing file.
+#' 
+#' @param text The log statement which should be printed to the new logfile.
+#' @param fileNameBase The root of the file name for the new logfile.
+logging<-function(text, fileNameBase){
   #get current date and replace hyphens by underline
   Date<-gsub(pattern="-", replacement="_",Sys.Date())
   #paste new filename
-  fileName<-paste("Log_KMLMM_term_project_",Date,".log",sep="")
-  cat(text, file = fileName, sep = " ", fill = TRUE,
-      append = TRUE)
+  fileName<-paste(fileNameBase,Date,".log",sep="")
+  if(!file.exists(fileName)){
+    init.logging(text, fileNameBase);
+  }else{
+      cat(text, file = fileName, sep = " ", fill = TRUE,
+          append = TRUE)
+  }
 }
 
+
+#' @title Test validity of numeric values.
+#'
+#' @description
+#' Checks if a numeric vector with given name exists, is of type numeric, and has the given minimum length.
+#' This function should be used to test pre- and postconditions within functions.
+#' 
+#' @param x The numeric vector to be tested.
+#' @param min_length The minimum number of elements of the vector.
 check.numeric.values<-function(x,min_length){
   stopifnot(exists("x"))
   stopifnot(is.numeric(x))
@@ -30,12 +69,32 @@ check.numeric.values<-function(x,min_length){
 }
 
 
+#' @title Test validity of character values.
+#'
+#' @description
+#' Checks if a character vector with given name exists, is of type character,
+#' and has the given minimum length.
+#' This function should be used to test pre- and postconditions within functions.
+#' 
+#' @param x The character vector to be tested.
+#' @param min_length The minimum number of elements of the vector.
 check.character.values<-function(x,min_length){
   stopifnot(exists("x"))
   stopifnot(is.character(x))
   stopifnot(length(x)>=min_length)
 }
 
+
+#' @title Test validity of data frames.
+#'
+#' @description
+#' Checks if a data frame with given name exists, is of class "data.frame",
+#' and has the given minimum number of rows and columns.
+#' This function should be used to test pre- and postconditions within functions.
+#' 
+#' @param x The data frame to be tested.
+#' @param min_rows The minimum number of rows of the data frame.
+#' @param min_columns The minimum number of columns of the data frame.
 check.data.frames<-function(x, min_rows, min_columns){
   stopifnot(exists("x"))
   stopifnot(is.data.frame(x))
@@ -44,23 +103,20 @@ check.data.frames<-function(x, min_rows, min_columns){
 }
 
 
-
-#############################################################################################
-# Instance generator 
-#
-# Instance generator with three dimensions:
-# dim 1: signal-to-noise ratio (between 0: no signal only noise and 1: only signal no noise)
-# dim 2: size of the data set N
-# dim 3: number of parameters D
-# polynomialDegree: power of the inputs that affects output
-# additional optional arguments:
-# withInteractions: should interactions between the variables be included (default is FALSE)
-# isDebug: Should debug statements be printed? Default is FALSE.
-#
-#############################################################################################
-
+#' @title Creates a new problem instance as a data frame.
+#'
+#' @description
+#' This functions creates a new data set (instance) given four different parameters: 
+#' signal-to-noise ratio, number of observations, number of features,  and polynomial degree.
+#'
+#' @param signal-to-noise_ratio Ratio between signal and noise in the data (between 0: no signal only noise and 1: only signal no noise)
+#' @param N Number of observations (cases) in the new data set
+#' @param D Number of features (inputs) in the new data set
+#' @param polynomialDegree Highest power of the inputs affecting the output
+#' @param isDebug Should debug statements be printed? Default is FALSE.
+#' 
+#' @examples d1<-instance.generator(signal_to_noise_ratio=0.5, N=100, D=10, polynomialDegree=4, isDebug=FALSE)
 instance.generator<-function(signal_to_noise_ratio, N, D, polynomialDegree, isDebug=FALSE){
-
   #test preconditions
   check.numeric.values(signal_to_noise_ratio,1);
   check.numeric.values(N,1);
@@ -70,14 +126,6 @@ instance.generator<-function(signal_to_noise_ratio, N, D, polynomialDegree, isDe
   stopifnot(signal_to_noise_ratio<=1)
   stopifnot(D>=1)
   stopifnot(N>=1)  
-
-  #for test purposes:
-  # signal_to_noise_ratio= 0.99
-  # N=5
-  # D=2
-  # polynomialDegree = 2
-  # isDebug=TRUE
-
   #Here the variability in the data is based on a hierarchical Gaussian model:
   #The mean and the variance of the inputs and the coefficients follow a normal distribution.
   
@@ -88,7 +136,6 @@ instance.generator<-function(signal_to_noise_ratio, N, D, polynomialDegree, isDe
   #standard deviations of the inputs
   sds<-abs(rnorm(n=D, mean=1, sd=1))
   if(isDebug) print(sds)
-  
   d<-data.frame("output"=rep(0,N))
 
   #the coefficients of the polynomials of the inputs on the output are normally distributed
@@ -102,7 +149,6 @@ instance.generator<-function(signal_to_noise_ratio, N, D, polynomialDegree, isDe
       ));
     }
   }
-
   for(nrVar in 1:D){
     eval(parse(text=
                  glue("d$input_",nrVar,"<-rnorm(n=N, 
@@ -110,7 +156,7 @@ instance.generator<-function(signal_to_noise_ratio, N, D, polynomialDegree, isDe
                       sd=abs(sds[",nrVar,"]))")
                ));
   }
-
+  
   #additive linear component for each variable
   #and for each power function of the input (from 1 to polynomial degree)
   for(nrVar in 1:D){
@@ -119,34 +165,32 @@ instance.generator<-function(signal_to_noise_ratio, N, D, polynomialDegree, isDe
       )));
     }
   }
-  
   #add Gaussian noise 
   d$output <- rnorm(n=N, mean=d$output, sd= 1-signal_to_noise_ratio)
-  
   return(d)
 }
 
-#How to call the instance generator:
-#d1<-instance.generator(signal_to_noise_ratio=0.5, N=100, D=10, polynomialDegree=4, isDebug=FALSE)
-  
-######################################################################################################
-#Calculates k-fold-cross-validation for a kernelized relevance vector machine.
-#
-#Arguments:
-#response.name: the name of the response (output) as a "string",
-#data: the data set,
-#p: polynomial degree of the kernel to be fitted
-#k: number of cross-validation folds, defaults to 10.
-#
-#return value: a numeric vector with three components 
-#1: mean coefficient of determination for validation data 
-#2: standard deviation of the coefficient of determination for validation data
-#3: sparsity index (1 - ratio of data used as support vectors)
-#4: standard deviation of the sparsity index (ratio of data used as support vectors)
-#
-#Code adapted from: 
-#http://stats.stackexchange.com/questions/61090/how-to-split-a-data-set-to-do-10-fold-cross-validation
-#######################################################################################################
+#' @title Calculates k-fold-cross-validation for a kernelized relevance vector machine.
+#'
+#' @description
+#' This functions calculates k-fold-cross-validation for a kernelized relevance vector machine.
+#' It uses the polynomial kernel with the supplied polynomial degree.
+#' The returned list represents averaged results for k cross-validation runs.
+#' Cross-validation code adapted from: http://stats.stackexchange.com/questions/61090/how-to-split-a-data-set-to-do-10-fold-cross-validation
+#' @param response.name: The name of the response (output) as a character
+#' @param data: The data set for this analysis
+#' @param p: The polynomial degree of the polynomial kernel which will be used by the relevance vector machine
+#' @param k: The number of cross-validation folds, defaults to 10
+#' 
+#' @return A numeric vector with three components:
+#' \itemize{
+#'  \item{"index 1"}{The mean coefficient of determination for validation data}
+#'  \item{"index 2"}{The standard deviation of the coefficient of determination for validation data}
+#'  \item{"index 3"}{The mean of the sparsity index, which is 1 - ratio of data used as support vectors}
+#'  \item{"index 4"}{The standard deviation of the sparsity index}
+#' }
+#' 
+#' @examples 
 krvm.CV<-function(response.name, data, p, k=10){
   
   #check preconditions
