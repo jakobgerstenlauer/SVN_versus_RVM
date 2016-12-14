@@ -148,10 +148,6 @@ sd.sparsity<-vector(mode="numeric",length=sample.size)
 #vector for computation time
 compu.time<-vector(mode="numeric",length=sample.size)
 
-#Here I have to declare the variable without initialising it,
-#because in the first call to optim.parameter() it is a necessary argument.
-result.optim<-NULL
-
 header<-paste(c("fileName", "opt.step", "parameter", "opt.value", "comput.time"), 
               sep="\t")
 init.logging(header)
@@ -164,6 +160,10 @@ for(fileName in file.names){
   print(paste("read input file:", fileName))
   load(fileName)
   
+  #Here I have to declare the variable without initialising it,
+  #because in the first call to optim.parameter() it is a necessary argument.
+  result.optim<-NULL
+  
   #For each parameter combination there are maxReplicatesLHC replicates.
   #Index j identifies the replicate.
   id_parameter_combination[i]<-j
@@ -173,14 +173,12 @@ for(fileName in file.names){
   
   #start values for parameters
   cv.mean.max <- 0
-  poly.optim <- polynomial_degree
   total.sim.time<-0
   
   #optimize polynomial degree
   o <-
     optim.parameter.rvm(
       result.optim,
-      param.optim=poly.optim,
       initial.poly.grid,
       data = d,
       numCVReplicates
@@ -270,10 +268,6 @@ sd.sparsity<-vector(mode="numeric",length=sample.size)
 #vector for computation time
 compu.time<-vector(mode="numeric",length=sample.size)
 
-#Here I have to declare the variable without initialising it,
-#because in the first call to optim.parameter() it is a necessary argument.
-result.optim<-NULL
-
 #index for files
 i<-1
 
@@ -302,6 +296,10 @@ for(fileName in file.names){
   poly.grid<-initial.poly.grid
   epsilon.grid<-initial.epsilon.grid
   c.grid<-initial.c.grid
+  
+  #Here I have to declare the variable without initialising it,
+  #because in the first call to optim.parameter() it is a necessary argument.
+  result.optim<-NULL
   
   for (step in 1:maxStep) {
     print(paste("optim step:", step))
