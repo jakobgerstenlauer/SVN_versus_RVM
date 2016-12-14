@@ -359,7 +359,7 @@ ksvm.CV<-function(response.name, data, c, eps, p, k=10){
   return(c(mean(rSquared),sd(rSquared), mean(sparsity), sd(sparsity) ))
 }
 
-#' Checks if argument if is NAN or infinite.
+#' @title Checks if argument if is NAN or infinite.
 #'
 #' @param x The argument to test.
 #'
@@ -368,7 +368,7 @@ is.invalid<-function(x){
   is.nan(x)||is.infinite(x)
 }
 
-#' Tests if a result object contains valid values for a given model parameter.
+#' @title Tests if a result object contains valid values for a given model parameter.
 #'
 #' @param result The result object to test.
 #' @param param_name Name of the parameter to test.
@@ -383,7 +383,7 @@ isInvalidResult<-function(result, param_name, param_value){
   return (FALSE);
 }
 
-#' Update optimization grid based on current optimum for the polynomial degree.
+#' @title Update optimization grid based on current optimum for the polynomial degree.
 #'
 #' @param value.optim The current optimum value for the parameter.
 #'
@@ -396,7 +396,7 @@ gridPoly<-function(value.optim){
   return(c(minV, value.optim, maxV))
 }
 
-#' Update optimization grid based on current optimum for the parameter C of the support vector machine.
+#' @title Update optimization grid based on current optimum for the parameter C of the support vector machine.
 #'
 #' @description This function adapts the optimization grid for C. 
 #' Based on a recommendation of Lluis Belanche, we work on the base 2 scale!
@@ -413,7 +413,7 @@ gridC<-function(value.optim, step){
   return(2**c(minV, value.optim, maxV))
 }
 
-#' Update optimization grid based on current optimum for the parameter \epsilon of the support vector machine.
+#' @title Update optimization grid based on current optimum for the parameter \epsilon of the support vector machine.
 #'
 #' @description This function adapts the optimization grid for \epsilon. 
 #' Based on a recommendation of Lluis Belanche, we work on the base 10 scale!
@@ -430,29 +430,37 @@ gridEpsilon<-function(value.optim, step){
   return(10**c(minV, value.optim, maxV))
 }
 
-#Calculates a new grid for parameter optimization
-#
-#value.optim: current estimate for the optimal value
-#step: current iteration
-#type: select the appropriate parameter: "C","epsilon","poly".
+#' @title Calculates a new grid for parameter optimization
+#'
+#' @description Switches between different parameter types and calls respective specialised function for grid update.
+#' 
+#' @value.optim Current estimate for the optimal value
+#' @step Current iteration step.
+#' @type Select the appropriate parameter from: "C","epsilon","poly".
 updateGrid <- function(value.optim, step, type) {
   stopifnot(value.optim>0.00001)
   switch(type,
     poly =  gridPoly(value.optim, step),
     C = gridC(value.optim, step),
-    epsilon = gridEpsilon(value.optim)
+    epsilon = gridEpsilon(value.optim, step)
   )
 }
 
-#Calculates n times k-fold-cross-validation for a kernelized relevance vector machine.
-#Arguments:
-#response.name: name of the response
-#data: the data set
-#p: degree of the polynomial kernel
-#n: number of replicates, default 10
-#k: number of fold in k-fold cross validation, default 10
-#return value: mean and sd of the prediction error and the sparsity ratio 
-#as average over all n replicates!
+#' @title Calculates n-times k-fold-cross-validation for a kernelized relevance vector machine.
+#' 
+#' @param response.name Name of the response (output)
+#' @data The data set to analyse
+#' @p Degree of the polynomial kernel
+#' @n Number of replicates, default is 10
+#' @k Number of folds in k-fold cross validation, default is 10
+#' @return 
+#' #' @return A numeric vector with averages over all n replicates:
+#' \itemize{
+#'  \item{"index 1"}{The mean coefficient of determination for validation data}
+#'  \item{"index 2"}{The standard deviation of the coefficient of determination for validation data}
+#'  \item{"index 3"}{The mean of the sparsity index, which is 1 - ratio of data used as support vectors}
+#'  \item{"index 4"}{The standard deviation of the sparsity index}
+#' }
 krvm.10x10CV<-function(response.name, data, p, n=10,k=10){
   
   #check preconditions
@@ -471,17 +479,23 @@ krvm.10x10CV<-function(response.name, data, p, n=10,k=10){
   return(r)
 }
 
-#Calculates n times k-fold-cross-validation for a kernelized SVM regression
-#Arguments:
-#response.name: name of the response
-#data: the data set
-#c: the C parameter
-#eps: the epsilon parameter
-#p: degree of the polynomial kernel
-#n: number of replicates, default 10
-#k: number of fold in k-fold cross validation, default 10
-#return value: mean and sd of the prediction error and the sparsity ratio 
-#as average over all n replicates!
+#' @title Calculates n-times k-fold-cross-validation for a kernelized support vector machine.
+#' 
+#' @param response.name Name of the response (output)
+#' @data The data set to analyse
+#' @c The C parameter
+#' @eps The epsilon parameter
+#' @p Degree of the polynomial kernel
+#' @n Number of replicates, default is 10
+#' @k Number of folds in k-fold cross validation, default is 10
+#' @return 
+#' #' @return A numeric vector with averages over all n replicates:
+#' \itemize{
+#'  \item{"index 1"}{The mean coefficient of determination for validation data}
+#'  \item{"index 2"}{The standard deviation of the coefficient of determination for validation data}
+#'  \item{"index 3"}{The mean of the sparsity index, which is 1 - ratio of data used as support vectors}
+#'  \item{"index 4"}{The standard deviation of the sparsity index}
+#' }
 ksvm.10x10CV<-function(response.name, data, c, eps, p, n=10,k=10){
   
   #check preconditions
