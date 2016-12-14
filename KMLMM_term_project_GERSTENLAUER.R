@@ -108,8 +108,8 @@ for (simulation in seq(1,dim(LHS)[1]))
     i<-i+1
     
     dump.file.name<-glue("data_signal_to_noise_", A1,
-                         "_N_", floor(A2),
-                         "_D_", floor(A3),
+                         "_N_", round(A2),
+                         "_D_", D,
                          "_poly_", round(A4),
                          "_replicate_",replicate,
                          ".RData");
