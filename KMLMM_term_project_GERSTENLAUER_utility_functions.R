@@ -518,6 +518,20 @@ ksvm.10x10CV<-function(response.name, data, c, eps, p, n=10,k=10){
   return(r)
 }
 
+#' Optimize the polynomial degree for the relevance vector machine.
+#'
+#' @param result.optim A result objects containing previous results that should be improved if possible
+#' @param grid The optimization grid with values for polynomial degree 
+#' @param data The data set to analyse
+#' @param numCVReplicates The number of replicates to use in k-fold cross-validation
+#'
+#' @return A list containing three elements:
+#' \itemize{
+#'  \item{"result"}{The best result obtained. For details of this object compare \link{krvm.10x10CV}.}
+#'  \item{"parameter"}{The optimal parameter setting, i.e. the optimal polynomial degree.}
+#'  \item{"time}{Computation time for this function call.}
+#' }
+
 optim.parameter.rvm<-function(result.optim, grid, data, numCVReplicates){
   ptm <- proc.time();
   #check preconditions
@@ -552,7 +566,27 @@ optim.parameter.rvm<-function(result.optim, grid, data, numCVReplicates){
   return(list(result=result.optim, parameter=param.optim, time=time.used[3]))
 }
   
-  
+#' Optimize the C,\epsilon, and the polynomial degree for the support vector machine.
+#'
+#' @description Switches between three versions of calls to \link{ksvm.10x10CV}
+#' depending on param_name. Proposes a new optimization grid for the respective parameter.    
+#' 
+#' @param result.optim A result objects containing previous results that should be improved if possible
+#' @param param_optim The optimal parameter value in previous analyses or a start value.
+#' @param grid The optimization grid 
+#' @param param_name The name of the parameter, must be either "epsilon","C", or "poly"
+#' @param data The data set to analyse
+#' @param c.optim The optimal parameter value for C in previous analyses or a start value.
+#' @param epsilon.optim The optimal parameter value for epsilon in previous analyses or a start value.
+#' @param polynomial.degree.optim The optimal parameter value for the polynomial degree in previous analyses or a start value.
+#' @param numCVReplicates The number of replicates to use in k-fold cross-validation
+#'
+#' @return A list containing three elements:
+#' \itemize{
+#'  \item{"result"}{The best result obtained. For details of this object compare \link{ksvm.10x10CV}.}
+#'  \item{"parameter"}{The optimal parameter setting, i.e. the optimal polynomial degree.}
+#'  \item{"time}{Computation time for this function call.}
+#' }
 optim.parameter<-function(result.optim, param.optim, grid, param_name, data, c.optim, epsilon.optim, polynomial.degree.optim, numCVReplicates){
   ptm <- proc.time();
   print(paste("Optimize parameter:",param_name))
