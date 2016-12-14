@@ -150,7 +150,7 @@ compu.time<-vector(mode="numeric",length=sample.size)
 
 header<-paste(c("fileName", "opt.step", "parameter", "opt.value", "comput.time"), 
               sep="\t")
-init.logging(header)
+init.logging(text=header, fileName="Log_KMLMM_term_project")
 #index for files
 i<-1
 #index for parameter combination
@@ -189,7 +189,8 @@ for(fileName in file.names){
   result.optim  <- o$result
   time.spent  <- o$time
   total.sim.time <- total.sim.time + time.spent
-  logging(paste(fileName, "poly:", poly.optim, time.spent, sep="\t"))
+  logging(paste(fileName, "poly:", poly.optim, time.spent, sep="\t"),
+          fileNameBase="Log_KMLMM_term_project")
   rm(o)
   
   #optimal parameters
@@ -323,7 +324,8 @@ for(fileName in file.names){
     result.optim  <- o$result
     time.spent  <- o$time
     total.sim.time <- total.sim.time + time.spent
-    logging(paste(fileName, step, "epsilon:", epsilon.optim, time.spent))
+    logging(paste(fileName, step, "epsilon:", epsilon.optim, time.spent),
+            fileNameBase="Log_KMLMM_term_project")
     rm(o)
     
     #optimize C
@@ -345,7 +347,8 @@ for(fileName in file.names){
     result.optim  <- o$result
     time.spent  <- o$time
     total.sim.time <- total.sim.time + time.spent
-    logging(paste(fileName, step, "C:", c.optim, time.spent))
+    logging(paste(fileName, step, "C:", c.optim, time.spent),
+            fileNameBase="Log_KMLMM_term_project")
     rm(o)
     
     #optimize polynomial degree
@@ -367,7 +370,8 @@ for(fileName in file.names){
     result.optim  <- o$result
     time.spent  <- o$time
     total.sim.time <- total.sim.time + time.spent
-    logging(paste(fileName, step, "poly:", poly.optim, time.spent, sep="\t"))
+    logging(paste(fileName, step, "poly:", poly.optim, time.spent, sep="\t"),
+            fileNameBase="Log_KMLMM_term_project")
     rm(o)
     
     #optimal parameters
