@@ -1,5 +1,5 @@
 #############################################################################################
-#                               Functions
+#                               Utility Functions
 #############################################################################################
 
 glue<-function(...){paste(...,sep="")}
@@ -425,13 +425,14 @@ ksvm.10x10CV<-function(response.name, data, c, eps, p, n=10,k=10){
   return(r)
 }
 
-optim.parameter.rvm<-function(result.optim, param.optim, grid, data, numCVReplicates){
+optim.parameter.rvm<-function(result.optim, grid, data, numCVReplicates){
   ptm <- proc.time();
   #check preconditions
   #Here I do not check result.optim because it is NULL in the first call!
   check.numeric.values(grid,3)
   check.data.frames(data, min_rows=10, min_columns=2)
   check.numeric.values(numCVReplicates,1)
+  param.optim<-"NA"
   print(grid)
   for (param in grid) {
     result <- krvm.10x10CV(response.name = "output", data, p = round(param),n = numCVReplicates);
@@ -453,11 +454,9 @@ optim.parameter.rvm<-function(result.optim, param.optim, grid, data, numCVReplic
       stop("Missing result!")
     }
   }
-  #type: select the appropriate parameter: "C","epsilon","poly".
-  grid <- updateGrid(param.optim, step, type="poly")
   time.used <- proc.time() - ptm
   print(time.used[3])
-  return(list(new.grid=grid, result=result.optim, parameter=param.optim, time=time.used[3]))
+  return(list(result=result.optim, parameter=param.optim, time=time.used[3]))
 }
   
   
