@@ -261,27 +261,29 @@ krvm.CV<-function(response.name, data, p, k=10){
   return(c(mean(rSquared),sd(rSquared), mean(sparsity), sd(sparsity) ))
 }
 
-
-######################################################################################################
-#Calculates k-fold-cross-validation for a kernelized SVM regression
-#
-#Arguments:
-#response.name: the name of the response (output) as a "string",
-#data: the data set,
-#c: the C parameter,
-#eps: the epsilon parameter,
-#k: number of cross-validation folds, defaults to 10.
-#p: polynomial degree of the kernel to be fitted
-#
-#return value: a numeric vector with three components 
-#1: mean coefficient of determination for validation data 
-#2: standard deviation of the coefficient of determination for validation data
-#3: sparsity index (1 - ratio of data used as support vectors)
-#4: standard deviation of the sparsity index (ratio of data used as support vectors)
-#
-#Code adapted from: 
-#http://stats.stackexchange.com/questions/61090/how-to-split-a-data-set-to-do-10-fold-cross-validation
-#######################################################################################################
+#' @title Calculates k-fold-cross-validation for a kernelized support vector machine.
+#'
+#' @description
+#' This functions calculates k-fold-cross-validation for a kernelized support vector machine.
+#' It uses the polynomial kernel with the supplied polynomial degree.
+#' The returned list represents averaged results for k cross-validation runs.
+#' Cross-validation code adapted from: http://stats.stackexchange.com/questions/61090/how-to-split-a-data-set-to-do-10-fold-cross-validation
+#' @param response.name The name of the response (output) as a character
+#' @param data The data set for this analysis
+#' @param c The C parameter
+#' @param eps The epsilon parameter
+#' @param p The polynomial degree of the polynomial kernel which will be used by the relevance vector machine
+#' @param k The number of cross-validation folds, defaults to 10
+#' 
+#' @return A numeric vector with four elements:
+#' \itemize{
+#'  \item{"index 1"}{The mean coefficient of determination for validation data}
+#'  \item{"index 2"}{The standard deviation of the coefficient of determination for validation data}
+#'  \item{"index 3"}{The mean of the sparsity index, which is 1 - ratio of data used as support vectors}
+#'  \item{"index 4"}{The standard deviation of the sparsity index}
+#' }
+#' 
+#' @examples 
 ksvm.CV<-function(response.name, data, c, eps, p, k=10){
   
   #check preconditions
@@ -357,10 +359,22 @@ ksvm.CV<-function(response.name, data, c, eps, p, k=10){
   return(c(mean(rSquared),sd(rSquared), mean(sparsity), sd(sparsity) ))
 }
 
+#' Checks if argument if is NAN or infinite.
+#'
+#' @param x The argument to test.
+#'
+#' @return Boolean indicating that argument is a valid value.
 is.invalid<-function(x){
   is.nan(x)||is.infinite(x)
 }
 
+#' Tests if a result object contains valid values for a given model parameter.
+#'
+#' @param result The result object to test.
+#' @param param_name Name of the parameter to test.
+#' @param param_value Value of the parameter to test.
+#'
+#' @return Boolean indicating if result object has valid value for requested parameter.
 isInvalidResult<-function(result, param_name, param_value){
   if(is.invalid(result[1])){
     print(paste("Invalid result for ", param_name,":",param_value))
@@ -369,6 +383,11 @@ isInvalidResult<-function(result, param_name, param_value){
   return (FALSE);
 }
 
+#' Update optimization grid based on current optimum for the polynomial degree.
+#'
+#' @param value.optim The current optimum value for the parameter.
+#'
+#' @return A numeric vector with three elements which can be used as updated optimization grid.
 gridPoly<-function(value.optim){
   value.optim<-round(value.optim)
   #for the degree 1 is the minimum
@@ -377,18 +396,34 @@ gridPoly<-function(value.optim){
   return(c(minV, value.optim, maxV))
 }
 
-#Adapt the optimization grid for parameter C
-#Here we work on the base 2 scale!
-gridC<-function(value.optim){
+#' Update optimization grid based on current optimum for the parameter C of the support vector machine.
+#'
+#' @description This function adapts the optimization grid for C. 
+#' Based on a recommendation of Lluis Belanche, we work on the base 2 scale!
+#' Note that we use a simulted annealing idea: the step size of the grid decreases with increasing number of iterations (step).
+#' 
+#' @param value.optim The current optimum value for C.
+#' @param step The optimization step.
+#'
+#' @return A numeric vector with three elements which can be used as updated optimization grid.
+gridC<-function(value.optim, step){
   value.optim<-log2(value.optim)
   minV <- max(value.optim - (1 / step**2) * value.optim, 0.001);
   maxV <- value.optim + (1 / step**2) * value.optim;
   return(2**c(minV, value.optim, maxV))
 }
 
-#Adapt the optimization grid for parameter epsilon.
-#Here we work on the base 10 scale!
-gridEpsilon<-function(value.optim){
+#' Update optimization grid based on current optimum for the parameter \epsilon of the support vector machine.
+#'
+#' @description This function adapts the optimization grid for \epsilon. 
+#' Based on a recommendation of Lluis Belanche, we work on the base 10 scale!
+#' Note that we use a simulted annealing idea: the step size of the grid decreases with increasing number of iterations (step).
+#' 
+#' @param value.optim The current optimum value for \epsilon.
+#' @param step The optimization step.
+#'
+#' @return A numeric vector with three elements which can be used as updated optimization grid.
+gridEpsilon<-function(value.optim, step){
   value.optim<-log10(value.optim)
   minV <- max(value.optim - (1 / step**2) * value.optim, 0.001);
   maxV <- value.optim + (1 / step**2) * value.optim;
@@ -403,8 +438,8 @@ gridEpsilon<-function(value.optim){
 updateGrid <- function(value.optim, step, type) {
   stopifnot(value.optim>0.00001)
   switch(type,
-    poly =  gridPoly(value.optim),
-    C = gridC(value.optim),
+    poly =  gridPoly(value.optim, step),
+    C = gridC(value.optim, step),
     epsilon = gridEpsilon(value.optim)
   )
 }
