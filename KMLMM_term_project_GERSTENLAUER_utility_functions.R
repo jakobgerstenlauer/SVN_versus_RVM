@@ -380,7 +380,7 @@ ksvm.CV<-function(response.name, data, c, eps, p, k=10){
 #' @param x The argument to test.
 #'
 #' @return Boolean indicating that argument is a valid value.
-is.invalid<-function(x){
+is.invalid.scalar<-function(x){
   is.nan(x)||is.infinite(x)
 }
 
@@ -392,7 +392,7 @@ is.invalid<-function(x){
 #'
 #' @return Boolean indicating if result object has valid value for requested parameter.
 isInvalidResult<-function(result, param_name, param_value){
-  if(is.invalid(result[1])){
+  if(is.invalid.scalar(result[1])){
     print(paste("Invalid result for ", param_name,":",param_value))
     return (TRUE);
   } 
