@@ -5,9 +5,9 @@ rm(list=ls(all=TRUE))
 glue<-function(...){paste(...,sep="")}
 
 #TODO Adapt to working dir or remove!
-#setwd("D:/Documents/MIRI/Semestre 2/ProyectoFinal/KernelFinalProject/code")
+#setwd("D:/Documents/MIRI/Semestre 2/APRENDIZAJE AUTOMATICO BASADO EN KERNEL Y MODELADO MULTIVARIANTE/ProyectoFinal/KernelFinalProject/code")
 #setwd("E:/Documents/Mis Documentos/MIRI/Semestre 2/APRENDIZAJE AUTOMATICO BASADO EN KERNEL Y MODELADO MULTIVARIANTE/ProyectoFinal/KernelFinalProject/code")
-setwd("J:/UPC/2016/02/KMLMM/KernelMethods/practicals/term_project/code")
+#setwd("J:/UPC/2016/02/KMLMM/KernelMethods/practicals/term_project/code")
 
 #define path of standard directories
 source("workingDir.R")
@@ -81,6 +81,6 @@ hist(tapply(d$compu.time,d$id_parameter_combination,sum))
 #pag. 28 <- reorder bars
 #pag. 122 <- multiple histograms with different color
 #pag. 159 <- error bars
-#boxplots?
+#boxplots? ts?
 
 #todo: is relevant to know the relation between str, cv.mean and sparcity?
