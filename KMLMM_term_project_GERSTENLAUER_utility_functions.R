@@ -61,11 +61,11 @@ logging<-function(text, fileNameBase){
 #'
 #' @examples
 is.invalid<-function(result.optim){
-  if(is.null(result.optim)) return (TRUE);
-  if(!is.numeric(result.optim)) return (TRUE);
-  if(length(result.optim)!=4) return (TRUE);
+  if(is.null(result.optim)){ return (TRUE)}
+  if(!is.numeric(result.optim)) {return (TRUE)}
+  if(length(result.optim)!=4){ return (TRUE)}
   for (i in 1:4){
-    if(length(result.optim[i])!=1) return (TRUE);
+    if(length(result.optim[i])!=1) {return (TRUE)}
   }
   return (FALSE);
 }
