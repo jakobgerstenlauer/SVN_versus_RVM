@@ -12,24 +12,24 @@ maxReplicatesLHC<-3
 
 #TODO Check if the sample size is correct!
 #number of samples from the LHC 
-SampleSize<-100
+SampleSize<-200
 
 #Now define the ranges for all four parameters of the LHC:
 #V1: signal-to-noise ratio
-low_V1= 0.3;
-high_V1= 0.9;
+low_V1= 0.01;
+high_V1= 0.99;
 
 #V2: number of observations N
 low_V2  = 16;
 high_V2 = 256;
 
-#V3: ratio observations to number of variables D
-low_V3  = 4;
-high_V3 = 32;
+#V3: ratio observations / number of variables D
+low_V3  = 0.5;
+high_V3 = 20;
 
 #V4: polynomial degree of the inputs.
 low_V4  = 3;
-high_V4 = 6;
+high_V4 = 7;
 
 #initial sample values
 #c.grid<-2**c(0,0.5,1,1.5)

@@ -108,8 +108,8 @@ for (simulation in seq(1,dim(LHS)[1]))
     i<-i+1
     
     dump.file.name<-glue("data_signal_to_noise_", A1,
-                         "_N_", floor(A2),
-                         "_D_", floor(A3),
+                         "_N_", round(A2),
+                         "_D_", D,
                          "_poly_", round(A4),
                          "_replicate_",replicate,
                          ".RData");
@@ -148,13 +148,9 @@ sd.sparsity<-vector(mode="numeric",length=sample.size)
 #vector for computation time
 compu.time<-vector(mode="numeric",length=sample.size)
 
-#Here I have to declare the variable without initialising it,
-#because in the first call to optim.parameter() it is a necessary argument.
-result.optim<-NULL
-
 header<-paste(c("fileName", "opt.step", "parameter", "opt.value", "comput.time"), 
               sep="\t")
-init.logging(header)
+init.logging(text=header, fileName="Log_KMLMM_term_project")
 #index for files
 i<-1
 #index for parameter combination
@@ -163,6 +159,10 @@ j<-1
 for(fileName in file.names){
   print(paste("read input file:", fileName))
   load(fileName)
+  
+  #Here I have to declare the variable without initialising it,
+  #because in the first call to optim.parameter() it is a necessary argument.
+  result.optim<-NULL
   
   #For each parameter combination there are maxReplicatesLHC replicates.
   #Index j identifies the replicate.
@@ -173,14 +173,12 @@ for(fileName in file.names){
   
   #start values for parameters
   cv.mean.max <- 0
-  poly.optim <- polynomial_degree
   total.sim.time<-0
   
   #optimize polynomial degree
   o <-
     optim.parameter.rvm(
       result.optim,
-      param.optim=poly.optim,
       initial.poly.grid,
       data = d,
       numCVReplicates
@@ -191,7 +189,8 @@ for(fileName in file.names){
   result.optim  <- o$result
   time.spent  <- o$time
   total.sim.time <- total.sim.time + time.spent
-  logging(paste(fileName, "poly:", poly.optim, time.spent, sep="\t"))
+  logging(paste(fileName, "poly:", poly.optim, time.spent, sep="\t"),
+          fileNameBase="Log_KMLMM_term_project")
   rm(o)
   
   #optimal parameters
@@ -270,10 +269,6 @@ sd.sparsity<-vector(mode="numeric",length=sample.size)
 #vector for computation time
 compu.time<-vector(mode="numeric",length=sample.size)
 
-#Here I have to declare the variable without initialising it,
-#because in the first call to optim.parameter() it is a necessary argument.
-result.optim<-NULL
-
 #index for files
 i<-1
 
@@ -303,6 +298,10 @@ for(fileName in file.names){
   epsilon.grid<-initial.epsilon.grid
   c.grid<-initial.c.grid
   
+  #Here I have to declare the variable without initialising it,
+  #because in the first call to optim.parameter() it is a necessary argument.
+  result.optim<-NULL
+  
   for (step in 1:maxStep) {
     print(paste("optim step:", step))
     
@@ -325,7 +324,8 @@ for(fileName in file.names){
     result.optim  <- o$result
     time.spent  <- o$time
     total.sim.time <- total.sim.time + time.spent
-    logging(paste(fileName, step, "epsilon:", epsilon.optim, time.spent))
+    logging(paste(fileName, step, "epsilon:", epsilon.optim, time.spent),
+            fileNameBase="Log_KMLMM_term_project")
     rm(o)
     
     #optimize C
@@ -347,7 +347,8 @@ for(fileName in file.names){
     result.optim  <- o$result
     time.spent  <- o$time
     total.sim.time <- total.sim.time + time.spent
-    logging(paste(fileName, step, "C:", c.optim, time.spent))
+    logging(paste(fileName, step, "C:", c.optim, time.spent),
+            fileNameBase="Log_KMLMM_term_project")
     rm(o)
     
     #optimize polynomial degree
@@ -369,7 +370,8 @@ for(fileName in file.names){
     result.optim  <- o$result
     time.spent  <- o$time
     total.sim.time <- total.sim.time + time.spent
-    logging(paste(fileName, step, "poly:", poly.optim, time.spent, sep="\t"))
+    logging(paste(fileName, step, "poly:", poly.optim, time.spent, sep="\t"),
+            fileNameBase="Log_KMLMM_term_project")
     rm(o)
     
     #optimal parameters
