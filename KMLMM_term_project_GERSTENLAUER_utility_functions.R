@@ -52,6 +52,23 @@ logging<-function(text, fileNameBase){
   }
 }
 
+#' Checks if a results object returned by krvm.10x10CV or ksvm.10x10CV is valid.
+#'
+#' @param result.optim 
+#'
+#' @return True or False depending if object is valid.
+#' @export
+#'
+#' @examples
+is.invalid<-function(result.optim){
+  if(is.null(result.optim)) return (TRUE);
+  if(!is.numeric(result.optim)) return (TRUE);
+  if(length(result.optim)!=4) return (TRUE);
+  for (i in 1:4){
+    if(length(result.optim[i])!=1) return (TRUE);
+  }
+  return (FALSE);
+}
 
 #' @title Test validity of numeric values.
 #'
