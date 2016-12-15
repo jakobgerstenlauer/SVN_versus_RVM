@@ -7,7 +7,6 @@
 #' @description This is a wrapper function for paste which does not use any separator.
 glue<-function(...){paste(...,sep="")}
 
-
 #' @title Initialize a common log file.
 #'
 #' @description
@@ -440,7 +439,7 @@ gridEpsilon<-function(value.optim, step){
 updateGrid <- function(value.optim, step, type) {
   stopifnot(value.optim>0.00001)
   switch(type,
-    poly =  gridPoly(value.optim, step),
+    poly =  gridPoly(value.optim),
     C = gridC(value.optim, step),
     epsilon = gridEpsilon(value.optim, step)
   )
