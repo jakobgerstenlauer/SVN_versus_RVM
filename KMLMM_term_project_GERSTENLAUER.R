@@ -184,6 +184,11 @@ for(fileName in file.names){
       numCVReplicates
     )
   
+  if(is.null(o)){
+    logging(paste("No valid result for file:",fileName),
+            fileNameBase="Log_KMLMM_term_project")
+  }else{
+    
   poly.grid  <- o$new.grid
   poly.optim <- o$parameter
   result.optim  <- o$result
@@ -192,10 +197,15 @@ for(fileName in file.names){
   logging(paste(fileName, "poly:", poly.optim, time.spent, sep="\t"),
           fileNameBase="Log_KMLMM_term_project")
   rm(o)
+  }
   
   #optimal parameters
   polynomial_degree_setting[i] <- poly.optim
   
+  if(is.null(result.optim)){
+    logging(paste("No valid result.optim object for file:",fileName),
+            fileNameBase="Log_KMLMM_term_project")
+  }else{
   #cross-validation error mean and sd
   cv.mean[i] <- result.optim[1]
   cv.sd[i] <- result.optim[2]
@@ -204,6 +214,7 @@ for(fileName in file.names){
   sparsity[i] <- result.optim[3]
   sd.sparsity[i] <- result.optim[4]
   compu.time[i]<-total.sim.time
+  }
   
   #The index i has to run over all input files.
   #I store only one result for each file!
@@ -319,14 +330,20 @@ for(fileName in file.names){
         numCVReplicates
       )
     
-    epsilon.grid  <- o$new.grid
-    epsilon.optim <- o$parameter
-    result.optim  <- o$result
-    time.spent  <- o$time
-    total.sim.time <- total.sim.time + time.spent
-    logging(paste(fileName, step, "epsilon:", epsilon.optim, time.spent),
-            fileNameBase="Log_KMLMM_term_project")
-    rm(o)
+    if(is.null(o)){
+      logging(paste("No valid result for file:",fileName, "step:", step),
+              fileNameBase="Log_KMLMM_term_project")
+    }else{
+      
+      epsilon.grid  <- o$new.grid
+      epsilon.optim <- o$parameter
+      result.optim  <- o$result
+      time.spent  <- o$time
+      total.sim.time <- total.sim.time + time.spent
+      logging(paste(fileName, step, "epsilon:", epsilon.optim, time.spent),
+      fileNameBase="Log_KMLMM_term_project")
+      rm(o)
+    }
     
     #optimize C
     o <-
@@ -341,7 +358,12 @@ for(fileName in file.names){
         poly.optim,
         numCVReplicates
       )
-    
+  
+    if(is.null(o)){
+      logging(paste("No valid result for file:",fileName, "step:", step),
+              fileNameBase="Log_KMLMM_term_project")
+    }else{
+      
     c.grid  <- o$new.grid
     c.optim <- o$parameter
     result.optim  <- o$result
@@ -350,6 +372,7 @@ for(fileName in file.names){
     logging(paste(fileName, step, "C:", c.optim, time.spent),
             fileNameBase="Log_KMLMM_term_project")
     rm(o)
+    }
     
     #optimize polynomial degree
     o <-
@@ -365,6 +388,10 @@ for(fileName in file.names){
         numCVReplicates
       )
     
+    if(is.null(o)){
+      logging(paste("No valid result for file:",fileName, "step:", step),
+              fileNameBase="Log_KMLMM_term_project")
+    }else{
     poly.grid  <- o$new.grid
     poly.optim <- o$parameter
     result.optim  <- o$result
@@ -373,6 +400,7 @@ for(fileName in file.names){
     logging(paste(fileName, step, "poly:", poly.optim, time.spent, sep="\t"),
             fileNameBase="Log_KMLMM_term_project")
     rm(o)
+    }
     
     #optimal parameters
     c_setting[i] <- c.optim
