@@ -81,6 +81,6 @@ hist(tapply(d$compu.time,d$id_parameter_combination,sum))
 #pag. 28 <- reorder bars
 #pag. 122 <- multiple histograms with different color
 #pag. 159 <- error bars
-#boxplots?
+#boxplots? ts?
 
 #todo: is relevant to know the relation between str, cv.mean and sparcity?
