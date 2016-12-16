@@ -673,3 +673,26 @@ optim.parameter<-function(result.optim, param.optim, grid, param_name, data, c.o
   return(list(new.grid=grid, result=result.optim, parameter=param.optim, time=time.used[3]))
 }
 
+#' Optimize the C,\epsilon, and the polynomial degree for the support vector machine.
+#'
+#' @description Fills a table according with the parameters and covariance methos given.    
+#' 
+#' @param row.attributes Data that corresponds to the table rows
+#' @param column.attributes Data that corresponds to the table rows
+#' @param covariance.method A string indicating the covariance method that is applyed
+#'
+#' @return A matrix with the rows and columns given and in each cell its correspondent covariance
+#' @examples result.table.svm <- populate.table(row.attributes,column.attributes,"spearman")
+populate.table<-function(row.attributes,column.attributes,covariance.method){
+  out <- c()
+  for(i in 1:length(row.attributes)) {
+    for(j in 1:length(column.attributes)) {
+      out<-c(out,eval(parse(text=glue("cor(",row.attributes[i],",",column.attributes[j],",","method=\"",covariance.method,"\")"))))
+    }
+  }
+  
+  result.table <- matrix(out,ncol=length(column.attributes),byrow=TRUE)
+  result.table <- as.table(result.table)
+  result.table
+}
+
