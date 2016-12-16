@@ -430,7 +430,7 @@ d.results<-data.frame(
   id_parameter_combination,
   #optimal parameters
   c_setting,
-  epsilon_setting,
+  epsilon_setting, 
   polynomial_degree_setting,
   #cross-validation error mean and sd
   cv.mean,
