@@ -184,26 +184,37 @@ for(fileName in file.names){
       numCVReplicates
     )
   
-  poly.grid  <- o$new.grid
-  poly.optim <- o$parameter
-  result.optim  <- o$result
-  time.spent  <- o$time
-  total.sim.time <- total.sim.time + time.spent
-  logging(paste(fileName, "poly:", poly.optim, time.spent, sep="\t"),
-          fileNameBase="Log_KMLMM_term_project")
-  rm(o)
+  if(is.null(o)){
+    logging(paste("No valid result for file:",fileName, "step:", step),
+            fileNameBase="Log_KMLMM_term_project")
+  }else{
+    poly.grid  <- o$new.grid
+    poly.optim <- o$parameter
+    result.optim  <- o$result
+    time.spent  <- o$time
+    total.sim.time <- total.sim.time + time.spent
+    logging(paste(fileName, "poly:", poly.optim, time.spent, sep="\t"),
+            fileNameBase="Log_KMLMM_term_project")
+    rm(o)
+  }
   
-  #optimal parameters
-  polynomial_degree_setting[i] <- poly.optim
-  
-  #cross-validation error mean and sd
-  cv.mean[i] <- result.optim[1]
-  cv.sd[i] <- result.optim[2]
-  
-  #sparsity mean and sd
-  sparsity[i] <- result.optim[3]
-  sd.sparsity[i] <- result.optim[4]
-  compu.time[i]<-total.sim.time
+  if(is.invalid(result.optim)){
+    logging(paste("No valid result.optim object for file:",fileName),
+            fileNameBase="Log_KMLMM_term_project")
+  }else{
+    
+    #optimal parameters
+    polynomial_degree_setting[i] <- poly.optim
+    
+    #cross-validation error mean and sd
+    cv.mean[i] <- result.optim[1]
+    cv.sd[i] <- result.optim[2]
+    
+    #sparsity mean and sd
+    sparsity[i] <- result.optim[3]
+    sd.sparsity[i] <- result.optim[4]
+    compu.time[i]<-total.sim.time
+  }
   
   #The index i has to run over all input files.
   #I store only one result for each file!
@@ -392,7 +403,7 @@ for(fileName in file.names){
       rm(o)
     }
     
-    if(is.null(result.optim)){
+    if(is.invalid(result.optim)){
       logging(paste("No valid result.optim object for file:",fileName),
               fileNameBase="Log_KMLMM_term_project")
     }else{
