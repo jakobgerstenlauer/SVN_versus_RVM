@@ -711,9 +711,9 @@ populate.table<-function(row.attributes,column.attributes,covariance.method){
 #' @examples result.table.svm.rvm <- populate.table.svm.rvm(row.attributes,column.attributes,"method",TRUE)
 populate.table.svm.rvm<-function(dataset,row.attributes,column.attributes,colour,show.geom.points,method){
   #install.packages("ggplot2")
-  #install.packages("reshape2")
+  #install.packages("gridExtra")
   library(ggplot2)
-  library(reshape2)
+  library(gridExtra)
   out <- c()
   for(i in 1:length(row.attributes)) {
     for(j in 1:length(column.attributes)) {
@@ -723,31 +723,23 @@ populate.table.svm.rvm<-function(dataset,row.attributes,column.attributes,colour
     }
   }
   
+  for(i in 1:length(row.attributes)) {
+    for(j in 1:length(column.attributes)) {
+      out<-c(out,eval(parse(text=glue("ggplot(",dataset,",", "aes(x=",column.attributes[i],",", 
+                                      "y=",row.attributes[j],",","colour=",colour,
+                                      ")) + stat_smooth(method=",method,",","formula = y ~ x) +", "geom_point()"))))
+    }
+  }
   
-  # plot.iris <- ggplot(iris, aes(Sepal.Length, Sepal.Width)) + 
-  #   geom_point() + facet_grid(. ~ Species) + stat_smooth(method = "lm") +
-  #   background_grid(major = 'y', minor = "none") + # add thin horizontal lines 
-  #   panel_border() # and a border around each panel
-  # # plot.mpt and plot.diamonds were defined earlier
-  # ggdraw() +
-  #   draw_plot(plot.iris, 0, .5, 1, .5) +
-  #   draw_plot(sp, 0, 0, .5, .5) +
-  #   draw_plot(bp, .5, 0, .5, .5) +
-  #   draw_plot_label(c("A", "B", "C"), c(0, 0, 0.5), c(1, 0.5, 0.5), size = 15) 
-  
-  # mdat <- melt(plotData)
-  # 
-  # if(plotType=='probability'){
-  #   ph <- ggplot(mdat, aes(value)) +
-  #     geom_histogram(aes(y=..density..), binwidth=bw, colour='black', fill='skyblue') + 
-  #     geom_density() + 
-  #     facet_wrap(~variable, scales="free")
-  # } 
+  eval(parse(text=glue("final.plot<-arrangeGrob(",,",ncol = length(column.attributes), nrow = length(row.attributes))")))
   
   
-  #result.table <- matrix(out,ncol=length(column.attributes),byrow=TRUE)
-  #result.table <- as.table(result.table)
-  #result.table
+  y <- arrangeGrob(p1, p2, ncol = length(column.attributes), nrow = length(row.attributes))
+  class(y)
+  #[1] "gtable" "grob"   "gDesc"
+  grid.draw(y)
+  
+  
   out
 }
 
