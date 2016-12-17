@@ -52,6 +52,7 @@ setwd(codeDir)
 source("KMLMM_term_project_GERSTENLAUER_utility_functions.R")
 
 require(lattice)
+setwd(plotDir)
 jpeg("Error_Estimating_Polynomial_Degree.jpeg")
 histogram(~polynomial.degree-polynomial_degree_setting|method,
           xlab="Empirical minus estimated polynomial degree",
@@ -61,6 +62,13 @@ histogram(~polynomial.degree-polynomial_degree_setting|method,
 dev.off()
 densityplot(~polynomial.degree-polynomial_degree_setting, groups=method, data=d.vertical)
 
+#comparison between performance of svm and rvm
+jpeg("Compare_RVM_and_RVM_STNR.jpeg")
+xyplot(rvm_cv.mean - svm_cv.mean, rvm_signal.to.noise.ratio,
+          xlab="Empirical minus estimated polynomial degree",
+          ylab="Frequency",
+          data=d.horizontal)
+dev.off()
 
 
 
