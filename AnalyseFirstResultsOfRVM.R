@@ -6,7 +6,7 @@ rm(list=ls(all=TRUE))
 glue<-function(...){paste(...,sep="")}
 
 #TODO Adapt to working dir or remove!
-#setwd("D:/Documents/MIRI/Semestre 2/APRENDIZAJE AUTOMATICO BASADO EN KERNEL Y MODELADO MULTIVARIANTE/ProyectoFinal/KernelFinalProject/code")
+setwd("D:/Documents/MIRI/Semestre 2/APRENDIZAJE AUTOMATICO BASADO EN KERNEL Y MODELADO MULTIVARIANTE/ProyectoFinal/KernelFinalProject/code")
 #setwd("E:/Documents/Mis Documentos/MIRI/Semestre 2/APRENDIZAJE AUTOMATICO BASADO EN KERNEL Y MODELADO MULTIVARIANTE/ProyectoFinal/KernelFinalProject/code")
 #setwd("J:/UPC/2016/02/KMLMM/KernelMethods/practicals/term_project/code")
 
@@ -20,9 +20,6 @@ d  <- read.csv(data.file,sep=";")
 setwd(codeDir)
 source("KMLMM_term_project_GERSTENLAUER_utility_functions.R")
 str(d)
-#there was a mistake in the first run: num.observations and num.vars were mixed up! why?
-names(d)[3]<-"num.observations"
-names(d)[4]<-"num.vars"
 
 #check the same way as with svm
 with(d,plot(signal.to.noise.ratio, cv.mean)) #P.P. the plot is already here?

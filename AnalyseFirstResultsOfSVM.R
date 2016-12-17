@@ -6,7 +6,7 @@ glue<-function(...){paste(...,sep="")}
 
 #TODO Adapt to working dir or remove!
 #setwd("D:/Documents/MIRI/Semestre 2/APRENDIZAJE AUTOMATICO BASADO EN KERNEL Y MODELADO MULTIVARIANTE/ProyectoFinal/KernelFinalProject/code")
-#setwd("E:/Documents/Mis Documentos/MIRI/Semestre 2/APRENDIZAJE AUTOMATICO BASADO EN KERNEL Y MODELADO MULTIVARIANTE/ProyectoFinal/KernelFinalProject/code")
+setwd("E:/Documents/Mis Documentos/MIRI/Semestre 2/APRENDIZAJE AUTOMATICO BASADO EN KERNEL Y MODELADO MULTIVARIANTE/ProyectoFinal/KernelFinalProject/code")
 #setwd("J:/UPC/2016/02/KMLMM/KernelMethods/practicals/term_project/code")
 
 #define path of standard directories
@@ -23,19 +23,16 @@ setwd(codeDir)
 source("KMLMM_term_project_GERSTENLAUER_utility_functions.R")
 str(d)
 
-with(subset(d,cv.mean>-0.1),plot(signal.to.noise.ratio, cv.mean)) #P.P. the plot is already here?
-#not very informative, (P.P. everyone) nearly always 1!
-with(d,hist(cv.mean))
-#not very informative, nearly always 1!
+with(subset(d,cv.mean>-0.1),plot(signal.to.noise.ratio, cv.mean)) 
+#we can infer that a lot of data tend to 0, i.e. explains 0% of results.
+#Also, the majority of the points are pretty fair distributed in the space, so there is not a strong correlation
+with(subset(d,cv.mean>-0.1),hist(cv.mean))
 
-#Why is the explained variance so freaking high?
-#Which attributes explain low model quality?
-#Too few variables? #P.P. I suppose this is the correction you talked me about
 
 d_low_model_quality<-subset(d,cv.mean<0.9)
 
-with(d, hist(num.vars))
-with(d, hist(num.observations))
+with(subset(d,cv.mean>-0.1), hist(num.vars))
+with(subset(d,cv.mean>-0.1), hist(num.observations))
 #Conclusion: the only data sets which were not perfectly well explained were those with the highest number of variables
 #which were 13 and 11 and a relatively low number of observations!
 #P.P. is this correct? I mean Tomas mentioned that a very good model is not probably correct, I know we know it is correct but
