@@ -25,9 +25,10 @@ str(d)
 
 with(subset(d,cv.mean>-0.1),plot(signal.to.noise.ratio, cv.mean)) 
 #we can infer that a lot of data tend to 0, i.e. explains 0% of results.
-#Also, the majority of the points are pretty fair distributed in the space, so there is not a strong correlation
+#Also, the majority of the points are pretty fairly distributed in the space, 
+#so there is not a strong correlation between signal to noise ratio 
+#and the mean cross-validated R2 
 with(subset(d,cv.mean>-0.1),hist(cv.mean))
-
 
 d_low_model_quality<-subset(d,cv.mean<0.9)
 
