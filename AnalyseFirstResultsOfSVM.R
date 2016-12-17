@@ -12,12 +12,12 @@ setwd("E:/Documents/Mis Documentos/MIRI/Semestre 2/APRENDIZAJE AUTOMATICO BASADO
 #define path of standard directories
 source("workingDir.R")
 
-#setwd(dataDir)
-#d<-read.csv("Results_Simulation_SVM_KMLMM_term_project_2016_12_16.csv",sep=";") #<-set to static
+setwd(dataDir)
+d<-read.csv("Results_Simulation_SVM_KMLMM_term_project_2016_12_16.csv",sep=";") #<-set to static
 
 #opens a dialog box to input the file
-data.file <- file.choose()
-d  <- read.csv(data.file,sep=";")
+#data.file <- file.choose()
+#d  <- read.csv(data.file,sep=";")
 
 setwd(codeDir)
 source("KMLMM_term_project_GERSTENLAUER_utility_functions.R")
