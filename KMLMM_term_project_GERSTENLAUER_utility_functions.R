@@ -687,7 +687,7 @@ populate.table<-function(row.attributes,column.attributes,covariance.method){
   out <- c()
   for(i in 1:length(row.attributes)) {
     for(j in 1:length(column.attributes)) {
-      out<-c(out,eval(parse(text=glue("round(cor(",row.attributes[i],",",column.attributes[j],",","method=\"",covariance.method,"\"),digits = 3)"))))
+      out<-c(out,eval(parse(text=glue("round(cor(",row.attributes[i],",",column.attributes[j],",","method=\"",covariance.method,"\")*100,digits = 3)"))))
     }
   }
   
