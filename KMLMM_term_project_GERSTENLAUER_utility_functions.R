@@ -725,16 +725,16 @@ populate.table.svm.rvm<-function(dataset,row.attributes,column.attributes,colour
   # }
   
   text.final<-""
-  for(i in 1:length(row.attributes)) {
-    for(j in 1:length(column.attributes)) {
+  for(i in 1:length(column.attributes)) {
+    for(j in 1:length(row.attributes)) {
       text.final<-glue("ggplot(",dataset,",", "aes(x=",column.attributes[i],",", 
                                       "y=",row.attributes[j],",","colour=",colour,
                                       ")) + stat_smooth(method=",method,",","formula = y ~ x) +", "geom_point()",",",text.final)
     }
   }
   
-  #eval(parse(text=glue("final.plot<-arrangeGrob(",text.final,",ncol = length(column.attributes), nrow = length(row.attributes))")))
-  
+  eval(parse(text=glue("final.plot<-arrangeGrob(",text.final,",ncol = length(column.attributes), nrow = length(row.attributes))")))
+  grid.draw(final.plot)
   
   #y <- arrangeGrob(p1, p2, ncol = length(column.attributes), nrow = length(row.attributes))
   #class(y)
