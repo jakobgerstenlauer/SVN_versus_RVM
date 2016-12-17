@@ -56,7 +56,7 @@ row.attributes<-c("d$polynomial.degree-d$polynomial_degree_setting","d$sparsity"
 column.attributes<-c("d$signal.to.noise.ratio","d$num.observations/d$num.vars","d$polynomial.degree")
 result.table.rvm <- populate.table(row.attributes,column.attributes,"spearman")
 colnames(result.table.rvm) <- c("Signal to noise ratio", "Number of observations/Number of variables", "Polynomial degree")
-rownames(result.table.rvm) <- c("Error in estimating poly","Sparcity","CV Mean","Computational Time")
+rownames(result.table.rvm) <- c("Error in estimating poly","Sparsity","CV Mean","Computational Time")
 #save to a new file
 Date<-gsub(pattern="-", replacement="_",Sys.Date())
 fileName<-paste("RVM_results_table_KMLMM_term_project_",Date,".csv",sep="")
