@@ -14,9 +14,11 @@ glue<-function(...){paste(...,sep="")}
 source("workingDir.R")
 setwd(dataDir)
 d<-read.csv("Results_Simulation_RVM_KMLMM_term_project_2016_12_15.csv",sep=";") #<-set to static
+#this region dynamically loads the file
 #opens a dialog box to input the file
 #data.file <- file.choose()
 #d  <- read.csv(data.file,sep=";")
+
 setwd(codeDir)
 source("KMLMM_term_project_GERSTENLAUER_utility_functions.R")
 str(d)
