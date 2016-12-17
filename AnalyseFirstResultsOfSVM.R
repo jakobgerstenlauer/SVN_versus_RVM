@@ -69,6 +69,12 @@ setwd(dataDir)
 write.table(result.table.svm, file=fileName, append=FALSE, row.names = TRUE, col.names = NA, sep = ";")
 
 
+
+
+
+
+
+
 #define more relevant graphic i.e. most and best descriptive graphic
 #pag. 28 <- reorder bars
 #pag. 122 <- multiple histograms with different color
@@ -81,15 +87,15 @@ write.table(result.table.svm, file=fileName, append=FALSE, row.names = TRUE, col
 #signal to noise ratio, comput time
 #
 #install.packages("ggplot2")
-library(ggplot2)
+# library(ggplot2)
 #signal to noise ratio vs cv.mean
-plot(d_low_model_quality$signal.to.noise.ratio, d_low_model_quality$cv.mean)
-ggplot(d,aes(x=d$cv.mean,y=d$signal.to.noise.ratio,fill=d$id_parameter_combination))+geom_bar(position = "dodge",stat="identity")+labs(title="Comparison for CV Mean and STNR",x="CV Mean",y="Signal to noise ratio")
-ggplot(d,aes(x=d$cv.mean,y=d$sparsity,fill=d$id_parameter_combination))+geom_bar(position = "identity",stat="identity")+labs(title="Comparison for CV Mean and STNR",x="CV Mean",y="Sparcity")
-ggplot(d,aes(x=d$sparsity,y=d$signal.to.noise.ratio,fill=d$id_parameter_combination))+geom_bar(position = "identity",stat="identity")+labs(title="Comparison for CV Mean and STNR",x="Sparcity",y="Signal to noise ratio") 
+# plot(d_low_model_quality$signal.to.noise.ratio, d_low_model_quality$cv.mean)
+# ggplot(d,aes(x=d$cv.mean,y=d$signal.to.noise.ratio,fill=d$id_parameter_combination))+geom_bar(position = "dodge",stat="identity")+labs(title="Comparison for CV Mean and STNR",x="CV Mean",y="Signal to noise ratio")
+# ggplot(d,aes(x=d$cv.mean,y=d$sparsity,fill=d$id_parameter_combination))+geom_bar(position = "identity",stat="identity")+labs(title="Comparison for CV Mean and STNR",x="CV Mean",y="Sparcity")
+# ggplot(d,aes(x=d$sparsity,y=d$signal.to.noise.ratio,fill=d$id_parameter_combination))+geom_bar(position = "identity",stat="identity")+labs(title="Comparison for CV Mean and STNR",x="Sparcity",y="Signal to noise ratio") 
 
 #shows the same concentration, most of them tend to be more grouped in 1 (100 in the graph)
 #ggplot(d_low_model_quality,aes(x=cv.mean,y=signal.to.noise.ratio,fill=id_parameter_combination))+geom_bar(position = "dodge",stat="identity")+labs(title="Comparison for CV Mean and STNR",x="CV Mean",y="Signal to noise ratio") 
 
 #get the computation time for each parameter, in total 100 combinations,3 each
-hist(tapply(d$compu.time,d$id_parameter_combination,sum))
+# hist(tapply(d$compu.time,d$id_parameter_combination,sum))
