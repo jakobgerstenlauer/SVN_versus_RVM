@@ -51,10 +51,6 @@ with(subset(d,cv.mean>-0.1),cor.test(signal.to.noise.ratio, cv.mean, method="ken
 # tau 
 # 0.04276472 
 
-#P.P. copy from tests done in isolated environment#
-#install.packages("ggplot2")
-library(ggplot2)
-
 #get the table analysing the results, in here we use a pearson covariance
 row.attributes<-c("d$polynomial.degree-d$polynomial_degree_setting","d$sparsity","d$cv.mean","d$compu.time")
 column.attributes<-c("d$signal.to.noise.ratio","d$num.observations/d$num.vars","d$polynomial.degree")
@@ -67,3 +63,7 @@ fileName<-paste("RVM_results_table_KMLMM_term_project_",Date,".csv",sep="")
 result.table.rvm
 setwd(dataDir)
 write.table(result.table.rvm, file=fileName, append=FALSE, row.names = TRUE, col.names = NA, sep = ";")
+
+#P.P. copy from tests done in isolated environment#
+#install.packages("ggplot2")
+library(ggplot2)
