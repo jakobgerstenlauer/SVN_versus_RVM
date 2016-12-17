@@ -14,21 +14,23 @@ source("workingDir.R")
 
 #this region dinamically loads the file
 #opens a dialog box to input the file for svm
-data.file <- file.choose()
-d.svm  <- read.csv(data.file,sep=";")
-str(d.svm)
+# data.file <- file.choose()
+# d.svm  <- read.csv(data.file,sep=";")
+# str(d.svm)
 
 #opens a dialog box to input the file for rvm
-data.file <- file.choose()
-library(tcltk2)
-tk_choose.files()
-d.rvm  <- read.csv(data.file,sep=";")
-str(d.rvm)
+# data.file <- file.choose()
+# library(tcltk2)
+# tk_choose.files()
+# d.rvm  <- read.csv(data.file,sep=";")
+# str(d.rvm)
 
 #this region is for static loading
-#setwd(dataDir)
-#d.svm<-read.csv("Results_Simulation_RVM_KMLMM_term_project_2016_12_08.csv",sep=";")
-#d.rvm<-read.csv("Results_Simulation_RVM_KMLMM_term_project_2016_12_08.csv",sep=";")
+setwd(dataDir)
+d.svm<-read.csv("Results_Simulation_RVM_KMLMM_term_project_2016_12_08.csv",sep=";")
+str(d.svm)
+d.rvm<-read.csv("Results_Simulation_RVM_KMLMM_term_project_2016_12_08.csv",sep=";")
+str(d.rvm)
 
 setwd(codeDir)
 source("KMLMM_term_project_GERSTENLAUER_utility_functions.R")

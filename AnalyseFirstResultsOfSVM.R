@@ -12,9 +12,11 @@ setwd("E:/Documents/Mis Documentos/MIRI/Semestre 2/APRENDIZAJE AUTOMATICO BASADO
 #define path of standard directories
 source("workingDir.R")
 
+#this region is for static loading
 setwd(dataDir)
-d<-read.csv("Results_Simulation_SVM_KMLMM_term_project_2016_12_16.csv",sep=";") #<-set to static
+d<-read.csv("Results_Simulation_SVM_KMLMM_term_project_2016_12_16.csv",sep=";")
 
+#this region dinamically loads the file
 #opens a dialog box to input the file
 #data.file <- file.choose()
 #d  <- read.csv(data.file,sep=";")
