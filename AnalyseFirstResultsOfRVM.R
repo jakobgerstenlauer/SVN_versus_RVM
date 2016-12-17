@@ -64,18 +64,14 @@ column.attributes<-c("d$signal.to.noise.ratio","d$num.observations/d$num.vars","
 result.table.rvm <- populate.table(row.attributes,column.attributes,"spearman")
 colnames(result.table.rvm) <- c("Signal to noise ratio", "Number of observations/Number of variables", "Polynomial degree")
 rownames(result.table.rvm) <- c("Error in estimating poly","Sparsity","CV Mean","Computational Time")
+
 #save to a new file
 Date<-gsub(pattern="-", replacement="_",Sys.Date())
 fileName<-paste("RVM_results_table_KMLMM_term_project_",Date,".csv",sep="")
 result.table.rvm
 setwd(dataDir)
+#install.packages("xtable")
+library(xtable)
+latex.table.rvm<-xtable(result.table.rvm)
+print.xtable(latex.table.rvm, type="latex", file="result_table_rvm.tex")
 write.table(result.table.rvm, file=fileName, append=FALSE, row.names = TRUE, col.names = NA, sep = ";")
-
-
-
-
-
-
-#P.P. copy from tests done in isolated environment#
-#install.packages("ggplot2")
-# library(ggplot2)

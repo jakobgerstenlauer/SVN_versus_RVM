@@ -696,23 +696,53 @@ populate.table<-function(row.attributes,column.attributes,covariance.method){
   result.table
 }
 
-#' Creates the table of results for SVM vs RVM
+#' Creates the table with the plot results of svm and rvm
 #'
 #' @description Fills a table according with the parameters and covariance methos given.    
 #' 
-#' @param row.attributes Data that corresponds to the table rows
-#' @param column.attributes Data that corresponds to the table rows
-#' @param covariance.method A string indicating the covariance method that is applyed
+#' @param dataset string with the name of the Data set that is used in the analysis
+#' @param row.attributes string set with the names that corresponds to the table rows
+#' @param column.attributes string set with the names that corresponds to the table rows
+#' @param colour A string indicating the colour column clasification
+#' @param show.geom.points A boolean variable indicating if the points are drawn or not
+#' @param method a string indicating the method used in the regression
 #'
-#' @return A matrix with the rows and columns given and in each cell its correspondent covariance
-#' @examples result.table.svm <- populate.table(row.attributes,column.attributes,"spearman")
-populate.table<-function(row.attributes,column.attributes,covariance.method){
+#' @return A matrix with the rows and columns given and a plot in each cell
+#' @examples result.table.svm.rvm <- populate.table.svm.rvm(row.attributes,column.attributes,"method",TRUE)
+populate.table.svm.rvm<-function(dataset,row.attributes,column.attributes,colour,show.geom.points,method){
+  #install.packages("ggplot2")
+  #install.packages("reshape2")
+  library(ggplot2)
+  library(reshape2)
   out <- c()
   for(i in 1:length(row.attributes)) {
     for(j in 1:length(column.attributes)) {
-      out<-c(out,eval(parse(text=glue("cor(",row.attributes[i],",",column.attributes[j],",","method=\"",covariance.method,"\")"))))
+      out<-c(out,eval(parse(text=glue("ggplot(",dataset,",", "aes(x=",column.attributes[i],",", 
+        "y=",row.attributes[j],",","colour=",colour,
+          ")) + stat_smooth(method=",method,",","formula = y ~ x) +", "geom_point()"))))
     }
   }
+  
+  # plot.iris <- ggplot(iris, aes(Sepal.Length, Sepal.Width)) + 
+  #   geom_point() + facet_grid(. ~ Species) + stat_smooth(method = "lm") +
+  #   background_grid(major = 'y', minor = "none") + # add thin horizontal lines 
+  #   panel_border() # and a border around each panel
+  # # plot.mpt and plot.diamonds were defined earlier
+  # ggdraw() +
+  #   draw_plot(plot.iris, 0, .5, 1, .5) +
+  #   draw_plot(sp, 0, 0, .5, .5) +
+  #   draw_plot(bp, .5, 0, .5, .5) +
+  #   draw_plot_label(c("A", "B", "C"), c(0, 0, 0.5), c(1, 0.5, 0.5), size = 15) 
+  
+  # mdat <- melt(plotData)
+  # 
+  # if(plotType=='probability'){
+  #   ph <- ggplot(mdat, aes(value)) +
+  #     geom_histogram(aes(y=..density..), binwidth=bw, colour='black', fill='skyblue') + 
+  #     geom_density() + 
+  #     facet_wrap(~variable, scales="free")
+  # } 
+  
   
   result.table <- matrix(out,ncol=length(column.attributes),byrow=TRUE)
   result.table <- as.table(result.table)
