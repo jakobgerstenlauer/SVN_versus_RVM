@@ -723,6 +723,7 @@ populate.table.svm.rvm<-function(dataset,row.attributes,column.attributes,colour
     }
   }
   
+  
   # plot.iris <- ggplot(iris, aes(Sepal.Length, Sepal.Width)) + 
   #   geom_point() + facet_grid(. ~ Species) + stat_smooth(method = "lm") +
   #   background_grid(major = 'y', minor = "none") + # add thin horizontal lines 
@@ -744,8 +745,9 @@ populate.table.svm.rvm<-function(dataset,row.attributes,column.attributes,colour
   # } 
   
   
-  result.table <- matrix(out,ncol=length(column.attributes),byrow=TRUE)
-  result.table <- as.table(result.table)
-  result.table
+  #result.table <- matrix(out,ncol=length(column.attributes),byrow=TRUE)
+  #result.table <- as.table(result.table)
+  #result.table
+  out
 }
 

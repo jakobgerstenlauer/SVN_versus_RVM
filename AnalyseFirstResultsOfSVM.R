@@ -52,10 +52,13 @@ with(d,table(polynomial.degree-polynomial_degree_setting))
 #-7  -6  -5  -4  -3  -2  -1   0   1   2   3   4   5   6   7 
 #1   6   9  29  28  50  28 155 108 230 103 101  31  18   3
 
+#correct value for cv.mean
+d$cv.mean.corrected <- ifelse(d$cv.mean < 0.0,0.0,d$cv.mean)
+
 #Conclusion: The SVM has a tendency to underestimates the polynomial degree.
 
 #get the table analysing the results, in here we use a pearson covariance
-row.attributes<-c("d$c_setting","d$epsilon_setting","d$polynomial.degree-d$polynomial_degree_setting","d$sparsity","d$cv.mean","d$compu.time")
+row.attributes<-c("d$c_setting","d$epsilon_setting","d$polynomial.degree-d$polynomial_degree_setting","d$sparsity","d$cv.mean.corrected","d$compu.time")
 column.attributes<-c("d$signal.to.noise.ratio","d$num.observations/d$num.vars","d$polynomial.degree")
 result.table.svm <- populate.table(row.attributes,column.attributes,"spearman")
 colnames(result.table.svm) <- c("Signal to noise ratio", "Number of observations/Number of variables", "Polynomial degree")

@@ -55,7 +55,7 @@ source("KMLMM_term_project_GERSTENLAUER_utility_functions.R")
 
 row.attributes<-c("polynomial.degree - polynomial_degree_setting","sparcity","cv.mean.corrected","compu.time")
 column.attributes<-c("signal.to.noise.ratio","num.observations/num.vars","polynomial.degree")
-populate.table.svm.rvm("d.vertical",row.attributes,column.attributes,"method",TRUE,"gam")
+result.table<-populate.table.svm.rvm("d.vertical",row.attributes,column.attributes,"method",TRUE,"gam")
 
 library(gam)
 library(ggplot2)
