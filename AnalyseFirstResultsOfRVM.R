@@ -51,6 +51,13 @@ with(subset(d,cv.mean>-0.1),cor.test(signal.to.noise.ratio, cv.mean, method="ken
 # tau 
 # 0.04276472 
 
+with(subset(d,cv.mean>-0.1),hist(cv.mean))
+with(subset(d,cv.mean>-0.1),hist(sparsity))
+with(d,hist(polynomial.degree-polynomial_degree_setting))
+with(d,table(polynomial.degree-polynomial_degree_setting))
+# -7  -6  -5  -4  -3  -2  -1   0   1   2   3   4   5   6   7 
+# 2   8   7  39  44  62  58 188  98 171  60  87  43  30   3
+
 #get the table analysing the results, in here we use a pearson covariance
 row.attributes<-c("d$polynomial.degree-d$polynomial_degree_setting","d$sparsity","d$cv.mean","d$compu.time")
 column.attributes<-c("d$signal.to.noise.ratio","d$num.observations/d$num.vars","d$polynomial.degree")
@@ -64,6 +71,11 @@ result.table.rvm
 setwd(dataDir)
 write.table(result.table.rvm, file=fileName, append=FALSE, row.names = TRUE, col.names = NA, sep = ";")
 
+
+
+
+
+
 #P.P. copy from tests done in isolated environment#
 #install.packages("ggplot2")
-library(ggplot2)
+# library(ggplot2)
