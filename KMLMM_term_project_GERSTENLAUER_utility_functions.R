@@ -714,14 +714,16 @@ populate.table.svm.rvm<-function(dataset,row.attributes,column.attributes,colour
   #install.packages("gridExtra")
   library(ggplot2)
   library(gridExtra)
-  out <- c()
-  for(i in 1:length(row.attributes)) {
-    for(j in 1:length(column.attributes)) {
-      out<-c(out,eval(parse(text=glue("ggplot(",dataset,",", "aes(x=",column.attributes[i],",", 
-        "y=",row.attributes[j],",","colour=",colour,
-          ")) + stat_smooth(method=",method,",","formula = y ~ x) +", "geom_point()"))))
-    }
-  }
+  
+  # out <- c()
+  # for(i in 1:length(row.attributes)) {
+  #   for(j in 1:length(column.attributes)) {
+  #     out<-c(out,eval(parse(text=glue("ggplot(",dataset,",", "aes(x=",column.attributes[i],",", 
+  #       "y=",row.attributes[j],",","colour=",colour,
+  #         ")) + stat_smooth(method=",method,",","formula = y ~ x) +", "geom_point()"))))
+  #   }
+  # }
+  
   text.final<-""
   for(i in 1:length(row.attributes)) {
     for(j in 1:length(column.attributes)) {
