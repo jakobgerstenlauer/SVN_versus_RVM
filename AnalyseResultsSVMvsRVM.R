@@ -51,6 +51,19 @@ d.vertical$cv.mean.corrected <- ifelse(d.vertical$cv.mean < 0.0,0.0,d.vertical$c
 setwd(codeDir)
 source("KMLMM_term_project_GERSTENLAUER_utility_functions.R")
 
+require(lattice)
+jpeg("Error_Estimating_Polynomial_Degree.jpeg")
+histogram(~polynomial.degree-polynomial_degree_setting|method,
+          xlab="Empirical minus estimated polynomial degree",
+          ylab="Frequency",
+          layout=c(1,2),
+          data=d.vertical)
+dev.off()
+densityplot(~polynomial.degree-polynomial_degree_setting, groups=method, data=d.vertical)
+
+
+
+
 #Obtain the plots for each combination of SVM and RVM 
 
 row.attributes<-c("polynomial.degree - polynomial_degree_setting","sparcity","cv.mean.corrected","compu.time")
