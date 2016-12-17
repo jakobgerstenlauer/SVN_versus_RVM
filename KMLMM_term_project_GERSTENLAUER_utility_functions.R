@@ -52,6 +52,23 @@ logging<-function(text, fileNameBase){
   }
 }
 
+#' Checks if a results object returned by krvm.10x10CV or ksvm.10x10CV is valid.
+#'
+#' @param result.optim 
+#'
+#' @return True or False depending if object is valid.
+#' @export
+#'
+#' @examples
+is.invalid<-function(result.optim){
+  if(is.null(result.optim)){ return (TRUE)}
+  if(!is.numeric(result.optim)) {return (TRUE)}
+  if(length(result.optim)!=4){ return (TRUE)}
+  for (i in 1:4){
+    if(length(result.optim[i])!=1) {return (TRUE)}
+  }
+  return (FALSE);
+}
 
 #' @title Test validity of numeric values.
 #'
@@ -363,7 +380,7 @@ ksvm.CV<-function(response.name, data, c, eps, p, k=10){
 #' @param x The argument to test.
 #'
 #' @return Boolean indicating that argument is a valid value.
-is.invalid<-function(x){
+is.invalid.scalar<-function(x){
   is.nan(x)||is.infinite(x)
 }
 
@@ -375,7 +392,7 @@ is.invalid<-function(x){
 #'
 #' @return Boolean indicating if result object has valid value for requested parameter.
 isInvalidResult<-function(result, param_name, param_value){
-  if(is.invalid(result[1])){
+  if(is.invalid.scalar(result[1])){
     print(paste("Invalid result for ", param_name,":",param_value))
     return (TRUE);
   } 
@@ -654,5 +671,28 @@ optim.parameter<-function(result.optim, param.optim, grid, param_name, data, c.o
   time.used <- proc.time() - ptm
   print(time.used[3])
   return(list(new.grid=grid, result=result.optim, parameter=param.optim, time=time.used[3]))
+}
+
+#' Optimize the C,\epsilon, and the polynomial degree for the support vector machine.
+#'
+#' @description Fills a table according with the parameters and covariance methos given.    
+#' 
+#' @param row.attributes Data that corresponds to the table rows
+#' @param column.attributes Data that corresponds to the table rows
+#' @param covariance.method A string indicating the covariance method that is applyed
+#'
+#' @return A matrix with the rows and columns given and in each cell its correspondent covariance
+#' @examples result.table.svm <- populate.table(row.attributes,column.attributes,"spearman")
+populate.table<-function(row.attributes,column.attributes,covariance.method){
+  out <- c()
+  for(i in 1:length(row.attributes)) {
+    for(j in 1:length(column.attributes)) {
+      out<-c(out,eval(parse(text=glue("cor(",row.attributes[i],",",column.attributes[j],",","method=\"",covariance.method,"\")"))))
+    }
+  }
+  
+  result.table <- matrix(out,ncol=length(column.attributes),byrow=TRUE)
+  result.table <- as.table(result.table)
+  result.table
 }
 
