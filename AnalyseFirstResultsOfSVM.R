@@ -28,9 +28,20 @@ with(d,plot(signal.to.noise.ratio, cv.mean, pch="+"))
 #Let´s ignore these very bad models to be able to plot the relationship between cv.mean and signal to noise ratio.
 
 with(subset(d,cv.mean>-0.1),plot(signal.to.noise.ratio, cv.mean, pch="+")) 
-with(subset(d,cv.mean>-0.1),cor(signal.to.noise.ratio, cv.mean)) 
+with(subset(d,cv.mean>-0.1),cor.test(signal.to.noise.ratio, cv.mean)) 
 # 0.04123481
-#There is no correlation between signal to noise ratio and cv.mean!
+#test for non-linear effect with Kendall's tau:
+
+with(subset(d,cv.mean>-0.1),cor.test(signal.to.noise.ratio, cv.mean, method="kendall"))
+# Kendall's rank correlation tau
+# 
+# data:  signal.to.noise.ratio and cv.mean
+# z = 0.94221, p-value = 0.3461
+# alternative hypothesis: true tau is not equal to 0
+# sample estimates:
+# tau 
+# 0.02297758 
+#Conclusion: There is no significant correlation between signal to noise ratio and cv.mean!
 #The results are quite evenly distributed in the space!
 with(subset(d,cv.mean>-0.1),hist(cv.mean))
 
@@ -39,8 +50,9 @@ row.attributes<-c("d$c_setting","d$epsilon_setting","d$polynomial.degree-d$polyn
 column.attributes<-c("d$signal.to.noise.ratio","d$num.observations/d$num.vars","d$polynomial.degree")
 result.table.svm <- populate.table(row.attributes,column.attributes,"spearman")
 colnames(result.table.svm) <- c("Signal to noise ratio", "Number of observations/Number of variables", "Polynomial degree")
-rownames(result.table.svm) <- c("C","Epsilon","Error in estimating poly","Sparcity","CV Mean","Computational Time")
+rownames(result.table.svm) <- c("C","Epsilon","Error in estimating poly","Sparsity","CV Mean","Computational Time")
 #save to a new file
+
 Date<-gsub(pattern="-", replacement="_",Sys.Date())
 fileName<-paste("SVM_results_table_KMLMM_term_project_",Date,".csv",sep="")
 result.table.svm
