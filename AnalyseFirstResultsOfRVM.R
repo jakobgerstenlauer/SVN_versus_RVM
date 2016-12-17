@@ -6,17 +6,22 @@ rm(list=ls(all=TRUE))
 glue<-function(...){paste(...,sep="")}
 
 #TODO Adapt to working dir or remove!
-setwd("D:/Documents/MIRI/Semestre 2/APRENDIZAJE AUTOMATICO BASADO EN KERNEL Y MODELADO MULTIVARIANTE/ProyectoFinal/KernelFinalProject/code")
-#setwd("E:/Documents/Mis Documentos/MIRI/Semestre 2/APRENDIZAJE AUTOMATICO BASADO EN KERNEL Y MODELADO MULTIVARIANTE/ProyectoFinal/KernelFinalProject/code")
+#setwd("D:/Documents/MIRI/Semestre 2/APRENDIZAJE AUTOMATICO BASADO EN KERNEL Y MODELADO MULTIVARIANTE/ProyectoFinal/KernelFinalProject/code")
+setwd("E:/Documents/Mis Documentos/MIRI/Semestre 2/APRENDIZAJE AUTOMATICO BASADO EN KERNEL Y MODELADO MULTIVARIANTE/ProyectoFinal/KernelFinalProject/code")
 #setwd("J:/UPC/2016/02/KMLMM/KernelMethods/practicals/term_project/code")
 
 #define path of standard directories
 source("workingDir.R")
-#setwd(dataDir)
-#d<-read.csv("Results_Simulation_RVM_KMLMM_term_project_2016_12_08.csv",sep=";") #<-set to static
+
+#this region is for static loading
+setwd(dataDir)
+d<-read.csv("Results_Simulation_SVM_KMLMM_term_project_2016_12_16.csv",sep=";")
+
+#this region dinamically loads the file
 #opens a dialog box to input the file
-data.file <- file.choose()
-d  <- read.csv(data.file,sep=";")
+#data.file <- file.choose()
+#d  <- read.csv(data.file,sep=";")
+
 setwd(codeDir)
 source("KMLMM_term_project_GERSTENLAUER_utility_functions.R")
 str(d)
