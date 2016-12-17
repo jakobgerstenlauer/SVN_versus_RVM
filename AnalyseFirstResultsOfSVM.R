@@ -46,6 +46,13 @@ with(subset(d,cv.mean>-0.1),cor.test(signal.to.noise.ratio, cv.mean, method="ken
 #Conclusion: There is no significant correlation between signal to noise ratio and cv.mean!
 #The results are quite evenly distributed in the space!
 with(subset(d,cv.mean>-0.1),hist(cv.mean))
+with(subset(d,cv.mean>-0.1),hist(sparsity))
+with(d,hist(polynomial.degree-polynomial_degree_setting))
+with(d,table(polynomial.degree-polynomial_degree_setting))
+#-7  -6  -5  -4  -3  -2  -1   0   1   2   3   4   5   6   7 
+#1   6   9  29  28  50  28 155 108 230 103 101  31  18   3
+
+#Conclusion: The SVM has a tendency to underestimates the polynomial degree.
 
 #get the table analysing the results, in here we use a pearson covariance
 row.attributes<-c("d$c_setting","d$epsilon_setting","d$polynomial.degree-d$polynomial_degree_setting","d$sparsity","d$cv.mean","d$compu.time")
