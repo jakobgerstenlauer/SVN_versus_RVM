@@ -20,9 +20,6 @@ d  <- read.csv(data.file,sep=";")
 setwd(codeDir)
 source("KMLMM_term_project_GERSTENLAUER_utility_functions.R")
 str(d)
-#there was a mistake in the first run: num.observations and num.vars were mixed up! why?
-names(d)[3]<-"num.observations"
-names(d)[4]<-"num.vars"
 
 #check the same way as with svm
 with(d,plot(signal.to.noise.ratio, cv.mean)) #P.P. the plot is already here?
