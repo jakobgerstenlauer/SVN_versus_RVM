@@ -720,7 +720,7 @@ populate.table.svm.rvm<-function(dataset,row.attributes,column.attributes,colour
     for(j in 1:length(column.attributes)) {
       text.final<-glue(text.final,",","ggplot(",dataset,",", "aes(x=",column.attributes[j],",", 
                                       "y=",row.attributes[i],",","colour=",colour,
-                                      ")) + stat_smooth(method=\"",method,"\",","formula = y ~ x) +", "geom_point() + labs(x=\"",column.labels[j],"\",y=\"",row.labels[i],"\")")
+                                      ")) + stat_smooth(method=\"",method,"\",","formula = y ~ x) +", "geom_point() + labs(x=\"",column.labels[j],"\",y=",row.labels[i],")")
     }
   }
   
@@ -730,5 +730,5 @@ populate.table.svm.rvm<-function(dataset,row.attributes,column.attributes,colour
   setwd(plotDir)
   ggsave(filename="Grid_SVM_RVM.jpeg",plot = grid::grid.draw(final.plot),path = plotDir,width = 18,height =12,dpi = 800,device = "jpeg")
   setwd(codeDir)
-  #text.final
+  text.final
 }
