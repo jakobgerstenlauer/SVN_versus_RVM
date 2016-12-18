@@ -729,6 +729,8 @@ populate.table.svm.rvm<-function(dataset,row.attributes,column.attributes,colour
   text.final<-substring(text.final, 2)
   eval(parse(text=glue("final.plot<-arrangeGrob(",text.final,",ncol = length(column.attributes), nrow = length(row.attributes))")))
   #grid::grid.draw(final.plot)
+  setwd(plotDir)
   ggsave(filename="Grid_SVM_RVM.jpeg",plot = grid::grid.draw(final.plot),path = plotDir,width = 18,height =12,dpi = 800)
+  setwd(codeDir)
   #text.final
 }
