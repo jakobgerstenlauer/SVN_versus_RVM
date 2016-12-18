@@ -6,7 +6,7 @@ glue<-function(...){paste(...,sep="")}
 
 #TODO Adapt to working dir or remove!
 #setwd("D:/Documents/MIRI/Semestre 2/APRENDIZAJE AUTOMATICO BASADO EN KERNEL Y MODELADO MULTIVARIANTE/ProyectoFinal/KernelFinalProject/code")
-setwd("E:/Documents/Mis Documentos/MIRI/Semestre 2/APRENDIZAJE AUTOMATICO BASADO EN KERNEL Y MODELADO MULTIVARIANTE/ProyectoFinal/KernelFinalProject/code")
+#setwd("E:/Documents/Mis Documentos/MIRI/Semestre 2/APRENDIZAJE AUTOMATICO BASADO EN KERNEL Y MODELADO MULTIVARIANTE/ProyectoFinal/KernelFinalProject/code")
 #setwd("J:/UPC/2016/02/KMLMM/KernelMethods/practicals/term_project/code")
 
 #define path of standard directories
@@ -72,11 +72,10 @@ dev.off()
 
 
 
-#Obtain the plots for each combination of SVM and RVM 
-
+#Obtain the grid of plots for each combination of SVM and RVM and saves it to the plot directory
 row.attributes<-c("polynomial.degree - polynomial_degree_setting","sparsity","cv.mean.corrected","compu.time")
 column.attributes<-c("signal.to.noise.ratio","num.observations/num.vars","polynomial.degree")
-result.table<-populate.table.svm.rvm("d.vertical",row.attributes,column.attributes,"method",TRUE,"gam")
+populate.table.svm.rvm("d.vertical",row.attributes,column.attributes,"method",TRUE,"gam")
 
 #verifying data doing a regression for svm and rvm
 error.poly.svm <-d.svm$polynomial.degree - d.svm$polynomial_degree_setting
