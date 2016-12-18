@@ -96,7 +96,7 @@ with(d.svm,table(polynomial.degree-polynomial_degree_setting))
 #get the table analysing the results, in here we use a pearson covariance
 row.attributes<-c("d.svm$c_setting","d.svm$epsilon_setting","d.svm$polynomial.degree-d.svm$polynomial_degree_setting","d.svm$sparsity","d.svm$cv.mean.corrected","d.svm$compu.time")
 column.attributes<-c("d.svm$signal.to.noise.ratio","d.svm$num.observations/d.svm$num.vars","d.svm$polynomial.degree")
-result.table.svm <- populate.table(row.attributes,column.attributes,"spearman")
+result.table.svm <- populate.table(row.attributes,column.attributes,"spearman",TRUE)
 colnames(result.table.svm) <- c("signal/noise","cases/inputs","degree")
 rownames(result.table.svm) <- c("C","$epsilon$","$delta$ degree","sparsity","$lambda$","time[s]")
 

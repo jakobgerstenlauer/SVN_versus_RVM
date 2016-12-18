@@ -85,7 +85,7 @@ with(d.rvm,table(polynomial.degree-polynomial_degree_setting))
 #get the table analysing the results, in here we use a pearson covariance
 row.attributes<-c("d.rvm$polynomial.degree-d.rvm$polynomial_degree_setting","d.rvm$sparsity","d.rvm$cv.mean.corrected","d.rvm$compu.time")
 column.attributes<-c("d.rvm$signal.to.noise.ratio","d.rvm$num.observations/d.rvm$num.vars","d.rvm$polynomial.degree")
-result.table.rvm <- populate.table(row.attributes,column.attributes,"spearman")
+result.table.rvm <- populate.table(row.attributes,column.attributes,"spearman",TRUE)
 colnames(result.table.rvm) <- c("signal/noise","cases/inputs","degree")
 rownames(result.table.rvm) <- c("$delta$ degree","sparsity","$lambda$","time[s]")
 

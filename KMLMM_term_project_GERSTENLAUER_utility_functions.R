@@ -673,6 +673,7 @@ optim.parameter<-function(result.optim, param.optim, grid, param_name, data, c.o
   return(list(new.grid=grid, result=result.optim, parameter=param.optim, time=time.used[3]))
 }
 
+
 #' Creates the table of results for SVM and RVM
 #'
 #' @description Fills a table according with the parameters and covariance methos given.    
@@ -682,12 +683,19 @@ optim.parameter<-function(result.optim, param.optim, grid, param_name, data, c.o
 #' @param covariance.method A string indicating the covariance method that is applyed
 #'
 #' @return A matrix with the rows and columns given and in each cell its correspondent covariance
-#' @examples result.table.svm <- populate.table(row.attributes,column.attributes,"spearman")
-populate.table<-function(row.attributes,column.attributes,covariance.method){
+#' @examples result.table.svm <- populate.table(row.attributes,column.attributes,"spearman",TRUE)
+populate.table<-function(row.attributes,column.attributes,covariance.method,show.correlation){
   out <- c()
   for(i in 1:length(row.attributes)) {
     for(j in 1:length(column.attributes)) {
-      out<-c(out,eval(parse(text=glue("round(cor(",row.attributes[i],",",column.attributes[j],",","method=\"",covariance.method,"\")*100,digits = 3)"))))
+      if(show.correlation){
+        res.asterisk<-eval(parse(text=glue("cor.test(",row.attributes[i],",",column.attributes[j],",","method=\"",covariance.method,"\")")))
+        ifelse(res.asterisk$p.value<0.01,
+          out<-c(out,glue(eval(parse(text=glue("round(cor(",row.attributes[i],",",column.attributes[j],",","method=\"",covariance.method,"\")*100,digits = 3)"))),"**")),
+        ifelse(res.asterisk$p.value<0.05,
+          out<-c(out,eval(parse(text=glue("round(cor(",row.attributes[i],",",column.attributes[j],",","method=\"",covariance.method,"\")*100,digits = 3)"))),"**"),
+          out<-c(out,eval(parse(text=glue("round(cor(",row.attributes[i],",",column.attributes[j],",","method=\"",covariance.method,"\")*100,digits = 3)"))))))
+      }
     }
   }
   
