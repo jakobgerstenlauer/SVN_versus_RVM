@@ -77,17 +77,7 @@ with(d.flat, quantile(rvm_sparsity - svm_sparsity))
 # 0%         25%         50%         75%        100% 
 # -0.29428571 -0.12585621 -0.04645833  0.01592162  0.32195122
 
-densityplot(~rvm_sparsity - svm_sparsity,
-            xlab="Sparsity[%]",
-            ylab="Frequency",
-            auto.key=TRUE,
-            data=d.flat)
 
-densityplot(~rvm_cv.mean.corrected - svm_cv.mean.corrected,
-            xlab="Sparsity[%]",
-            ylab="Frequency",
-            auto.key=TRUE,
-            data=d.flat)
 
 #Conclusion: In general the sparsity is slightly higher for the SVM!
 setwd(plotDir)
@@ -108,6 +98,47 @@ densityplot(~cv.mean.corrected,
             auto.key=TRUE,
             data=d.vertical)
 dev.off()
+
+#Now let´s analyse the difference in svm and rvm for each single data set and then average over replicates
+setwd(dataDir)
+d.svm.atomic<-read.csv("Results_Simulation_SVM_KMLMM_term_project_2016_12_16.csv",sep=";")
+d.rvm.atomic<-read.csv("Results_Simulation_RVM_KMLMM_term_project_2016_12_15.csv",sep=";")
+
+N<-length(d.rvm.atomic$cv.mean)
+cv.mean.pairwise <-  pmax(d.rvm.atomic$cv.mean,rep(0,N)) - pmax(d.svm.atomic$cv.mean,rep(0,N))
+hist(cv.mean.pairwise)
+#aggregate over samples
+cv.mean.pairwise.mean<-tapply(cv.mean.pairwise, d.rvm.atomic$id_parameter_combination, mean)
+
+setwd(plotDir)
+jpeg("R2_SVM_vs_RVM_pairwise.jpeg")
+densityplot(~cv.mean.pairwise.mean,
+            xlab="Difference RVM - SVM in coefficient of determination",
+            ylab="Frequency",
+            auto.key=TRUE,
+            data=d.flat)
+dev.off()
+
+
+N<-length(d.rvm.atomic$cv.mean)
+sparsity.pairwise <-  pmax(d.rvm.atomic$sparsity,rep(0,N)) - pmax(d.svm.atomic$sparsity,rep(0,N))
+hist(sparsity.pairwise)
+#aggregate over samples
+sparsity.pairwise.mean<-tapply(sparsity.pairwise, d.rvm.atomic$id_parameter_combination, mean)
+
+setwd(plotDir)
+jpeg("Sparsity_RVM_minus_SVM_pairwise.jpeg")
+densityplot(~sparsity.pairwise.mean,
+            xlab="Difference RVM - SVM in Sparsity[%]",
+            ylab="Frequency",
+            auto.key=TRUE,
+            data=d.flat)
+dev.off()
+
+
+
+
+
 
 
 jpeg("Compare_RVM_and_RVM_STNR.jpeg")
