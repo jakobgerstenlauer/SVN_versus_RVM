@@ -57,7 +57,7 @@ for(var in variables.sample){
 }
 
 setwd(dataDir)
-write.table(x=d.rvm, file="Results_Simulation_RVM_KMLMM_term_project_2016_12_15_aggregated.csv",row.names = FALSE)
+write.table(x=d.rvm, file="Results_Simulation_RVM_KMLMM_term_project_2016_12_15_aggregated.csv",row.names = FALSE, sep=";")
 
 with(d.rvm,plot(signal.to.noise.ratio, cv.mean.corrected, pch="+")) 
 

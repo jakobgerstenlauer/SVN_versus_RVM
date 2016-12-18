@@ -20,9 +20,9 @@ source("workingDir.R")
 
 #this region is for static loading
 setwd(dataDir)
-d.svm<-read.csv("Results_Simulation_SVM_KMLMM_term_project_2016_12_16.csv",sep=";")
+d.svm<-read.csv("Results_Simulation_SVM_KMLMM_term_project_2016_12_16_aggregated.csv",sep=";")
 str(d.svm)
-d.rvm<-read.csv("Results_Simulation_RVM_KMLMM_term_project_2016_12_15.csv",sep=";")
+d.rvm<-read.csv("Results_Simulation_RVM_KMLMM_term_project_2016_12_15_aggregated.csv",sep=";")
 str(d.rvm)
 
 dim(d.svm)
