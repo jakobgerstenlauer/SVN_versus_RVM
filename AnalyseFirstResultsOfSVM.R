@@ -52,7 +52,7 @@ for(var in variables.sample){
 }
 
 setwd(dataDir)
-write.table(x=d.svm, file="Results_Simulation_SVM_KMLMM_term_project_2016_12_16_aggregated.csv",row.names = FALSE)
+write.table(x=d.svm, file="Results_Simulation_SVM_KMLMM_term_project_2016_12_16_aggregated.csv",row.names = FALSE,sep=";")
 
 with(d.svm,plot(signal.to.noise.ratio, cv.mean, pch="+")) 
 #There are some extreme outliers with very low cv.mean (very bad models)
