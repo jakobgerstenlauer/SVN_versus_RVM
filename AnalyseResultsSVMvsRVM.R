@@ -26,7 +26,9 @@ d.rvm<-read.csv("Results_Simulation_RVM_KMLMM_term_project_2016_12_15_aggregated
 str(d.rvm)
 
 dim(d.svm)
+#[1] 300  23
 dim(d.rvm)
+#[1] 300  19
 
 #auxiliary variables to set the names for each set
 d2.svm<-d.svm
@@ -37,9 +39,8 @@ names(d2.rvm)<-paste("rvm",names(d.rvm),sep="_")
 #we work with one horizontal grouped dataset, and other vertical grouped dataset for easyness
 d.horizontal<-cbind(d2.svm,d2.rvm)
 d.vertical<-rbind(subset(d.svm,select = names(d.rvm)),d.rvm)
-#add clasificator for the grouped dataset
+#add a variable which indicates the method 
 d.vertical$method <- c(rep("svm",nrow(d.svm)),rep("rvm",nrow(d.rvm)))
-d.vertical$cv.mean.corrected <- ifelse(d.vertical$cv.mean < 0.0,0.0,d.vertical$cv.mean)
 
 setwd(codeDir)
 source("KMLMM_term_project_GERSTENLAUER_utility_functions.R")
