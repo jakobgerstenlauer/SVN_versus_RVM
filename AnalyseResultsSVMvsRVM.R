@@ -47,11 +47,21 @@ source("KMLMM_term_project_GERSTENLAUER_utility_functions.R")
 
 require(lattice)
 setwd(plotDir)
-jpeg("Error_Estimating_Polynomial_Degree.jpeg")
+jpeg("Error_Estimating_Polynomial_Degree_boxplot.jpeg")
 histogram(~polynomial.degree-polynomial_degree_setting|method,
           xlab="Empirical minus estimated polynomial degree",
           ylab="Frequency",
           layout=c(1,2),
+          data=d.vertical)
+dev.off()
+
+setwd(plotDir)
+jpeg("Error_Estimating_Polynomial_Degree.jpeg")
+densityplot(~polynomial.degree-polynomial_degree_setting,
+            groups=method,
+          xlab="Empirical minus estimated polynomial degree",
+          ylab="Frequency",
+          auto.key=TRUE,
           data=d.vertical)
 dev.off()
 densityplot(~polynomial.degree-polynomial_degree_setting, groups=method, data=d.vertical)
