@@ -104,11 +104,19 @@ setwd(dataDir)
 d.svm.atomic<-read.csv("Results_Simulation_SVM_KMLMM_term_project_2016_12_16.csv",sep=";")
 d.rvm.atomic<-read.csv("Results_Simulation_RVM_KMLMM_term_project_2016_12_15.csv",sep=";")
 
+
+#########################################################################
+#Figure 1
+#########################################################################
 N<-length(d.rvm.atomic$cv.mean)
 cv.mean.pairwise <-  pmax(d.rvm.atomic$cv.mean,rep(0,N)) - pmax(d.svm.atomic$cv.mean,rep(0,N))
 hist(cv.mean.pairwise)
 #aggregate over samples
 cv.mean.pairwise.mean<-tapply(cv.mean.pairwise, d.rvm.atomic$id_parameter_combination, mean)
+
+quantile(cv.mean.pairwise.mean)
+# 0%         25%         50%         75%        100% 
+# -0.51762249 -0.07967348 -0.03326958  0.00000000  0.22644942 
 
 setwd(plotDir)
 jpeg("R2_SVM_vs_RVM_pairwise.jpeg")
@@ -120,11 +128,18 @@ densityplot(~cv.mean.pairwise.mean,
 dev.off()
 
 
+#########################################################################
+#Figure 2
+#########################################################################
 N<-length(d.rvm.atomic$cv.mean)
 sparsity.pairwise <-  pmax(d.rvm.atomic$sparsity,rep(0,N)) - pmax(d.svm.atomic$sparsity,rep(0,N))
 hist(sparsity.pairwise)
 #aggregate over samples
 sparsity.pairwise.mean<-tapply(sparsity.pairwise, d.rvm.atomic$id_parameter_combination, mean)
+
+quantile(sparsity.pairwise.mean)
+# 0%         25%         50%         75%        100% 
+# -0.29428571 -0.12585621 -0.04645833  0.01592162  0.32195122 
 
 setwd(plotDir)
 jpeg("Sparsity_RVM_minus_SVM_pairwise.jpeg")
@@ -136,20 +151,39 @@ densityplot(~sparsity.pairwise.mean,
 dev.off()
 
 
+#########################################################################
+#Poly Degree
+#########################################################################
+N<-length(d.rvm.atomic$cv.mean)
+deviation.degree.pairwise <-  abs(d.rvm.atomic$polynomial.degree - d.rvm.atomic$polynomial_degree_setting)-abs(d.svm.atomic$polynomial.degree - d.svm.atomic$polynomial_degree_setting);
+hist(deviation.degree.pairwise)
+#aggregate over samples
+deviation.degree.pairwise.mean<-tapply(deviation.degree.pairwise, d.rvm.atomic$id_parameter_combination, mean)
 
+quantile(deviation.degree.pairwise.mean)
+#0%        25%        50%        75%       100% 
+#-3.6666667 -0.6666667  0.0000000  0.6666667  4.3333333  
 
-
-
-
-jpeg("Compare_RVM_and_RVM_STNR.jpeg")
-xyplot(rvm_cv.mean.corrected - svm_cv.mean.corrected, rvm_signal.to.noise.ratio,
-          xlab="Empirical minus estimated polynomial degree",
-          ylab="Frequency",
-          data=d.flat)
+setwd(plotDir)
+jpeg("DeviationPolyDegree_RVM_minus_SVM_pairwise.jpeg")
+densityplot(~deviation.degree.pairwise.mean,
+            xlab="Difference RVM - SVM in absolute deviation from correct degree",
+            ylab="Frequency",
+            auto.key=TRUE,
+            data=d.flat)
 dev.off()
 
-#plot difference between R2 of svm and rvm 
+#########################################################################
+#Figure 3
+#########################################################################
 
+
+
+
+
+#########################################################################
+#Figure 4
+#########################################################################
 
 #Obtain the grid of plots for each combination of SVM and RVM and saves it to the plot directory
 row.attributes<-c("polynomial.degree - polynomial_degree_setting","sparsity","cv.mean.corrected","compu.time")
