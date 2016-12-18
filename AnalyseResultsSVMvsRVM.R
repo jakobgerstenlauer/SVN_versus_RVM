@@ -26,7 +26,9 @@ d.rvm<-read.csv("Results_Simulation_RVM_KMLMM_term_project_2016_12_15_aggregated
 str(d.rvm)
 
 dim(d.svm)
+#[1] 300  23
 dim(d.rvm)
+#[1] 300  19
 
 #auxiliary variables to set the names for each set
 d2.svm<-d.svm
@@ -37,20 +39,29 @@ names(d2.rvm)<-paste("rvm",names(d.rvm),sep="_")
 #we work with one horizontal grouped dataset, and other vertical grouped dataset for easyness
 d.horizontal<-cbind(d2.svm,d2.rvm)
 d.vertical<-rbind(subset(d.svm,select = names(d.rvm)),d.rvm)
-#add clasificator for the grouped dataset
+#add a variable which indicates the method 
 d.vertical$method <- c(rep("svm",nrow(d.svm)),rep("rvm",nrow(d.rvm)))
-d.vertical$cv.mean.corrected <- ifelse(d.vertical$cv.mean < 0.0,0.0,d.vertical$cv.mean)
 
 setwd(codeDir)
 source("KMLMM_term_project_GERSTENLAUER_utility_functions.R")
 
 require(lattice)
 setwd(plotDir)
-jpeg("Error_Estimating_Polynomial_Degree.jpeg")
+jpeg("Error_Estimating_Polynomial_Degree_boxplot.jpeg")
 histogram(~polynomial.degree-polynomial_degree_setting|method,
           xlab="Empirical minus estimated polynomial degree",
           ylab="Frequency",
           layout=c(1,2),
+          data=d.vertical)
+dev.off()
+
+setwd(plotDir)
+jpeg("Error_Estimating_Polynomial_Degree.jpeg")
+densityplot(~polynomial.degree-polynomial_degree_setting,
+            groups=method,
+          xlab="Empirical minus estimated polynomial degree",
+          ylab="Frequency",
+          auto.key=TRUE,
           data=d.vertical)
 dev.off()
 densityplot(~polynomial.degree-polynomial_degree_setting, groups=method, data=d.vertical)
@@ -69,6 +80,9 @@ dev.off()
 row.attributes<-c("polynomial.degree - polynomial_degree_setting","sparsity","cv.mean.corrected","compu.time")
 column.attributes<-c("signal.to.noise.ratio","num.observations/num.vars","polynomial.degree")
 populate.table.svm.rvm("d.vertical",row.attributes,column.attributes,"method",TRUE,"gam")
+
+labels.columns <- c("signal/noise","cases/inputs","degree")
+labels.rows <- c("delta degree","sparsity","lambda","time[s]")
 
 #verifying data doing a regression for svm and rvm
 error.poly.svm <-d.svm$polynomial.degree - d.svm$polynomial_degree_setting
