@@ -715,33 +715,18 @@ populate.table.svm.rvm<-function(dataset,row.attributes,column.attributes,colour
   library(ggplot2)
   library(gridExtra)
   
-  # out <- c()
-  # for(i in 1:length(row.attributes)) {
-  #   for(j in 1:length(column.attributes)) {
-  #     out<-c(out,eval(parse(text=glue("ggplot(",dataset,",", "aes(x=",column.attributes[i],",", 
-  #       "y=",row.attributes[j],",","colour=",colour,
-  #         ")) + stat_smooth(method=",method,",","formula = y ~ x) +", "geom_point()"))))
-  #   }
-  # }
-  
+  #text.final<-glue("ggplot(",dataset,",", "aes(x=",column.attributes[1],",","y=",row.attributes[1],",","colour=",colour,")) + stat_smooth(method=\"",method,"\",","formula = y ~ x) +", "geom_point()")
   text.final<-""
-  for(i in 1:length(column.attributes)) {
-    for(j in 1:length(row.attributes)) {
-      text.final<-glue("ggplot(",dataset,",", "aes(x=",column.attributes[i],",", 
+  for(i in 1:length(row.attributes)) {
+    for(j in 1:length(column.attributes)) {
+      text.final<-glue(text.final,",","ggplot(",dataset,",", "aes(x=",column.attributes[i],",", 
                                       "y=",row.attributes[j],",","colour=",colour,
-                                      ")) + stat_smooth(method=",method,",","formula = y ~ x) +", "geom_point()",",",text.final)
+                                      ")) + stat_smooth(method=\"",method,"\",","formula = y ~ x) +", "geom_point()")
     }
   }
   
+  text.final<-substring(text.final, 2)
   eval(parse(text=glue("final.plot<-arrangeGrob(",text.final,",ncol = length(column.attributes), nrow = length(row.attributes))")))
-  grid.draw(final.plot)
-  
-  #y <- arrangeGrob(p1, p2, ncol = length(column.attributes), nrow = length(row.attributes))
-  #class(y)
-  #[1] "gtable" "grob"   "gDesc"
-  #grid.draw(y)
-  
-  
+  grid::grid.draw(final.plot) 
   text.final
 }
-

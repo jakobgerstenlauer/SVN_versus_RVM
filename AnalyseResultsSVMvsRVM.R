@@ -66,42 +66,11 @@ densityplot(~polynomial.degree-polynomial_degree_setting, groups=method, data=d.
 
 #Obtain the plots for each combination of SVM and RVM 
 
-row.attributes<-c("polynomial.degree - polynomial_degree_setting","sparcity","cv.mean.corrected","compu.time")
+row.attributes<-c("polynomial.degree - polynomial_degree_setting","sparsity","cv.mean.corrected","compu.time")
 column.attributes<-c("signal.to.noise.ratio","num.observations/num.vars","polynomial.degree")
 result.table<-populate.table.svm.rvm("d.vertical",row.attributes,column.attributes,"method",TRUE,"gam")
 
-library(gam)
-library(ggplot2)
-#Error in estimated poly ~ signal to noise ratio
-error.poly<-d.vertical$polynomial.degree - d.vertical$polynomial_degree_setting
-ggplot(d.vertical, aes(x=signal.to.noise.ratio, y=polynomial.degree - polynomial_degree_setting,colour=method)) + stat_smooth(method=gam,formula = y ~ x) + geom_point()
-
-#Error in estimated poly ~ number of observations/number of variables
-rate.no.nv<-d.vertical$num.observations/d.vertical$num.vars
-ggplot(d.vertical, aes(x=rate.no.nv, y=error.poly,colour=method)) + stat_smooth(method=gam,formula = y ~ x) + geom_point()
-
-#Error in estimated poly ~ polynomial degree
-ggplot(d.vertical, aes(x=polynomial.degree, y=error.poly,colour=method)) + stat_smooth(method=gam,formula = y ~ x) + geom_point()
-
-#Sparsity ~ signal to noise ratio
-ggplot(d.vertical, aes(x=signal.to.noise.ratio, y=sparcity,colour=method)) + stat_smooth(method=gam,formula = y ~ x) + geom_point()
-
-#Sparsity ~ number of observations/number of variables
-ggplot(d.vertical, aes(x=rate.no.nv, y=sparcity,colour=method)) + stat_smooth(method=gam,formula = y ~ x) + geom_point()
-
-#Sparsity ~ polynomial degree
-ggplot(d.vertical, aes(x=polynomial.degree, y=sparcity,colour=method)) + stat_smooth(method=gam,formula = y ~ x) + geom_point()
-
-#Computational Burden ~ signal to noise ratio
-ggplot(d.vertical, aes(x=signal.to.noise.ratio, y=compu.time,colour=method)) + stat_smooth(method=gam,formula = y ~ x) + geom_point()
-
-#Computational Burden ~ number of observations/number of variables
-ggplot(d.vertical, aes(x=rate.no.nv, y=compu.time,colour=method)) + stat_smooth(method=gam,formula = y ~ x) + geom_point()
-
-#Computational Burden ~ polynomial degree
-ggplot(d.vertical, aes(x=polynomial.degree, y=compu.time,colour=method)) + stat_smooth(method=gam,formula = y ~ x) + geom_point()
-
-
+#verifying data doing a regression for svm and rvm
 error.poly.svm <-d.svm$polynomial.degree - d.svm$polynomial_degree_setting
 error.poly.rvm <-d.rvm$polynomial.degree - d.rvm$polynomial_degree_setting
 plot(d.svm$signal.to.noise.ratio,error.poly.svm,ylab = "Error in estimated poly",xlab="Signal to noise ratio") 
