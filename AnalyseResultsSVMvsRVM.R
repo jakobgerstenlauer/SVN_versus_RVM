@@ -79,10 +79,11 @@ dev.off()
 #Obtain the grid of plots for each combination of SVM and RVM and saves it to the plot directory
 row.attributes<-c("polynomial.degree - polynomial_degree_setting","sparsity","cv.mean.corrected","compu.time")
 column.attributes<-c("signal.to.noise.ratio","num.observations/num.vars","polynomial.degree")
-populate.table.svm.rvm("d.vertical",row.attributes,column.attributes,"method",TRUE,"gam")
-
 labels.columns <- c("signal/noise","cases/inputs","degree")
 labels.rows <- c("delta degree","sparsity","lambda","time[s]")
+
+populate.table.svm.rvm("d.vertical",row.attributes,column.attributes,"method",TRUE,"gam",labels.rows,labels.columns)
+
 
 #verifying data doing a regression for svm and rvm
 error.poly.svm <-d.svm$polynomial.degree - d.svm$polynomial_degree_setting
