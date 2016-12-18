@@ -720,7 +720,8 @@ populate.table.svm.rvm<-function(dataset,row.attributes,column.attributes,colour
     for(j in 1:length(column.attributes)) {
       text.final<-glue(text.final,",","ggplot(",dataset,",", "aes(x=",column.attributes[j],",", 
                                       "y=",row.attributes[i],",","colour=",colour,
-                                      ")) + stat_smooth(method=\"",method,"\",","formula = y ~ x) +", "geom_point() + labs(x=\"",column.labels[j],"\",y=",row.labels[i],")")
+                                      ")) + stat_smooth(method=\"",method,"\",","formula = y ~ x) +", "geom_point() + labs(x=\"",column.labels[j],"\",y=",row.labels[i],
+                                      ")+theme(text = element_text(size=20))")
     }
   }
   
