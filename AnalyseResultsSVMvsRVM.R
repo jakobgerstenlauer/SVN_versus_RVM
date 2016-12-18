@@ -37,7 +37,7 @@ d2.rvm<-d.rvm
 names(d2.rvm)<-paste("rvm",names(d.rvm),sep="_")
 
 #we work with one horizontal grouped dataset, and other vertical grouped dataset for easyness
-d.horizontal<-cbind(d2.svm,d2.rvm)
+d.flat<-cbind(d2.svm,d2.rvm)
 d.vertical<-rbind(subset(d.svm,select = names(d.rvm)),d.rvm)
 #add a variable which indicates the method 
 d.vertical$method <- c(rep("svm",nrow(d.svm)),rep("rvm",nrow(d.rvm)))
@@ -67,13 +67,57 @@ dev.off()
 densityplot(~polynomial.degree-polynomial_degree_setting, groups=method, data=d.vertical)
 
 #comparison between performance of svm and rvm
-jpeg("Compare_RVM_and_RVM_STNR.jpeg")
-xyplot(rvm_cv.mean - svm_cv.mean, rvm_signal.to.noise.ratio,
-          xlab="Empirical minus estimated polynomial degree",
-          ylab="Frequency",
-          data=d.horizontal)
+with(d.flat, quantile(rvm_cv.mean.corrected - svm_cv.mean.corrected))
+# 0%         25%         50%         75%        100% 
+# -0.51762249 -0.07967348 -0.03326958  0.00000000  0.22644942
+
+#Conclusion: In general the coeficient of determination is slightly higher for the SVM!
+
+with(d.flat, quantile(rvm_sparsity - svm_sparsity))
+# 0%         25%         50%         75%        100% 
+# -0.29428571 -0.12585621 -0.04645833  0.01592162  0.32195122
+
+densityplot(~rvm_sparsity - svm_sparsity,
+            xlab="Sparsity[%]",
+            ylab="Frequency",
+            auto.key=TRUE,
+            data=d.flat)
+
+densityplot(~rvm_cv.mean.corrected - svm_cv.mean.corrected,
+            xlab="Sparsity[%]",
+            ylab="Frequency",
+            auto.key=TRUE,
+            data=d.flat)
+
+#Conclusion: In general the sparsity is slightly higher for the SVM!
+setwd(plotDir)
+jpeg("Sparsity_SVM_vs_RVM.jpeg")
+densityplot(~sparsity,
+            groups=method,
+            xlab="Sparsity[%]",
+            ylab="Frequency",
+            auto.key=TRUE,
+            data=d.vertical)
 dev.off()
 
+jpeg("R2_SVM_vs_RVM.jpeg")
+densityplot(~cv.mean.corrected,
+            groups=method,
+            xlab=expression(lambda),
+            ylab="Frequency",
+            auto.key=TRUE,
+            data=d.vertical)
+dev.off()
+
+
+jpeg("Compare_RVM_and_RVM_STNR.jpeg")
+xyplot(rvm_cv.mean.corrected - svm_cv.mean.corrected, rvm_signal.to.noise.ratio,
+          xlab="Empirical minus estimated polynomial degree",
+          ylab="Frequency",
+          data=d.flat)
+dev.off()
+
+#plot difference between R2 of svm and rvm 
 
 
 #Obtain the grid of plots for each combination of SVM and RVM and saves it to the plot directory
