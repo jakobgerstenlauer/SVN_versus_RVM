@@ -22,6 +22,12 @@ d<-read.csv("Results_Simulation_RVM_KMLMM_term_project_2016_12_15.csv",sep=";") 
 setwd(codeDir)
 source("KMLMM_term_project_GERSTENLAUER_utility_functions.R")
 
+with(d,plot(signal.to.noise.ratio, cv.mean, pch="+")) 
+#There are some extreme outliers with very low cv.mean (very bad models)
+#Let´s ignore these very bad models to be able to plot the relationship between cv.mean and signal to noise ratio.
+with(subset(d,cv.mean>-0.1),plot(signal.to.noise.ratio, cv.mean, pch="+")) 
+with(subset(d,cv.mean>-0.1),cor.test(signal.to.noise.ratio, cv.mean)) 
+
 #correct value for cv.mean
 d$cv.mean.corrected <- ifelse(d$cv.mean < 0.0,0.0,d$cv.mean)
 
@@ -57,7 +63,6 @@ with(d.rvm,plot(signal.to.noise.ratio, cv.mean.corrected, pch="+"))
 
 with(d.rvm,plot(signal.to.noise.ratio, cv.mean.corrected, pch="+")) 
 with(d.rvm,cor.test(signal.to.noise.ratio, cv.mean.corrected)) 
-# 
 # Pearson's product-moment correlation
 # 
 # data:  signal.to.noise.ratio and cv.mean.corrected
@@ -71,8 +76,6 @@ with(d.rvm,cor.test(signal.to.noise.ratio, cv.mean.corrected))
 
 #test for non-linear effect with Kendall's tau:
 with(d.rvm,cor.test(signal.to.noise.ratio, cv.mean.corrected, method="kendall"))
-
-
 with(d.rvm,hist(cv.mean.corrected))
 with(d.rvm,hist(sparsity))
 with(d.rvm,hist(polynomial.degree-polynomial_degree_setting))

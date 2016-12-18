@@ -18,13 +18,6 @@ source("workingDir.R")
 # d.svm  <- read.csv(data.file,sep=";")
 # str(d.svm)
 
-#opens a dialog box to input the file for rvm
-# data.file <- file.choose()
-# library(tcltk2)
-# tk_choose.files()
-# d.rvm  <- read.csv(data.file,sep=";")
-# str(d.rvm)
-
 #this region is for static loading
 setwd(dataDir)
 d.svm<-read.csv("Results_Simulation_SVM_KMLMM_term_project_2016_12_16_aggregated.csv",sep=";")
