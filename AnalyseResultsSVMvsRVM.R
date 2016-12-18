@@ -81,6 +81,9 @@ row.attributes<-c("polynomial.degree - polynomial_degree_setting","sparsity","cv
 column.attributes<-c("signal.to.noise.ratio","num.observations/num.vars","polynomial.degree")
 populate.table.svm.rvm("d.vertical",row.attributes,column.attributes,"method",TRUE,"gam")
 
+labels.columns <- c("signal/noise","cases/inputs","degree")
+labels.rows <- c("delta degree","sparsity","lambda","time[s]")
+
 #verifying data doing a regression for svm and rvm
 error.poly.svm <-d.svm$polynomial.degree - d.svm$polynomial_degree_setting
 error.poly.rvm <-d.rvm$polynomial.degree - d.rvm$polynomial_degree_setting
