@@ -707,7 +707,7 @@ populate.table<-function(row.attributes,column.attributes,covariance.method){
 #' @param show.geom.points A boolean variable indicating if the points are drawn or not
 #' @param method a string indicating the method used in the regression
 #'
-#' @return A matrix with the rows and columns given and a plot in each cell
+#' @return A plot with the rows and columns given and a plot in each cell
 #' @examples result.table.svm.rvm <- populate.table.svm.rvm(row.attributes,column.attributes,"method",TRUE)
 populate.table.svm.rvm<-function(dataset,row.attributes,column.attributes,colour,show.geom.points,method){
   #install.packages("ggplot2")
@@ -719,14 +719,15 @@ populate.table.svm.rvm<-function(dataset,row.attributes,column.attributes,colour
   text.final<-""
   for(i in 1:length(row.attributes)) {
     for(j in 1:length(column.attributes)) {
-      text.final<-glue(text.final,",","ggplot(",dataset,",", "aes(x=",column.attributes[i],",", 
-                                      "y=",row.attributes[j],",","colour=",colour,
-                                      ")) + stat_smooth(method=\"",method,"\",","formula = y ~ x) +", "geom_point()")
+      text.final<-glue(text.final,",","ggplot(",dataset,",", "aes(x=",column.attributes[j],",", 
+                                      "y=",row.attributes[i],",","colour=",colour,
+                                      ")) + stat_smooth(method=\"",method,"\",","formula = y ~ x) +", "geom_point() + labs(x=\"labelx\",y=\"labely\")")
     }
   }
   
   text.final<-substring(text.final, 2)
   eval(parse(text=glue("final.plot<-arrangeGrob(",text.final,",ncol = length(column.attributes), nrow = length(row.attributes))")))
-  grid::grid.draw(final.plot) 
+  #grid::grid.draw(final.plot)
+  ggsave(filename="Grid_SVM_RVM.jpeg",plot = grid::grid.draw(final.plot),path = plotDir,width = 18,height =12,dpi = 800)
   text.final
 }
