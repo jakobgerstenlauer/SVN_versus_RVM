@@ -719,20 +719,45 @@ populate.table.svm.rvm<-function(dataset,row.attributes,column.attributes,colour
   for(i in 1:length(row.attributes)) {
     for(j in 1:length(column.attributes)) {
       text.final<-glue(text.final,",","ggplot(",dataset,",", "aes(x=",column.attributes[j],",", 
-                                      "y=",row.attributes[i],",","colour=",colour,
-                                      ")) + stat_smooth(method=\"",method,"\",","formula = y ~ x) +", "geom_point()")
-      #show the labels just in the main axis
-      if(j==1){
-        text.final<-glue(text.final,"+ labs(x=\"",column.labels[j],"\",y=",row.labels[i],") + theme(axis.title.x=element_blank(),text = element_text(size=20),legend.position='none')")
+                                      "y=",row.attributes[i],",","colour=",colour,")) + stat_smooth(method=\"",method,"\",","formula = y ~ x) +", "geom_point()")
+      
+      if(i==length(row.attributes)){
+        text.final<-glue(text.final,"+ scale_y_log10()")
       }
-      else
-      {
+      
+      #show all axis labels
+      #text.final<-glue(text.final,"+ labs(x=\"",column.labels[j],"\",y=",row.labels[i],") + theme(text = element_text(size=20))")
+      
+      #show the labels just in the main axis
+      if(j==length(column.attributes)){
         if(i==length(row.attributes)){
-          
+          text.final<-glue(text.final," + labs(x=\"",column.labels[j],"\",y=",row.labels[i],") + theme(axis.title.y=element_blank(),text = element_text(size=20))")
         }
         else
         {
-          text.final<-glue(text.final,"+ theme(axis.title.x=element_blank(),axis.title.y=element_blank())")
+          text.final<-glue(text.final,"+ theme(axis.title.x=element_blank(),axis.title.y=element_blank(),text = element_text(size=20))")
+        }
+      }
+      else
+      {
+        if(j==1){
+          if(i==length(row.attributes)){
+            text.final<-glue(text.final,"+ labs(x=\"",column.labels[j],"\",y=",row.labels[i],") + theme(text = element_text(size=20),legend.position='none')")
+          }
+          else
+          {
+            text.final<-glue(text.final,"+ labs(x=\"",column.labels[j],"\",y=",row.labels[i],") + theme(text = element_text(size=20),axis.title.x=element_blank(),legend.position='none')")
+          }
+        }
+        else
+        {
+          if(i==length(row.attributes)){
+            text.final<-glue(text.final,"+ labs(x=\"",column.labels[j],"\",y=",row.labels[i],") + theme(text = element_text(size=20),axis.title.y=element_blank(),legend.position='none')")
+          }
+          else
+          {
+            text.final<-glue(text.final,"+ labs(x=\"",column.labels[j],"\",y=",row.labels[i],") + theme(text = element_text(size=20),axis.title.x=element_blank(),axis.title.y=element_blank(),legend.position='none')")
+          }
         }
       }
     }
