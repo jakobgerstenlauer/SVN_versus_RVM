@@ -715,13 +715,14 @@ populate.table.svm.rvm<-function(dataset,row.attributes,column.attributes,colour
   library(ggplot2)
   library(gridExtra)
   
-  #text.final<-glue("ggplot(",dataset,",", "aes(x=",column.attributes[1],",","y=",row.attributes[1],",","colour=",colour,")) + stat_smooth(method=\"",method,"\",","formula = y ~ x) +", "geom_point()")
+  row.labels<-c("Error in estimated polynomial degree","sparsity","CV mean Corrected","Computational Burden")
+  column.labels<-c("Signal to noise ratio","Ratio between number of observations and number of variables","Polynomial Degree")
   text.final<-""
   for(i in 1:length(row.attributes)) {
     for(j in 1:length(column.attributes)) {
       text.final<-glue(text.final,",","ggplot(",dataset,",", "aes(x=",column.attributes[j],",", 
                                       "y=",row.attributes[i],",","colour=",colour,
-                                      ")) + stat_smooth(method=\"",method,"\",","formula = y ~ x) +", "geom_point() + labs(x=\"labelx\",y=\"labely\")")
+                                      ")) + stat_smooth(method=\"",method,"\",","formula = y ~ x) +", "geom_point() + labs(x=\"",column.labels[j],"\",y=\"",row.labels[i],"\")")
     }
   }
   
@@ -729,5 +730,5 @@ populate.table.svm.rvm<-function(dataset,row.attributes,column.attributes,colour
   eval(parse(text=glue("final.plot<-arrangeGrob(",text.final,",ncol = length(column.attributes), nrow = length(row.attributes))")))
   #grid::grid.draw(final.plot)
   ggsave(filename="Grid_SVM_RVM.jpeg",plot = grid::grid.draw(final.plot),path = plotDir,width = 18,height =12,dpi = 800)
-  text.final
+  #text.final
 }
