@@ -51,6 +51,9 @@ for(var in variables.sample){
   eval(parse(text=command))
 }
 
+setwd(dataDir)
+write.table(x=d.svm, file="Results_Simulation_SVM_KMLMM_term_project_2016_12_16_aggregated.csv",row.names = FALSE)
+
 with(d.svm,plot(signal.to.noise.ratio, cv.mean, pch="+")) 
 #There are some extreme outliers with very low cv.mean (very bad models)
 #Let´s ignore these very bad models to be able to plot the relationship between cv.mean and signal to noise ratio.
