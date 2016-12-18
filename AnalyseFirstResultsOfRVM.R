@@ -26,7 +26,6 @@ str(d)
 with(d,plot(signal.to.noise.ratio, cv.mean, pch="+")) 
 #There are some extreme outliers with very low cv.mean (very bad models)
 #Let´s ignore these very bad models to be able to plot the relationship between cv.mean and signal to noise ratio.
-
 with(subset(d,cv.mean>-0.1),plot(signal.to.noise.ratio, cv.mean, pch="+")) 
 with(subset(d,cv.mean>-0.1),cor.test(signal.to.noise.ratio, cv.mean)) 
 # Pearson's product-moment correlation
