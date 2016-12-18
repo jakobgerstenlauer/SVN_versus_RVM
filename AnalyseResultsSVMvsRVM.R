@@ -12,13 +12,13 @@ glue<-function(...){paste(...,sep="")}
 #define path of standard directories
 source("workingDir.R")
 
-#this region dinamically loads the file
+#dynamically load the file:
 #opens a dialog box to input the file for svm
 # data.file <- file.choose()
 # d.svm  <- read.csv(data.file,sep=";")
 # str(d.svm)
 
-#this region is for static loading
+#hard coded file names 
 setwd(dataDir)
 d.svm<-read.csv("Results_Simulation_SVM_KMLMM_term_project_2016_12_16_aggregated.csv",sep=";")
 str(d.svm)
