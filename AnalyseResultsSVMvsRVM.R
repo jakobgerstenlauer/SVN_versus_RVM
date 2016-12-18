@@ -174,10 +174,27 @@ densityplot(~deviation.degree.pairwise.mean,
 dev.off()
 
 #########################################################################
-#Figure 3
+#Figure 3 Computation time
 #########################################################################
 
+N<-length(d.rvm.atomic$cv.mean)
+compu.time.pairwise <-  d.svm.atomic$compu.time / d.rvm.atomic$compu.time 
+hist(compu.time.pairwise)
+#aggregate over samples
+compu.time.pairwise.mean<-tapply(compu.time.pairwise, d.rvm.atomic$id_parameter_combination, mean)
 
+quantile(compu.time.pairwise.mean, c(0.05,0.1,0.25,0.5,0.75,0.9,0.95))
+#5%       10%       25%       50%       75%       90%       95% 
+#3.063410  4.036868  5.082727  6.455291 10.721340 19.871889 33.901927 
+
+setwd(plotDir)
+jpeg("DeviationPolyDegree_RVM_minus_SVM_pairwise.jpeg")
+densityplot(~deviation.degree.pairwise.mean,
+            xlab="Difference RVM - SVM in absolute deviation from correct degree",
+            ylab="Frequency",
+            auto.key=TRUE,
+            data=d.flat)
+dev.off()
 
 
 
