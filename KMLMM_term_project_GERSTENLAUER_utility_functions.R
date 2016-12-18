@@ -709,15 +709,13 @@ populate.table<-function(row.attributes,column.attributes,covariance.method){
 #'
 #' @return A plot with the rows and columns given and a plot in each cell
 #' @examples result.table.svm.rvm <- populate.table.svm.rvm(row.attributes,column.attributes,"method",TRUE)
-populate.table.svm.rvm<-function(dataset,row.attributes,column.attributes,colour,show.geom.points,method){
+populate.table.svm.rvm<-function(dataset,row.attributes,column.attributes,colour,show.geom.points,method,row.labels,column.labels){
   #install.packages("ggplot2")
   #install.packages("gridExtra")
   library(ggplot2)
   library(gridExtra)
   
-  row.labels<-c("Error in estimated polynomial degree","sparsity","CV mean Corrected","Computational Burden")
-  column.labels<-c("Signal to noise ratio","Ratio between number of observations and number of variables","Polynomial Degree")
-  text.final<-""
+ text.final<-""
   for(i in 1:length(row.attributes)) {
     for(j in 1:length(column.attributes)) {
       text.final<-glue(text.final,",","ggplot(",dataset,",", "aes(x=",column.attributes[j],",", 
@@ -730,7 +728,7 @@ populate.table.svm.rvm<-function(dataset,row.attributes,column.attributes,colour
   eval(parse(text=glue("final.plot<-arrangeGrob(",text.final,",ncol = length(column.attributes), nrow = length(row.attributes))")))
   #grid::grid.draw(final.plot)
   setwd(plotDir)
-  ggsave(filename="Grid_SVM_RVM.jpeg",plot = grid::grid.draw(final.plot),path = plotDir,width = 18,height =12,dpi = 800)
+  ggsave(filename="Grid_SVM_RVM.jpeg",plot = grid::grid.draw(final.plot),path = plotDir,width = 18,height =12,dpi = 800,device = "jpeg")
   setwd(codeDir)
   #text.final
 }
