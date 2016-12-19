@@ -90,6 +90,18 @@ with(d.svm,table(polynomial.degree-polynomial_degree_setting))
 #-7  -6  -5  -4  -3  -2  -1   0   1   2   3   4   5   6   7 
 #1   6   9  29  28  50  28 155 108 230 103 101  31  18   3
 
+#Calculate correlations by hand:
+# with(d.svm,cor.test(sparsity,signal.to.noise.ratio, method="spearman"))
+# with(d.svm,cor.test(sparsity,num.observations/num.vars, method="spearman"))
+# with(d.svm,cor.test(sparsity,polynomial.degree, method="spearman"))
+# with(d.svm,cor.test(cv.mean.corrected,signal.to.noise.ratio, method="spearman"))
+# with(d.svm,cor.test(cv.mean.corrected,num.observations/num.vars, method="spearman"))
+# with(d.svm,cor.test(cv.mean.corrected,polynomial.degree, method="spearman"))
+# with(d.svm,cor.test(compu.time,signal.to.noise.ratio, method="spearman"))
+# with(d.svm,cor.test(compu.time,num.observations/num.vars, method="spearman"))
+# with(d.svm,cor.test(compu.time,polynomial.degree, method="spearman"))
+# with(d.svm,cor.test(polynomial.degree-polynomial_degree_setting,num.observations/num.vars, method="spearman"))
+# with(d.svm,cor.test(c_setting,num.observations/num.vars, method="spearman"))
 
 #Conclusion: The SVM has a tendency to underestimates the polynomial degree.
 
