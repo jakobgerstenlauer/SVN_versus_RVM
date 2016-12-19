@@ -693,11 +693,13 @@ populate.table<-function(row.attributes,column.attributes,covariance.method,show
         ifelse(res.asterisk$p.value<0.01,
           out<-c(out,glue(eval(parse(text=glue("round(cor(",row.attributes[i],",",column.attributes[j],",","method=\"",covariance.method,"\")*100,digits = 3)"))),"**")),
         ifelse(res.asterisk$p.value<0.05,
-          out<-c(out,eval(parse(text=glue("round(cor(",row.attributes[i],",",column.attributes[j],",","method=\"",covariance.method,"\")*100,digits = 3)"))),"**"),
+          out<-c(out,eval(parse(text=glue("round(cor(",row.attributes[i],",",column.attributes[j],",","method=\"",covariance.method,"\")*100,digits = 3)"))),"*"),
           out<-c(out,eval(parse(text=glue("round(cor(",row.attributes[i],",",column.attributes[j],",","method=\"",covariance.method,"\")*100,digits = 3)"))))))
       }
     }
   }
+  
+  #vari<-sapply(correlations.gen,function(x) ifelse(x<0.01,glue(sprintf("%.3f",x),"*"),ifelse(x<0.05,glue(sprintf("%.3f",x),"**"),sprintf("%.3f",x))))
   
   result.table <- matrix(out,ncol=length(column.attributes),byrow=TRUE)
   result.table <- as.table(result.table)
