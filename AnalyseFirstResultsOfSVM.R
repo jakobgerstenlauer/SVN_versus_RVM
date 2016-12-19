@@ -103,6 +103,8 @@ with(d.svm,table(polynomial.degree-polynomial_degree_setting))
 # with(d.svm,cor.test(polynomial.degree-polynomial_degree_setting,num.observations/num.vars, method="spearman"))
 # with(d.svm,cor.test(c_setting,num.observations/num.vars, method="spearman"))
 
+with(d.svm,cor.test(cv.mean.corrected,polynomial.degree, method="spearman"))
+
 #Conclusion: The SVM has a tendency to underestimates the polynomial degree.
 
 #get the table analysing the results, in here we use a pearson covariance
