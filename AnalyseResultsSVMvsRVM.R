@@ -36,7 +36,8 @@ names(d2.svm)<-paste("svm",names(d.svm),sep="_")
 d2.rvm<-d.rvm
 names(d2.rvm)<-paste("rvm",names(d.rvm),sep="_")
 
-#we work with one horizontal grouped dataset, and other vertical grouped dataset for easyness
+#d.flat: each row contains data from svm and rvm
+#d.vertical: data from svm and rvm in separate rows
 d.flat<-cbind(d2.svm,d2.rvm)
 d.vertical<-rbind(subset(d.svm,select = names(d.rvm)),d.rvm)
 #add a variable which indicates the method 
