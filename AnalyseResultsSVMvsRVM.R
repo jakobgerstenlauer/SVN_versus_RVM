@@ -356,18 +356,28 @@ setwd(plotDir)
 jpeg("Inter_batteries_lambda.jpeg")
 xyplot(d.vertical$cv.mean.corrected ~ T[,1], 
        groups = d.vertical$method,
-       xlab="Inter-batteries component 1",
+       xlab="Inter Batteries Component 1",
+       ylab=expression(lambda),
+       auto.key=TRUE,
+       cex.axis=10.0,
+       cex.lab=10.0)
+dev.off()
+
+xyplot(T[,2] ~ T[,1], 
+       groups = d.vertical$method,
+       xlab="Inter Batteries component 1",
        ylab=expression(lambda),
        auto.key=TRUE)
-dev.off()
 
 setwd(plotDir)
 jpeg("Inter_batteries_sparsity.jpeg")
 xyplot(d.vertical$sparsity ~ T[,2], 
        groups = d.vertical$method,
-       xlab="Inter-batteries component 2",
+       xlab="Inter Batteries Component 2",
        ylab="Sparsity",
-       auto.key=TRUE)
+       auto.key=TRUE,
+       cex.axis=10.0,
+       cex.lab=10.0)
 dev.off()
 
 require(mgcv)
