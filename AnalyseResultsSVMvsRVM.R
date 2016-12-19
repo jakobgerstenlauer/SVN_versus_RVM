@@ -369,6 +369,34 @@ xyplot(d.vertical$sparsity ~ T[,2],
        ylab="Sparsity",
        auto.key=TRUE)
 dev.off()
+
+require(mgcv)
+m1.gam <- gam(cv.mean.corrected ~ s(num.observations), data=d.vertical)
+m2.gam <- gam(cv.mean.corrected ~ s(cv), data=d.vertical)
+m3.gam <- gam(cv.mean.corrected ~ s(num.vars), data=d.vertical)
+m4.gam <- gam(cv.mean.corrected ~ polynomial.degree, data=d.vertical)
+m5.gam <- gam(cv.mean.corrected ~ s(num.observations, cv), data=d.vertical)
+anova(m1.gam,m2.gam,m3.gam,m4.gam, m5.gam)
+# Resid. Df Resid. Dev      Df Deviance
+# 1    596.89     30.626                 
+# 2    596.48     21.636  0.4108   8.9898
+# 3    595.22     26.133  1.2585  -4.4966
+# 4    598.00     19.320 -2.7784   6.8133
+# 5    571.28     18.643 26.7195   0.6772
+plot(m6.gam)
+
+m6.gam <- gam(cv.mean.corrected ~ s(num.vars)+s(num.observations)+s(num.observations, cv), data=d.vertical)
+anova(m5.gam, m6.gam)
+# Resid. Df Resid. Dev   Df Deviance
+# 1    571.28     18.643              
+# 2    562.49     17.815 8.79  0.82759
+
+
+setwd(plotDir)
+jpeg("Interaction_num_observations_cases_to_variables_ratio_interactions.jpeg")
+plot(m4.gam, cex=6)
+dev.off()
+
 #########################################################################
 #Figure 4
 #########################################################################
