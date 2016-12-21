@@ -1,3 +1,18 @@
+###############################################################################################
+# Kernel-Based Learning & Multivariate Modeling DMKM Master - MIRI Master
+# Lecturer: Lluıs A. Belanche, belanche@cs.upc.edu
+# Term project
+# October-December 2016  
+#
+# In this script we analyze aggregated results from our experiments 
+# and create the figures, tables, and summary statistics included in the final report.
+# The input data files 
+# "Results_Simulation_SVM_KMLMM_term_project_2016_12_16_aggregated.csv"
+# and "Results_Simulation_RVM_KMLMM_term_project_2016_12_16_aggregated.csv"
+# were created in the script files "AnalyseFirstResultsOfSVM.R"
+# and "AnalyseFirstResultsOfSVM.R".
+#############################################################################################
+
 #remove old objects for safety resons
 rm(list=ls(all=TRUE))
 
