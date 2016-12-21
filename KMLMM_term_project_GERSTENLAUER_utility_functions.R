@@ -1,8 +1,8 @@
 #############################################################################################
 #                               Utility Functions
 #
-# Script containing all the function that are common among the files off the project
-# The description of each oe of them is added in it's description header
+# Script containing all the function that are common among the files of the project
+# The description of each one of them is added in it's description header
 #
 # Date: 22.12.2016
 # Jakob Gerstenlauer
