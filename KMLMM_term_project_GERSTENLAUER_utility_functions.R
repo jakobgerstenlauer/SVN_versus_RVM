@@ -699,6 +699,8 @@ populate.table<-function(row.attributes,column.attributes,covariance.method,show
     }
   }
   
+  #vari<-sapply(correlations.gen,function(x) ifelse(x<0.01,glue(sprintf("%.3f",x),"*"),ifelse(x<0.05,glue(sprintf("%.3f",x),"**"),sprintf("%.3f",x))))
+  
   result.table <- matrix(out,ncol=length(column.attributes),byrow=TRUE)
   result.table <- as.table(result.table)
   result.table
