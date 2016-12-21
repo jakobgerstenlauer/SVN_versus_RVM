@@ -141,6 +141,10 @@ histogram(~polynomial.degree-polynomial_degree_setting|method,
           data=d.vertical)
 dev.off()
 
+###############################################################################################
+# Figure 3 
+###############################################################################################
+
 setwd(plotDir)
 jpeg("Error_Estimating_Polynomial_Degree.jpeg")
 densityplot(~polynomial.degree-polynomial_degree_setting,
@@ -163,9 +167,8 @@ with(d.flat, quantile(rvm_sparsity - svm_sparsity))
 # 0%         25%         50%         75%        100% 
 # -0.29428571 -0.12585621 -0.04645833  0.01592162  0.32195122
 
-
-
 #Conclusion: In general the sparsity is slightly higher for the SVM!
+
 setwd(plotDir)
 jpeg("Sparsity_SVM_vs_RVM.jpeg")
 densityplot(~sparsity,
@@ -190,10 +193,6 @@ setwd(dataDir)
 d.svm.atomic<-read.csv("Results_Simulation_SVM_KMLMM_term_project_2016_12_16.csv",sep=";")
 d.rvm.atomic<-read.csv("Results_Simulation_RVM_KMLMM_term_project_2016_12_15.csv",sep=";")
 
-
-#########################################################################
-#Figure 1
-#########################################################################
 N<-length(d.rvm.atomic$cv.mean)
 cv.mean.pairwise <-  pmax(d.rvm.atomic$cv.mean,rep(0,N)) - pmax(d.svm.atomic$cv.mean,rep(0,N))
 hist(cv.mean.pairwise)
@@ -204,6 +203,11 @@ quantile(cv.mean.pairwise.mean)
 # 0%         25%         50%         75%        100% 
 # -0.51762249 -0.07967348 -0.03326958  0.00000000  0.22644942 
 
+
+###############################################################################################
+# Figure 1 
+###############################################################################################
+
 setwd(plotDir)
 jpeg("R2_SVM_vs_RVM_pairwise.jpeg")
 densityplot(~cv.mean.pairwise.mean,
@@ -213,10 +217,6 @@ densityplot(~cv.mean.pairwise.mean,
             data=d.flat)
 dev.off()
 
-
-#########################################################################
-#Figure 2
-#########################################################################
 N<-length(d.rvm.atomic$cv.mean)
 sparsity.pairwise <-  pmax(d.rvm.atomic$sparsity,rep(0,N)) - pmax(d.svm.atomic$sparsity,rep(0,N))
 hist(sparsity.pairwise)
@@ -226,6 +226,11 @@ sparsity.pairwise.mean<-tapply(sparsity.pairwise, d.rvm.atomic$id_parameter_comb
 quantile(sparsity.pairwise.mean)
 # 0%         25%         50%         75%        100% 
 # -0.29428571 -0.12585621 -0.04645833  0.01592162  0.32195122 
+
+
+###############################################################################################
+# Figure 2
+###############################################################################################
 
 setwd(plotDir)
 jpeg("Sparsity_RVM_minus_SVM_pairwise.jpeg")
@@ -250,6 +255,7 @@ quantile(deviation.degree.pairwise.mean)
 #0%        25%        50%        75%       100% 
 #-3.6666667 -0.6666667  0.0000000  0.6666667  4.3333333  
 
+
 setwd(plotDir)
 jpeg("DeviationPolyDegree_RVM_minus_SVM_pairwise.jpeg")
 densityplot(~deviation.degree.pairwise.mean,
@@ -258,10 +264,6 @@ densityplot(~deviation.degree.pairwise.mean,
             auto.key=TRUE,
             data=d.flat)
 dev.off()
-
-#########################################################################
-#Figure 3 Computation time
-#########################################################################
 
 N<-length(d.rvm.atomic$cv.mean)
 compu.time.pairwise <-  d.svm.atomic$compu.time / d.rvm.atomic$compu.time 
@@ -360,13 +362,16 @@ cor(T[,2],Xs[,5])
 #polynomial degree (+)
 #and cases/ inputs (+).
 
-#Conclusion:
-
 plot(T[,1],d.vertical$sparsity, pch="+", col=ifelse(d.vertical$method=="svm","red","blue"))
 plot(T[,2],d.vertical$sparsity, pch="+", col=ifelse(d.vertical$method=="svm","red","blue"))
 
 plot(T[,1],d.vertical$cv.mean.corrected, pch="+", col=ifelse(d.vertical$method=="svm","red","blue"))
 plot(T[,2],d.vertical$cv.mean.corrected, pch="+")
+
+
+###############################################################################################
+# Figure 5
+###############################################################################################
 setwd(plotDir)
 jpeg("Inter_batteries_lambda.jpeg")
 xyplot(d.vertical$cv.mean.corrected ~ T[,1], 
@@ -384,6 +389,10 @@ xyplot(T[,2] ~ T[,1],
        ylab=expression(lambda),
        auto.key=TRUE)
 
+
+###############################################################################################
+# Figure 6
+###############################################################################################
 setwd(plotDir)
 jpeg("Inter_batteries_sparsity.jpeg")
 xyplot(d.vertical$sparsity ~ T[,2], 
