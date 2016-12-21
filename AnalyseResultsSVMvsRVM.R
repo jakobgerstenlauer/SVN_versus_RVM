@@ -281,7 +281,6 @@ labels.rows <- c("expression(paste(delta,\" degree\"))","\"sparsity\"","expressi
 
 populate.table.svm.rvm("d.vertical",row.attributes,column.attributes,"method",TRUE,"gam",labels.rows,labels.columns)
 
-
 #verifying data doing a regression for svm and rvm
 error.poly.svm <-d.svm$polynomial.degree - d.svm$polynomial_degree_setting
 error.poly.rvm <-d.rvm$polynomial.degree - d.rvm$polynomial_degree_setting

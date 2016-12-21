@@ -693,7 +693,7 @@ populate.table<-function(row.attributes,column.attributes,covariance.method,show
         ifelse(res.asterisk$p.value<0.01,
           out<-c(out,glue(eval(parse(text=glue("round(cor(",row.attributes[i],",",column.attributes[j],",","method=\"",covariance.method,"\")*100,digits = 3)"))),"**")),
         ifelse(res.asterisk$p.value<0.05,
-          out<-c(out,eval(parse(text=glue("round(cor(",row.attributes[i],",",column.attributes[j],",","method=\"",covariance.method,"\")*100,digits = 3)"))),"**"),
+          out<-c(out,eval(parse(text=glue("round(cor(",row.attributes[i],",",column.attributes[j],",","method=\"",covariance.method,"\")*100,digits = 3)"))),"*"),
           out<-c(out,eval(parse(text=glue("round(cor(",row.attributes[i],",",column.attributes[j],",","method=\"",covariance.method,"\")*100,digits = 3)"))))))
       }
     }
