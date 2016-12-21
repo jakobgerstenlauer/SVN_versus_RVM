@@ -23,7 +23,8 @@ Eight, we compare the two models asking the following questions:
   Question 1: How often do the models choose the appropriate ploynomial degree of the kernel?
   Question 2: How does the predictive accuracy of both models depend on N, D, and signal-to-noise ratio?
 
-Date: 26.11.2016
+Date: 22.12.2016
 Jakob Gerstenlauer
 jakob.gerstenlauer@gjakob.de
 Francisco Pèrez
+pacogppl@gmail.com

@@ -11,6 +11,12 @@
 # and "Results_Simulation_RVM_KMLMM_term_project_2016_12_16_aggregated.csv"
 # were created in the script files "AnalyseFirstResultsOfSVM.R"
 # and "AnalyseFirstResultsOfSVM.R".
+#
+# Date: 22.12.2016
+# Jakob Gerstenlauer
+# jakob.gerstenlauer@gjakob.de
+# Francisco Pèrez
+# pacogppl@gmail.com
 #############################################################################################
 
 #remove old objects for safety resons

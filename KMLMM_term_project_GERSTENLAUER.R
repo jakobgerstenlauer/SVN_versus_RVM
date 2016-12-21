@@ -33,7 +33,7 @@
 #   Jakob@Win16 MINGW64 /j/UPC/2016/02/KMLMM/KernelMethods/practicals/term_project/code (master)
 #   $ git pull https://jakobgerstenlauer@bitbucket.org/jakobgerstenlauer/kernels_term_project.git
 #
-# Date: 26.11.2016
+# Date: 22.12.2016
 # Jakob Gerstenlauer
 # jakob.gerstenlauer@gjakob.de
 # Francisco Pèrez

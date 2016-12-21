@@ -1,3 +1,28 @@
+####################################################################################################
+# Kernel-Based Learning & Multivariate Modeling DMKM Master - MIRI Master
+# Lecturer: Lluıs A. Belanche, belanche@cs.upc.edu
+# Term project
+# October-December 2016  
+#
+# This script represents the first analysis made to the result of SVM.
+# Here an "agregated" result analysis file will be created,that has the recorded values for each sample
+# then a table with the results of this analysis, showing the index of the correlation 
+# (* for pvalue <0.05, and ** for pvalue<0.01) next to the number in each cell 
+# is populated and saved with the current date. This table is also created in latex format.
+# All of the output data are stored in the "data" folder
+# The input data files 
+# "Results_Simulation_SVM_KMLMM_term_project_DATEXXXXX.csv"
+# The output data files
+# A csv document named "SVM_results_table_KMLMM_term_project_DATEXXXXX.csv"
+# A latex formated table from the results table named "result_table_svm.tex"
+#
+# Date: 22.12.2016
+# Jakob Gerstenlauer
+# jakob.gerstenlauer@gjakob.de
+# Francisco Pèrez
+# pacogppl@gmail.com
+#####################################################################################################
+
 #remove old objects for safety resons
 rm(list=ls(all=TRUE))
 
