@@ -1,29 +1,36 @@
 Kernel-Based Learning & Multivariate Modeling DMKM Master - MIRI Master
 Lecturer: Lluıs A. Belanche, belanche@cs.upc.edu
 Term project
-October-Dezember 2016
+October-December 2016
 "Compare the Relevance Vector machine and the SVM for regression in terms of predictive accuracy
 and sparsity."
 
-First, an instance generater is set-up.
-Second, we define a latin-hypercube (LH) scheme for efficient sampling of parameter space.
-Third, for each parameter combination of the LH sampling scheme, one instance (data set) is generated.
-Fourth, for each instance we tune the parameters of the SVM and the kernel.
-  Based on the optimum parameters (both kernel and SVM parameters, criteria: cv error)
-  we record generalization error, sparsity, and total computation time (including tuning) for the selected model.
-Sixth, for each instance we tune the parameters of the RVM and the kernel.
-  Based on the optimum parameters (both kernel and RVM parameters, criteria: cv error)
-  we record generalization error, sparsity, and total computation time (including tuning) for the selected model.
-Seventh, we analyse the results of step 5 and 6 comparing SVM and RVM across the following dimensions:
-  dim 1: signal-to-noise ratio (between 0: no signal only noise and 1: only signal no noise),
-  dim 2: number of observations N,
-  dim 3: number of parameters D,
-  dim 4: polynomial degree of the inputs.
-Eight, we compare the two models asking the following questions:
-  Question 1: How often do the models choose the appropriate ploynomial degree of the kernel?
-  Question 2: How does the predictive accuracy of both models depend on N, D, and signal-to-noise ratio?
+The following folders are available:
 
-Date: 22.12.2016
+report:
+Report as pdf.
+
+data: 
+In this folder, for each method (SVM and RVM) there is a separate output file 
+storing the results of the replicated Latin hypercube simulation implemented in "KMLMM_term_project_GERSTENLAUER.R".
+
+code: 
+properties.R: Defines parameters of the Latin hypercube sampling scheme.
+KMLMM_term_project_Perez_GERSTENLAUER.R: Code for running the simulations.
+KMLMM_term_project_Perez_GERSTENLAUER_utilities.R: Utility functions used in other scripts.
+AnalyseFirstResultsOfSVM.R: 
+Inputfile: "Results_Simulation_SVM_KMLMM_term_project_2016_12_16.csv"
+Outputfile: "Results_Simulation_SVM_KMLMM_term_project_2016_12_16_aggregated.csv"
+Creates Table 4, aggregates data and writes it to outputfile 
+AnalyseFirstResultsOfRVM.R: 
+Inputfile: "Results_Simulation_RVM_KMLMM_term_project_2016_12_16.csv"
+Outputfile: "Results_Simulation_RVM_KMLMM_term_project_2016_12_16_aggregated.csv"
+Create Table 5, aggregates data and writes it to outputfile
+AnalyseResultsSVMvsRVM.R:
+Reads aggregated outputfiles from AnalyseFirstResultsOfSVM.R / AnalyseFirstResultsOfRVM.R.
+Analyses results and creates figures and tables.
+
+Date: 21.12.2016
 Jakob Gerstenlauer
 jakob.gerstenlauer@gjakob.de
 Francisco Pèrez

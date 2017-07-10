@@ -1,8 +1,8 @@
 #############################################################################################
 #                               Utility Functions
 #
-# Script containing all the function that are common among the files of the project
-# The description of each one of them is added in it's description header
+# Script containing all the function that are common among the files off the project
+# The description of each oe of them is added in it's description header
 #
 # Date: 22.12.2016
 # Jakob Gerstenlauer
@@ -786,7 +786,7 @@ populate.table.svm.rvm<-function(dataset,row.attributes,column.attributes,colour
   eval(parse(text=glue("final.plot<-arrangeGrob(",text.final,",ncol = length(column.attributes), nrow = length(row.attributes))")))
   #grid::grid.draw(final.plot)
   setwd(plotDir)
-  ggsave(filename="Grid_SVM_RVM.jpeg",plot = grid::grid.draw(final.plot),path = plotDir,width = 14,height =16,dpi = 200,device = "jpeg")
+  ggsave(filename="Grid_SVM_RVM.jpeg",plot = grid::grid.draw(final.plot),path = plotDir,width = 14,height =12,dpi = 400,device = "jpeg")
   setwd(codeDir)
   #text.final
 }
