@@ -22,6 +22,3 @@ October-Dezember 2016
 - Seven, we compare the two models asking the following questions:
   Question 1: How often do the models choose the appropriate ploynomial degree of the kernel?
   Question 2: How does the predictive accuracy of both models depend on N, D, and signal-to-noise ratio?
-
-Date: 22.12.2016
-
